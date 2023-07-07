@@ -997,6 +997,83 @@
                         "placeLongitude": 2.335274665845999,
                         "placeSaved": "false",
                         "placeImage":"https://assets.website-files.com/61a4c39d72da2b4573e78a83/643febc805c0127a94e5a438_02RECAMIER-TRI23-037274-1%20copie-p-1080.jpeg"
+                    },
+                    {
+                        "placeId": 9,
+                        "placeTitle": "Pavillon de la Reine",
+                        "placeDescription": "Overlooking the picturesque Place des Vosges, this family-owned hotel is as decadent as it is discreet. Some of the 56 rooms boast exposed beams and antique furniture, while others have contemporary chandeliers and velvet couches; all are quietly sophisticated.",
+                        "placeCategory": "5 Star Tourist Hotel",
+                        "placeAddress": "28 Pl. des Vosges, 75003 Paris, France",
+                        "placeWebsite": "http://www.pavillon-de-la-reine.com/",
+                        "placeHours": "Check-in time: 14:00, Check-out time: 12:00",
+                        "placeGoogleMapLink": "https://www.google.com/maps/place/Le+Pavillon+de+la+Reine/@48.8562725,2.3557413,15z/data=!3m1!4b1!4m9!3m8!1s0x47e671ffdfd000a3:0x44fe077cc519dc4e!5m2!4m1!1i2!8m2!3d48.856273!4d2.366041!16s%2Fg%2F121vxmb1?entry=ttu",
+                        "placeContact": "+33140291919",
+                        "placeLatitude": 48.85706314746683,
+                        "placeLongitude": 2.366427189672281,
+                        "placeSaved": "false",
+                        "placeImage":"https://www.travelandleisure.com/thmb/cZJX5njYHFuvEQGRlYNH-_2T6OU=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/pavillon-de-la-reine-room-PARISHOTELS0618-3b7678a53fa04221971ad56ff55937f9.jpg"
+                    },
+                    {
+                        "placeId": 10,
+                        "placeTitle": "Hotel National des Arts et Métiers",
+                        "placeDescription": "This 64-room hotel brings a modern twist to the historic neighborhood. Clean lines and contemporary touches (think: terrazzo bathrooms, Nespresso machines, black-and-white photos) dominate the lobby and rooms, and a rooftop lounge offers a fabulous peek across the Parisian rooftops.",
+                        "placeCategory": "4 Star Tourist Hotel",
+                        "placeAddress": "243 Rue Saint-Martin, 75003 Paris, France",
+                        "placeWebsite": "http://www.hotelnational.paris/",
+                        "placeHours": "Check-in time: 14:00, Check-out time: 12:00",
+                        "placeGoogleMapLink": "https://www.google.com/maps/place/H%C3%B4tel+National+Des+Arts+et+M%C3%A9tiers/@48.8659329,2.3429305,15z/data=!3m2!4b1!5s0x47e66e1a7a595d21:0x8d96440672d7b7cf!4m9!3m8!1s0x47e66e1a7a3cbdf5:0x2cbfbb7ce7f3f87a!5m2!4m1!1i2!8m2!3d48.8659334!4d2.3532302!16s%2Fg%2F11c6v5g_47?entry=ttu",
+                        "placeContact": "+33180972280",
+                        "placeLatitude": 48.86638463061518,
+                        "placeLongitude": 2.353401812965082,
+                        "placeSaved": "false",
+                        "placeImage":"https://www.dvvd.fr/wp-content/uploads/2018/04/HNAM-header-.jpg"
+                    },
+                    {
+                        "placeId": 11,
+                        "placeTitle": "Hotel Costes",
+                        "placeDescription": "The Costes gets its style cred from opulent baroque décor, legendary soundtracks, and international celebrities who dine at the courtyard restaurant. Rooms range from petites chambres to spectacular suites.",
+                        "placeCategory": "5 Star Tourist Hotel",
+                        "placeAddress": "7 Rue de Castiglione, 75001 Paris, France",
+                        "placeWebsite": "https://www.hotelcostes.com/",
+                        "placeHours": "Check-in time: 15:00, Check-out time: 12:00",
+                        "placeGoogleMapLink": "https://www.google.com/maps/place/Costes/@48.86628,2.3176737,15z/data=!3m1!4b1!4m9!3m8!1s0x47e66e3200d2afb1:0xf42018a912b5f440!5m2!4m1!1i2!8m2!3d48.8662805!4d2.3279734!16zL20vMDY2NnBj?entry=ttu",
+                        "placeContact": "+33142445000",
+                        "placeLatitude": 48.8665341152919,
+                        "placeLongitude": 2.3286170817417644,
+                        "placeSaved": "false",
+                        "placeImage":"https://i.pinimg.com/originals/77/c9/83/77c9834e7c6ecc32059871ff7bf635f9.jpg"
+                    },
+                    {
+                        "placeId": 12,
+                        "placeTitle": "Ritz Paris",
+                        "placeDescription": "Pourquoi pas? If you're looking for the swankiest spot in Paris, there aren't many destinations that will top the Ritz. The refined 19th-century décor — gilded sconces, marble bathrooms, floor-to-ceiling windows — of the 142 rooms and themed suites (like the Coco Chanel) remind us all that the French do timeless elegance best.",
+                        "placeCategory": "5 Star Tourist Hotel",
+                        "placeAddress": "15 Pl. Vendôme, 75001 Paris, France",
+                        "placeWebsite": "http://www.ritzparis.com/",
+                        "placeHours": "Check-in time: 15:00, Check-out time: 12:00",
+                        "placeGoogleMapLink": "https://www.google.com/maps/place/Ritz+Paris/@48.8680982,2.3185935,15z/data=!3m2!4b1!5s0x47e66e318913a89d:0x6ff08e4d1a846c6!4m9!3m8!1s0x47e66f50e4922355:0x4e7e02b37682a099!5m2!4m1!1i2!8m2!3d48.8680987!4d2.3288932!16zL20vMDU2bjgx?entry=ttu",
+                        "placeContact": "+33143163030",
+                        "placeLatitude":48.868719286177644,
+                        "placeLongitude": 2.3286356595341373,
+                        "placeSaved": "false",
+                        "placeImage":"https://www.travelandleisure.com/thmb/o5-yicUwTlp_wy5434EKFARzUm4=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/ritz-paris-windor-suite-PARISHOTELS0618-5436e26300a24dcf82b67ec63d34324e.jpg"
+                    }
+                ]
+            },
+            {
+                "articleId" : 5,
+                "articleTitle": "The 14 Best Cheap Eats in Paris",
+                "articleUrl": "https://www.timeout.com/paris/en/feature/food/pariss-best-cheap-eats",
+                "articleSource": "Time Out",
+                "articleImg": "https://media.timeout.com/images/105246062/1920/1080/image.jpg",
+                "articleCategory": "Eat & Drink",
+                "articleDate": "13 February 2020",
+                "articleAuthor": "Eleanor Aldridge",
+                "articleIntro":"One of the greatest myths about dining out in Paris is that you have to spend a lot to eat well. Even classic French cuisine is built on brilliant basics: seasonal ingredients, good-quality produce and the same menus served day in, day out. If you know where to look, it’s still totally possible to find big brasserie lunches for around €15, and a life-affirmingly good jambon-beurre for little more than €5. (Let’s be honest, is there anything more appealing than a fresh baguette slathered with salty butter – even if you later find crumbs in unexpected places?) Some of our latest faves show how the city’s culinary scene is changing, both in wine bars that are swapping rillettes or planches for pizzette and in a growing range of true-to-the-source restaurants and delis serving everything from Israeli to Sichuan cuisine untempered for European palates. ",
+                "articleSaved": "false",
+                "places": [
+                    {
+
                     }
                 ]
             }
