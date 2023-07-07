@@ -1,0 +1,54 @@
+[
+    {
+        "destinationName": "Paris",
+        "destinationId": 1,
+        "country": "France",
+        "description": "Paris is the capital and most populous city of France, with an area of 105 square kilometres and an official estimated population of 2,140,526 residents as of 1 January 2019. Since the 17th century, Paris has been one of Europe's major centres of finance, diplomacy, commerce, fashion, science, and the arts.",
+        "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Paris_vue_d%27ensemble_tour_Eiffel.jpg/1200px-Paris_vue_d%27ensemble_tour_Eiffel.jpg",
+        "articles": [
+            {
+                "articleId": 1,
+                "articleTitle": "The 27 best things to do in Paris right now",
+                "articleUrl": "https://www.cntraveller.com/gallery/things-to-do-in-paris",
+                "articleSource": "CN Traveler",
+                "articleImg": "https://www.pexels.com/photo/aerial-view-of-eiffel-tower-1308940/",
+                "articleCategory": "Things to do",
+                "articleDate": "2 June 2023",
+                "articleAuthor": "Antonia Bentel, Julia Webster Ayuso and Rosalyn Wikeley",
+                "articleIntro":"The French capital is easily one of our favourite city breaks in Europe. Here's how to make the most of your visit with 26 amazing things to do in Paris. Everyone knows about the big-hitting things to do in Paris. You can easily spend your day embracing the Parisian lifestyle by eating your way through the best pâtisseries in Paris and enjoying the most incredible restaurants that Paris has to offer. Experiencing the big-ticket attractions will always be a must — from watching the Eiffel Tower light up the night sky and wandering through the endless artwork housed at the Musée du Louvre to camping out at one of the best hotels in Paris for the weekend. For those looking for unique things to do in Paris, our editors have narrowed down the list to 26 activities to complete your stay in the French capital.",
+                "articleSaved": "false",
+                "places": [
+                    {
+                        "placeId": 1,
+                        "placeTitle": "Casa Eminente",
+                        "placeDescription": "In a sleepy sidestreet behind Place des Vosges, a little bit of Cuban magic has transformed a private Parisian mansion into a lavish casa particular. From a lush inner courtyard steps lead to a bar, restaurant and subterranean speakeasy celebrating all things Eminente - the rum launched by Moët Hennessy with César Martí, Cuba's youngest Rum Master, at the stills. The casa is a riot of colour and Cuban charm, the building's classically French architecture transformed by touches of lapis and ochre, a jungle of potted tropical plants and bright, bold paintings selected by Havana-born Laura Salas Redondo. An evening of fabulous and rare-for-Paris rum cocktails is the main draw, starting with a classic Daiquiri and then moving on to specials from rotating monthly bartenders. If you want to go deeper, experiences include masterclasses and mixology sessions. Cuban hospitality shines through in the cosy, softly lit restaurant, where chefs rotate every two months. Alberto González, the first Cuban chef to win a Michelin star, is set to make a much-anticipated appearance in June. The spell is only cast until 19 July, when the mansion will be transformed back into a private home, so get there quickly.",
+                        "placeCategory": "Cocktail bar",
+                        "placeAddress": "Casa Eminente, 6 Impasse Guéménée, 75004 Paris, France",
+                        "placeWebsite": "https://www.casaeminente.com/",
+                        "placeHours": "Friday-Saturday 6pm-1am, Tuesday-Thursday 6pm-12am, Sunday-Monday closed",
+                        "placeGoogleMapLink": "https://www.google.com/maps/place/Casa+Eminente/@48.8541047,2.3660115,15z/data=!4m6!3m5!1s0x47e6714b401c7281:0x40e115f5558f3f6a!8m2!3d48.8541047!4d2.3660115!16s%2Fg%2F11tp4k5_2r?entry=ttu",
+                        "placeContact": "+33189163322",
+                        "placeLatitude": 48.85451414033612,
+                        "placeLongitude": 2.365925669311524,
+                        "placeSaved": "false",
+                        "placeImage":"https://media.cntraveller.com/photos/6470bf8fd82f31f3aa46a910/master/w_1920%2Cc_limit/Casa%2520Eminente%2520-%2520food%2520-may23-pr.jpg"
+
+                    },
+                    {
+                        "placeId": 2
+                    },
+                    {
+                        "placeId": 3
+                    }
+                ]
+            },
+            {
+                "artilceId": 2
+            },
+            {
+                "articleId" : 3
+            }
+        ]
+    }
+
+]
