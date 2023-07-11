@@ -1,10 +1,11 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Explore from "../screens/tabScreens/Explore";
-import Trips from "../../src/screens/tabScreens/Trips";
-import Profile from "../../src/screens/tabScreens/Profile";
+import Explore from "./src/screens/tabScreens/Explore"
+import Trips from "./src/screens/tabScreens/Trips";
+import Profile from "./src/screens/tabScreens/Profile";
 import { Feather } from "@expo/vector-icons";
+import DestinationScreen from "./src/screens/DestinationScreen";
 
 const ExploreStack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -13,6 +14,7 @@ function ExploreStackGroup() {
   return (
     <ExploreStack.Navigator>
       <ExploreStack.Screen name="Explore" component={Explore} />
+      <ExploreStack.Screen name="DestinationScreen" component={DestinationScreen} />
     </ExploreStack.Navigator>
   );
 }
@@ -36,6 +38,8 @@ function Tabs() {
               color={focused ? "tomato" : "black"}
             />
           ),
+          headerShown: false,
+          tabBarLabel: 'Explore'
         }}
       />
       <Tab.Screen
