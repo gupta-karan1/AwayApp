@@ -1,9 +1,5 @@
-// install react navigation for bottom tabs
-
-// import { StatusBar } from "expo-status-bar";
 import { StyleSheet, StatusBar } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
-import Tabs from "./src/components/Tabs";
+import Navigation from "./Navigation";
 
 // refer this for firestore functions: https://firebase.google.com/docs/firestore/query-data/get-data
 
@@ -50,25 +46,7 @@ export default function App() {
   //   getAllDocs();
   // }, []);
 
-  return (
-    <NavigationContainer>
-      <Tabs />
-      {/* <StatusBar style="auto" /> */}
-      {/* <Button title="Get All Data" onPress={getAllDocs} />
-      <FlatList
-        data={allData}
-        renderItem={({ item }) => {
-          return (
-            <View style={styles.container}>
-              <Text>{item.placeTitle}</Text>
-              <Text>{item.placeId}</Text>
-            </View>
-          );
-        }}
-        keyExtractor={(item) => item.placeId}
-      /> */}
-    </NavigationContainer>
-  );
+  return <Navigation />;
 }
 
 const styles = StyleSheet.create({
