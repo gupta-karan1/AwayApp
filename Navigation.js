@@ -1,5 +1,73 @@
 import { NavigationContainer } from "@react-navigation/native";
-import Tabs from "./src/components/Tabs";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import Explore from "../screens/tabScreens/Explore";
+import Trips from "../../src/screens/tabScreens/Trips";
+import Profile from "../../src/screens/tabScreens/Profile";
+import { Feather } from "@expo/vector-icons";
+
+const ExploreStack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
+
+function ExploreStackGroup() {
+  return (
+    <ExploreStack.Navigator>
+      <ExploreStack.Screen name="Explore" component={Explore} />
+    </ExploreStack.Navigator>
+  );
+}
+
+function Tabs() {
+  return (
+    <Tab.Navigator
+      screenOptions={{
+        tabBarActiveTintColor: "tomato",
+        tabBarInactiveTintColor: "gray",
+      }}
+    >
+      <Tab.Screen
+        name={"ExploreStackGroup"}
+        component={ExploreStackGroup}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <Feather
+              name={"globe"}
+              size={25}
+              color={focused ? "tomato" : "black"}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name={"Trips"}
+        component={Trips}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <Feather
+              name={"clipboard"}
+              size={25}
+              color={focused ? "tomato" : "black"}
+            />
+          ),
+        }}
+      />
+
+      <Tab.Screen
+        name={"Profile"}
+        component={Profile}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <Feather
+              name={"user"}
+              size={25}
+              color={focused ? "tomato" : "black"}
+            />
+          ),
+        }}
+      />
+    </Tab.Navigator>
+  );
+}
 
 export default function Navigation() {
   return (
