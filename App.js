@@ -10,6 +10,8 @@ import {
 import app from "./firebaseConfig";
 import { useEffect, useState } from "react";
 import { getFirestore, collection, getDocs } from "firebase/firestore";
+import { NavigationContainer } from "@react-navigation/native";
+import Tabs from "./src/components/Tabs";
 
 // refer this for firestore functions: https://firebase.google.com/docs/firestore/query-data/get-data
 
@@ -57,7 +59,8 @@ export default function App() {
   // }, []);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <NavigationContainer>
+      <Tabs />
       <StatusBar style="auto" />
       {/* <Button title="Get All Data" onPress={getAllDocs} />
       <FlatList
@@ -72,7 +75,7 @@ export default function App() {
         }}
         keyExtractor={(item) => item.placeId}
       /> */}
-    </SafeAreaView>
+    </NavigationContainer>
   );
 }
 
