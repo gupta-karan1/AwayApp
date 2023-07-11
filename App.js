@@ -1,3 +1,5 @@
+// install react navigation for bottom tabs 
+
 import { StatusBar } from "expo-status-bar";
 import {
   StyleSheet,
