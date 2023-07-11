@@ -1,4 +1,6 @@
 import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 
 // Initialize Firebase
 const firebaseConfig = {
@@ -10,8 +12,12 @@ const firebaseConfig = {
   appId: "1:658063917261:web:69b34a8bbbf7f52ad0a984",
 };
 
-const app = initializeApp(firebaseConfig);
-// For more information on how to access Firebase in your project,
-// see the Firebase documentation: https://firebase.google.com/docs/web/setup#access-firebase
+// const app = initializeApp(firebaseConfig);
+// // For more information on how to access Firebase in your project,
+// // see the Firebase documentation: https://firebase.google.com/docs/web/setup#access-firebase
 
-export default app;
+// export default app;
+
+export const FIREBASE_APP = initializeApp(firebaseConfig);
+export const FIREBASE_AUTH = getAuth(FIREBASE_APP);
+export const FIREBASE_DB = getFirestore(FIREBASE_APP);
