@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
-import ExploreFeed from "../components/ExploreFeed";
+import ExploreFeed from "../../components/ExploreFeed";
 
 const Explore = () => {
   return (

@@ -1,8 +1,8 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Explore from "../../src/screens/Explore";
-import Trips from "../../src/screens/Trips";
-import Profile from "../../src/screens/Profile";
+import Explore from "../screens/tabScreens/Explore";
+import Trips from "../../src/screens/tabScreens/Trips";
+import Profile from "../../src/screens/tabScreens/Profile";
 import { Feather } from "@expo/vector-icons";
 
 const Tab = createBottomTabNavigator();
