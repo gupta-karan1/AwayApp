@@ -1,6 +1,6 @@
-// install react navigation for bottom tabs 
+// install react navigation for bottom tabs
 
-import { StatusBar } from "expo-status-bar";
+// import { StatusBar } from "expo-status-bar";
 import {
   StyleSheet,
   Text,
@@ -8,12 +8,12 @@ import {
   Button,
   FlatList,
   SafeAreaView,
+  StatusBar,
 } from "react-native";
-import app from "./firebaseConfig";
 import { useEffect, useState } from "react";
-import { getFirestore, collection, getDocs } from "firebase/firestore";
 import { NavigationContainer } from "@react-navigation/native";
 import Tabs from "./src/components/Tabs";
+import ExploreFeed from "./src/components/ExploreFeed";
 
 // refer this for firestore functions: https://firebase.google.com/docs/firestore/query-data/get-data
 
@@ -63,7 +63,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <Tabs />
-      <StatusBar style="auto" />
+      {/* <StatusBar style="auto" /> */}
       {/* <Button title="Get All Data" onPress={getAllDocs} />
       <FlatList
         data={allData}
@@ -77,6 +77,7 @@ export default function App() {
         }}
         keyExtractor={(item) => item.placeId}
       /> */}
+      <ExploreFeed />
     </NavigationContainer>
   );
 }
@@ -86,5 +87,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+    marginTop: StatusBar.currentHeight || 0,
   },
 });

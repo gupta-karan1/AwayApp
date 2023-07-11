@@ -69,7 +69,7 @@
                     {
                         "placeId": 4,
                         "placeTitle":"LV DREAM",
-                        "placeDescription":"Since it first opened in 1854, Louis Vuitton has been committed to creating awe-inspiring collaborations with the most consequential artists and creatives of the day. The Maison has now brought together some of its most iconic partnerships in an exhibition designed to showcase the vast expanse of Louis Vuitton's artistic and cultural work over the last 150 years. Titled LV Dream, the gallery takes visitors through specially curated rooms of multimedia art, textiles, furniture, perfumes, trunks and ready-to-wear items. The first room presents artistic interpretations of Vuitton himself by contemporary artists, such as a floor-to-ceiling digital moving portrait by multimedia artist Cao Fei and a painting of Gaston-Louis, Louis and Georges Vuitton by American figurative artist Alex Katz. Further along the exhibition, a psychedelic room designed by Kenta Cobayashi is dotted with cleverly designed 'Objets Nomades'. These are limited edition pieces of travel-inspired furniture created by designers from around the world, covering everything from a foldable stool to a packable (and very comfortable looking) camp bed. Other highlights included a look at the first three chapters of the Maison’s Artycapucines collection and creative collaborations with Japanese artists Yayoi Kusama and Takashi Murakami. The exhibition is free to enter, visitors need to book on the site. Olivia Morelli",
+                        "placeDescription":"Since it first opened in 1854, Louis Vuitton has been committed to creating awe-inspiring collaborations with the most consequential artists and creatives of the day. The Maison has now brought together some of its most iconic partnerships in an exhibition designed to showcase the vast expanse of Louis Vuitton's artistic and cultural work over the last 150 years. Titled LV Dream, the gallery takes visitors through specially curated rooms of multimedia art, textiles, furniture, perfumes, trunks and ready-to-wear items. The first room presents artistic interpretations of Vuitton himself by contemporary artists, such as a floor-to-ceiling digital moving portrait by multimedia artist Cao Fei and a painting of Gaston-Louis, Louis and Georges Vuitton by American figurative artist Alex Katz. Further along the exhibition, a psychedelic room designed by Kenta Cobayashi is dotted with cleverly designed 'Objets Nomades'. These are limited edition pieces of travel-inspired furniture created by designers from around the world, covering everything from a foldable stool to a packable (and very comfortable looking) camp bed. Other highlights included a look at the first three chapters of the Maison’s Artycapucines collection and creative collaborations with Japanese artists Yayoi Kusama and Takashi Murakami. The exhibition is free to enter, visitors need to book on the site.",
                         "placeCategory":"Museum",
                         "placeAddress":"2 Rue du Pont Neuf, 75001 Paris, France",
                         "placeWebsite":"https://eu.louisvuitton.com/eng-e1/magazine/articles/lv-dream",
@@ -357,7 +357,7 @@
                 ]
             },
             {
-                "artilceId": 2,
+                "articleId": 2,
                 "articleTitle": "The 10 best parks in Paris",
                 "articleUrl": "https://www.lonelyplanet.com/articles/best-parks-paris",
                 "articleSource": "Lonely Planet",
@@ -759,7 +759,7 @@
                         "placeImage":"https://images.adsttc.com/media/images/5d44/0ea3/284d/d1fd/3a00/0037/slideshow/Philharmonie_de_Paris_-_Guilhem_Vellut-_licensed_under_cc-by-2.0.jpg?1564741279"
                     },
                     {
-                        "placeId": 15,
+                        "placeId": 16,
                         "placeTitle": "La Seine Musical",
                         "placeDescription": "Architect: Shigeru Ban and Jean de Gastines. Year: 2017. Another structure dedicated to musical affairs – La Seine Musicale – which has received a wildly positive welcome by the general public. The facilities include an elevated egg-shaped auditorium for classical music, a larger modular concert hall, rehearsal rooms and an extensive roof garden. Much of the site's daytime energy needs are supplied by a large mobile curved solar panel array that covers the smaller auditorium.",
                         "placeCategory": "Live Music Venue",
@@ -774,7 +774,7 @@
                         "placeImage":"https://images.adsttc.com/media/images/5d44/0e6b/284d/d1fd/3a00/0035/slideshow/La_Seine_Musicale_-_slam.photo_-_licensed_under_CC_BY-SA_2.0.jpg?1564741204"
                     },
                     {
-                        "placeId": 16,
+                        "placeId": 17,
                         "placeTitle": "Bourse de Commerce / Collection Pinault",
                         "placeDescription": "Architect: Tadao Ando. François Pinault, who previously teamed up with Tadao Ando to open Venice's Palazzo Grassi and Punta della Dogana, commissioned this exciting project which will soon open. Located at the Bourse de Commerce, an 18th-century rotunda that once held the city's grain market and stock exchange, Collection Pinault Paris will host exhibitions from painting, sculpture, photography and video to installations. Ando designed the ambitious interior, where a cylindrical gallery will form the main exhibition space which will be set into the centre of the plan below the building's domed ceiling.",
                         "placeCategory": "Museum",
@@ -789,7 +789,7 @@
                         "placeImage":"https://parisjetaime.com/data/layout_image/fr-FR/Bourse-de-Commerce-Pinault-Collection-10-septembre-2020--630x405--%C2%A9-Courtesy-Pinault-Collection-Image-Timelapse-Go.jpg"
                     },
                     {
-                        "placeId": 17,
+                        "placeId": 18,
                         "placeTitle": "Galeries Lafayette Haussmann",
                         "placeDescription": "Architect: Georges Chedanne and Ferdinand Chanut. Year: 1912. The first Galeries Lafayette (the Harrods of France), opened here in 1912. Théophile Bader and his cousin Alphonse Kahn commissioned the architect Georges Chedanne and his pupil Ferdinand Chanut a lavish fashion store with a glass and steel dome and stunning Art Nouveau staircases. More than a century later, the building is still used for the same purpose and its oozing with greatness. Don't miss the amazing views from its rooftop. If you liked this one, you might also want to visit the recently refurbished Galeries Lafayette Champs-Élyséesby BIG (2019).",
                         "placeCategory": "Market",
@@ -804,7 +804,7 @@
                         "placeImage":"https://images.adsttc.com/media/images/5d44/0e1b/284d/d164/be00/0063/slideshow/Gallerie_Lafayette_-_via_gallerie_lafayette_group.jpg?1564741143"
                     },
                     {
-                        "placeId": 18,
+                        "placeId": 19,
                         "placeTitle": "Les Orgues de Flandre",
                         "placeDescription": "Architect: Martin van Trek. Year: 1980. Paris is full of Brutalist masterpieces but this is, in my opinion, one of the best. The Orgues de Flandre, which can be translated as the 'Organs of Flanders', are a group of residential buildings built from 1974 to 1980. What is really outstanding about this complex – and different to other residential houses of this kind around the world – is that Martin van Trek granted the private spaces (the apartments) a monumental status whilst leaving the public spaces in a secondary and more ordinary level. Controversial.",
                         "placeCategory": "Apartment Complex",
@@ -819,7 +819,7 @@
                         "placeImage":"https://images.adsttc.com/media/images/5d44/0ed3/284d/d164/be00/006a/slideshow/Virginia_Duran-_Paris_Architecture-Brutalism.jpg?1564741325"
                     },
                     {
-                        "placeId": 19,
+                        "placeId": 20,
                         "placeTitle": "Les Choux de Créteil",
                         "placeDescription": "Architect: Gérard Grandval. Year: 1974. Another housing project in the suburbs of Paris that is worth a visit: Les Choux de Créteil. This group of ten cylindrical buildings each 15 stories in height is called Les Choux (the cabbages). The project was initiated in 1966, in an area which had been used for a century to produce much of the vegetables for Parisian tables although the name makes reference to the unusual shape of their balconies. The buildings' unique shape is intended to be functional: the apartments' living spaces are closer to the windows and the 2-meter-tall balconies provide outdoor access and privacy at the same time.",
                         "placeCategory": "Student Dormitory",
@@ -834,7 +834,7 @@
                         "placeImage":"https://images.adsttc.com/media/images/5d44/0dfe/284d/d1fd/3a00/0034/slideshow/by_Paul_Fleury_via_Wikimedia_Commons_licenced_under_Creative_Commons_Attribution_3.0_Unported.jpg?1564741114"
                     },
                     {
-                        "placeId": 20,
+                        "placeId": 21,
                         "placeTitle": "Palace of Versailles",
                         "placeDescription": "Architect: Louis Le Vau, Andre Le Notre and Charles Lebrun. Year: 1682. The site began as Louis XIII’s hunting lodge before his son Louis XIV transformed and expanded it, moving the court and government of France to Versailles in 1682. Each of the three French kings who lived there until the French Revolution added improvements to make it more beautiful. Indeed it's one of the most stunning European palaces. This is a classic that everyone should visit once in a lifetime.",
                         "placeCategory": "Castle",
@@ -849,7 +849,7 @@
                         "placeImage":"https://images.adsttc.com/media/images/5d44/146d/284d/d164/be00/006e/slideshow/Myrabella__Wikimedia_Commons__CC_BY-SA_3.0.jpg?1564742759"
                     },
                     {
-                        "placeId": 21,
+                        "placeId": 22,
                         "placeTitle": "Villa Savoye",
                         "placeDescription": "Architect: Le Corbusier. Year: 1931. This may be the one house that every architect knows in the world and with no doubt it is one of the most significant contributions to modern architecture in the 20th century. The house single handedly transformed Le Corbusier’s career as well as the principles of the International Style, becoming one of the most important architectural precedents in history. Originally built as a country retreat on behest of the Savoye family but it now belongs to the French state and therefore it can be visited. In fact, it's free to visit on the 1st Sunday of every month.",
                         "placeCategory": "Monument",
@@ -1073,7 +1073,19 @@
                 "articleSaved": "false",
                 "places": [
                     {
-
+                        "placeId": 1,
+                        "placeTitle": "Ritz Paris",
+                        "placeDescription": "Pourquoi pas? If you're looking for the swankiest spot in Paris, there aren't many destinations that will top the Ritz. The refined 19th-century décor — gilded sconces, marble bathrooms, floor-to-ceiling windows — of the 142 rooms and themed suites (like the Coco Chanel) remind us all that the French do timeless elegance best.",
+                        "placeCategory": "5 Star Tourist Hotel",
+                        "placeAddress": "15 Pl. Vendôme, 75001 Paris, France",
+                        "placeWebsite": "http://www.ritzparis.com/",
+                        "placeHours": "Check-in time: 15:00, Check-out time: 12:00",
+                        "placeGoogleMapLink": "https://www.google.com/maps/place/Ritz+Paris/@48.8680982,2.3185935,15z/data=!3m2!4b1!5s0x47e66e318913a89d:0x6ff08e4d1a846c6!4m9!3m8!1s0x47e66f50e4922355:0x4e7e02b37682a099!5m2!4m1!1i2!8m2!3d48.8680987!4d2.3288932!16zL20vMDU2bjgx?entry=ttu",
+                        "placeContact": "+33143163030",
+                        "placeLatitude":48.868719286177644,
+                        "placeLongitude": 2.3286356595341373,
+                        "placeSaved": "false",
+                        "placeImage":"https://www.travelandleisure.com/thmb/o5-yicUwTlp_wy5434EKFARzUm4=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/ritz-paris-windor-suite-PARISHOTELS0618-5436e26300a24dcf82b67ec63d34324e.jpg"
                     }
                 ]
             }
