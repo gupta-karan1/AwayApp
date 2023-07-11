@@ -1,23 +1,23 @@
-import { StyleSheet, Text, View, Image, Button, Pressable } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import DestinationScreen from "../screens/DestinationScreen";
+import { StyleSheet, Text, View, Button, Pressable, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 // DestinationCard component
-const DestinationCard = ({ country, description, name, image }) => {
+const DestinationCard = ({ country, description, name, image, path }) => {
   const { navigate } = useNavigation();
   return (
     <View>
-      <Pressable onPress={() => navigate("DestinationScreen")}>
-      <Image source={{ uri: image }} style={styles.image} />
-      <Text>{name}</Text>
-      <Text>{country}</Text>
-      <Text>{description}</Text>
-      <Button
-        title="Read More"
-        // onPress={navigation.navigate("DestinationScreen")}
-      />
+      <Pressable
+        onPress={() =>
+          navigate("DestinationScreen", {
+            pathId: path,
+          })
+        }
+      >
+        <Image source={{ uri: image }} style={styles.image} />
+        <Text>{name}</Text>
+        <Text>{country}</Text>
+        <Text>{description}</Text>
+        <Text>{path}</Text>
       </Pressable>
     </View>
   );

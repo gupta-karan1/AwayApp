@@ -32,6 +32,7 @@ const ExploreFeed = () => {
             key={item.destinationId}
             name={item.destinationName}
             image={item.imageUrl}
+            path={`destinations/${item.destinationId}/articles`}
           />
         ))}
     </View>
