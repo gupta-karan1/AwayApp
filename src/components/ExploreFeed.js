@@ -2,6 +2,7 @@ import { StyleSheet, Text, View, Image } from "react-native";
 import React, { useState, useEffect } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { FIREBASE_APP, FIREBASE_DB } from "../../firebaseConfig";
+import DestinationCard from "./DestinationCard";
 
 const ExploreFeed = () => {
   const [exploreData, setExploreData] = useState([]);
@@ -19,18 +20,6 @@ const ExploreFeed = () => {
     getExploreData();
     setLoading(false);
   }, []);
-
-  // DestinationCard component
-  const DestinationCard = ({ country, description, name, image }) => {
-    return (
-      <View>
-        <Image source={{ uri: image }} style={{ height: 200, width: 200 }} />
-        <Text>{name}</Text>
-        <Text>{country}</Text>
-        <Text>{description}</Text>
-      </View>
-    );
-  };
 
   return (
     <View>

@@ -1,10 +1,11 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
+import ExploreFeed from "../components/ExploreFeed";
 
 const Explore = () => {
   return (
     <View>
-      <Text>Explore</Text>
+      <ExploreFeed />
     </View>
   );
 };

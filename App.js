@@ -1,19 +1,9 @@
 // install react navigation for bottom tabs
 
 // import { StatusBar } from "expo-status-bar";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Button,
-  FlatList,
-  SafeAreaView,
-  StatusBar,
-} from "react-native";
-import { useEffect, useState } from "react";
+import { StyleSheet, StatusBar } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import Tabs from "./src/components/Tabs";
-import ExploreFeed from "./src/components/ExploreFeed";
 
 // refer this for firestore functions: https://firebase.google.com/docs/firestore/query-data/get-data
 
@@ -77,7 +67,6 @@ export default function App() {
         }}
         keyExtractor={(item) => item.placeId}
       /> */}
-      <ExploreFeed />
     </NavigationContainer>
   );
 }
