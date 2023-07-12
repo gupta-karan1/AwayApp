@@ -1,11 +1,29 @@
-import { StyleSheet, Text, View, StatusBar, FlatList } from 'react-native'
+import {
+  StyleSheet,
+  Text,
+  View,
+  StatusBar,
+  FlatList,
+  Image,
+} from "react-native";
 import { useState, useEffect } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { FIREBASE_DB } from "../../firebaseConfig";
 import PlaceCard from "../components/PlaceCard";
 
 const ArticleScreen = ({ route }) => {
-  const { pathId } = route.params;
+  const {
+    pathId,
+    articleImg,
+    articleTitle,
+    articleCategory,
+    articleAuthor,
+    articleDate,
+    articleIntro,
+    articleSaved,
+    articleSource,
+    articleUrl,
+  } = route.params;
 
   const [placeData, setPlaceData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -22,44 +40,50 @@ const ArticleScreen = ({ route }) => {
   }, []);
 
   return (
-    <View style={styles.constainer}>
+    <View style={styles.container}>
       {loading && <Text>Loading...</Text>}
-      
-        {!loading && (
-          <FlatList
-            data={placeData}
-            renderItem={({ item }) => (
-              <PlaceCard
-            key={item.placeId}
-            address={item.placeAddress}
-            category={item.placeCategory}
-            contact={item.placeContact}
-            description={item.placeDescription}
-            googleMap={item.placeGoogleMapLink}
-            hours={item.placeHours}
-            image={item.placeImage}
-            lattitude={item.placeLattitude}
-            longitude={item.placeLongitude}
-            saved={item.placeSaved}
-            title={item.placeTitle}
-            website={item.placeWebsite}
-            path={`${pathId}/${item.placeId}`}
-          />
-            )}
-            keyExtractor={(item) => item.placeId}
-          />
-        )}
-    </View>
-  )
-}
 
-export default ArticleScreen
+      {!loading && (
+        <FlatList
+          data={placeData}
+          renderItem={({ item }) => (
+            <PlaceCard
+              key={item.placeId}
+              placeItem={item}
+              path={`${pathId}/${item.placeId}`}
+            />
+          )}
+          keyExtractor={(item) => item.placeId}
+          ListHeaderComponent={
+            <View>
+              <Image source={{ uri: articleImg }} style={styles.image} />
+              <Text>{articleTitle}</Text>
+              <Text>{articleCategory}</Text>
+              <Text>{articleAuthor}</Text>
+              <Text>{articleDate}</Text>
+              <Text>{articleIntro}</Text>
+              <Text>{articleSaved}</Text>
+              <Text>{articleSource}</Text>
+              <Text>{articleUrl}</Text>
+            </View>
+          }
+        />
+      )}
+    </View>
+  );
+};
+
+export default ArticleScreen;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: StatusBar.currentHeight || 0,
+  },
+
+  image: {
+    width: 300,
+    height: 150,
   },
 });

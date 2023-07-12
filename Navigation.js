@@ -1,7 +1,7 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Explore from "./src/screens/tabScreens/Explore"
+import Explore from "./src/screens/tabScreens/Explore";
 import Trips from "./src/screens/tabScreens/Trips";
 import Profile from "./src/screens/tabScreens/Profile";
 import { Feather } from "@expo/vector-icons";
@@ -14,11 +14,29 @@ const Tab = createBottomTabNavigator();
 
 function ExploreStackGroup() {
   return (
-    <ExploreStack.Navigator>
+    <ExploreStack.Navigator initialRouteName="Explore">
       <ExploreStack.Screen name="Explore" component={Explore} />
-      <ExploreStack.Screen name="DestinationScreen" component={DestinationScreen} />
-      <ExploreStack.Screen name="ArticleScreen" component={ArticleScreen} />
-      <ExploreStack.Screen name="PlaceScreen" component={PlaceScreen} />
+      <ExploreStack.Screen
+        name="DestinationScreen"
+        component={DestinationScreen}
+        options={{
+          title: "Destination",
+        }}
+      />
+      <ExploreStack.Screen
+        name="ArticleScreen"
+        component={ArticleScreen}
+        options={{
+          title: "Article",
+        }}
+      />
+      <ExploreStack.Screen
+        name="PlaceScreen"
+        component={PlaceScreen}
+        options={{
+          title: "Place",
+        }}
+      />
     </ExploreStack.Navigator>
   );
 }
@@ -43,7 +61,7 @@ function Tabs() {
             />
           ),
           headerShown: false,
-          tabBarLabel: 'Explore'
+          tabBarLabel: "Explore",
         }}
       />
       <Tab.Screen

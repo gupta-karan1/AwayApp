@@ -1,11 +1,4 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  FlatList,
-  Image,
-  ScrollView,
-} from "react-native";
+import { StyleSheet, Text, View, FlatList, Image } from "react-native";
 import { useState, useEffect } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { FIREBASE_DB } from "../../firebaseConfig";
@@ -38,34 +31,25 @@ const DestinationScreen = ({ route }) => {
     <View style={styles.container}>
       {loading && <Text>Loading...</Text>}
       {!loading && (
-        <ScrollView>
-          <Image source={{ uri: destinationImage }} style={styles.image} />
-          <Text>{destinationName}</Text>
-          <Text>{destinationCountry}</Text>
-          <Text>{destinationDescription}</Text>
-
-          <ScrollView>
-            <FlatList
-              data={articleData}
-              renderItem={({ item }) => (
-                <ArticleCard
-                  key={item.articleId}
-                  author={item.articleAuthor}
-                  category={item.articleCategory}
-                  date={item.articleDate}
-                  image={item.articleImg}
-                  intro={item.articleIntro}
-                  saved={item.articleSaved}
-                  source={item.articleSource}
-                  title={item.articleTitle}
-                  url={item.articleUrl}
-                  path={`${pathId}/${item.articleId}/places`}
-                />
-              )}
-              keyExtractor={(item) => item.articleId}
+        <FlatList
+          data={articleData}
+          renderItem={({ item }) => (
+            <ArticleCard
+              key={item.articleId}
+              articleItem={item}
+              path={`${pathId}/${item.articleId}/places`}
             />
-          </ScrollView>
-        </ScrollView>
+          )}
+          keyExtractor={(item) => item.articleId}
+          ListHeaderComponent={
+            <View>
+              <Image source={{ uri: destinationImage }} style={styles.image} />
+              <Text>{destinationName}</Text>
+              <Text>{destinationCountry}</Text>
+              <Text>{destinationDescription}</Text>
+            </View>
+          }
+        />
       )}
     </View>
   );

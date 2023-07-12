@@ -1,42 +1,57 @@
 import { StyleSheet, Text, View, Pressable, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-const PlaceCard = ({ address, category, contact, description, googleMap, hours, image, lattitude, longitude, saved, title, website, path }) => {
-    const { navigate } = useNavigation();
+const PlaceCard = ({ placeItem, path }) => {
+  const { navigate } = useNavigation();
+  const {
+    placeAddress,
+    placeCategory,
+    placeContact,
+    placeDescription,
+    placeGoogleMapLink,
+    placeHours,
+    placeImage,
+    placeLatitude,
+    placeLongitude,
+    placeSaved,
+    placeTitle,
+    placeWebsite,
+  } = placeItem;
 
   return (
     <View>
-        <Pressable
+      <Pressable
         onPress={() =>
           navigate("PlaceScreen", {
             pathId: path,
-            address, category, contact, description, googleMap, hours, image, lattitude, longitude, saved, title, website
+            placeAddress,
+            placeCategory,
+            placeContact,
+            placeDescription,
+            placeGoogleMapLink,
+            placeHours,
+            placeImage,
+            placeLatitude,
+            placeLongitude,
+            placeSaved,
+            placeTitle,
+            placeWebsite,
           })
         }
       >
-        <Image source={{ uri: image }} style={styles.image} />
-        <Text>{address}</Text>
-        <Text>{category}</Text>
-        <Text>{contact}</Text>
-        <Text>{description}</Text>
-        <Text>{googleMap}</Text>
-        <Text>{hours}</Text>
-        <Text>{lattitude}</Text>
-        <Text>{longitude}</Text>
-        <Text>{saved}</Text>
-        <Text>{title}</Text>
-        <Text>{website}</Text>
-        <Text>{path}</Text>
+        <Image source={{ uri: placeImage }} style={styles.image} />
+        <Text>{placeTitle}</Text>
+        <Text>{placeCategory}</Text>
       </Pressable>
-      </View>
-  )
-}
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
-    image: {
-      height: 200,
-      width: 200,
-    },
-  });
+  image: {
+    height: 200,
+    width: 200,
+  },
+});
 
-export default PlaceCard
+export default PlaceCard;

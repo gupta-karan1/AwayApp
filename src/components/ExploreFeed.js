@@ -30,12 +30,8 @@ const ExploreFeed = () => {
           data={exploreData}
           renderItem={({ item }) => (
             <DestinationCard
-              item={item}
+              destinationItem={item}
               key={item.destinationId}
-              // country={item.country}
-              // description={item.description}
-              // name={item.destinationName}
-              // image={item.imageUrl}
               path={`destinations/${item.destinationId}/articles`}
             />
           )}
