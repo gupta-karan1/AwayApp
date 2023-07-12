@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, Image } from "react-native";
 import React, { useState, useEffect } from "react";
 import { collection, getDocs } from "firebase/firestore";
-import { FIREBASE_APP, FIREBASE_DB } from "../../firebaseConfig";
+import { FIREBASE_DB } from "../../firebaseConfig";
 import DestinationCard from "./DestinationCard";
 
 const ExploreFeed = () => {

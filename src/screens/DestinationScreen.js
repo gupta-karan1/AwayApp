@@ -1,12 +1,11 @@
 import { StyleSheet, Text, View, Image, StatusBar } from "react-native";
 import { useState, useEffect } from "react";
 import { collection, getDocs } from "firebase/firestore";
-import { FIREBASE_APP, FIREBASE_DB } from "../../firebaseConfig";
-import { useRoute } from "@react-navigation/native";
+import { FIREBASE_DB } from "../../firebaseConfig";
+import ArticleCard from "../components/ArticleCard";
 
 const DestinationScreen = ({ route, navigation }) => {
   const { pathId } = route.params;
-  //   const articlePath = JSON.stringify(pathId);
 
   const [articleData, setArticleData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -22,19 +21,24 @@ const DestinationScreen = ({ route, navigation }) => {
     setLoading(false);
   }, []);
 
-  const ArticleCard = ({ author }) => {
-    return (
-      <View>
-        <Text>{author}</Text>
-      </View>
-    );
-  };
   return (
     <View style={styles.container}>
       {loading && <Text>Loading...</Text>}
       {!loading &&
         articleData.map((item) => (
-          <ArticleCard key={item.articleId} author={item.articleId} />
+          <ArticleCard 
+          key={item.articleId} 
+          author={item.articleAuthor}
+          category={item.articleCategory}
+          date={item.articleDate}
+          image={item.articleImg}
+          intro={item.articleIntro}ç
+          saved={item.articleSaved}
+          source={item.articleSource}
+          title={item.articleTitle}
+          url={item.articleUrl}
+          path={`${pathId}/${item.articleId}/places`}
+          />
         ))}
     </View>
   );

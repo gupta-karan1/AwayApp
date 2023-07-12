@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Button, Pressable, Image } from "react-native";
+import { StyleSheet, Text, View, Pressable, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 // DestinationCard component
@@ -10,6 +10,7 @@ const DestinationCard = ({ country, description, name, image, path }) => {
         onPress={() =>
           navigate("DestinationScreen", {
             pathId: path,
+            
           })
         }
       >
