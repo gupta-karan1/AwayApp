@@ -1,9 +1,8 @@
-import { StyleSheet, Text, View, Image } from "react-native";
+import { StyleSheet, View, ActivityIndicator, FlatList } from "react-native";
 import React, { useState, useEffect } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { FIREBASE_DB } from "../../firebaseConfig";
 import DestinationCard from "./DestinationCard";
-import { FlatList } from "react-native-gesture-handler";
 
 const ExploreFeed = () => {
   const [exploreData, setExploreData] = useState([]);
@@ -24,7 +23,7 @@ const ExploreFeed = () => {
 
   return (
     <View>
-      {loading && <Text>Loading...</Text>}
+      {loading && <ActivityIndicator size="large" />}
       {!loading && (
         <FlatList
           data={exploreData}

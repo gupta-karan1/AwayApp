@@ -1,4 +1,11 @@
-import { StyleSheet, Text, View, Image } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  ActivityIndicator,
+  ScrollView,
+} from "react-native";
 import { useState, useEffect } from "react";
 import { doc, getDoc } from "firebase/firestore";
 import { FIREBASE_DB } from "../../firebaseConfig";
@@ -28,25 +35,27 @@ const PlaceScreen = ({ route }) => {
 
   return (
     <View>
-      {loading && <Text>Loading...</Text>}
+      {loading && <ActivityIndicator size="large" />}
       {!loading && (
         <View>
-          <Image
-            source={{ uri: singlePlaceData.placeImage }}
-            style={styles.image}
-          />
-          <Text>{singlePlaceData.placeTitle}</Text>
-          <Text>{singlePlaceData.placeAddress}</Text>
-          <Text>{singlePlaceData.placeCategory}</Text>
-          <Text>{singlePlaceData.placeContact}</Text>
-          <Text>{singlePlaceData.placeDescription}</Text>
-          <Text>{singlePlaceData.placeGoogleMapLink}</Text>
-          <Text>{singlePlaceData.placeHours}</Text>
-          <Text>{singlePlaceData.placeLattitude}</Text>
-          <Text>{singlePlaceData.placeLongitude}</Text>
-          <Text>{singlePlaceData.placeSaved}</Text>
-          <Text>{singlePlaceData.placeTitle}</Text>
-          <Text>{singlePlaceData.placeWebsite}</Text>
+          <ScrollView>
+            <Image
+              source={{ uri: singlePlaceData.placeImage }}
+              style={styles.image}
+            />
+            <Text>{singlePlaceData.placeTitle}</Text>
+            <Text>{singlePlaceData.placeAddress}</Text>
+            <Text>{singlePlaceData.placeCategory}</Text>
+            <Text>{singlePlaceData.placeContact}</Text>
+            <Text>{singlePlaceData.placeDescription}</Text>
+            <Text>{singlePlaceData.placeGoogleMapLink}</Text>
+            <Text>{singlePlaceData.placeHours}</Text>
+            <Text>{singlePlaceData.placeLatitude}</Text>
+            <Text>{singlePlaceData.placeLongitude}</Text>
+            <Text>{singlePlaceData.placeSaved ? "Saved" : "Not Saved"}</Text>
+            <Text>{singlePlaceData.placeTitle}</Text>
+            <Text>{singlePlaceData.placeWebsite}</Text>
+          </ScrollView>
         </View>
       )}
     </View>

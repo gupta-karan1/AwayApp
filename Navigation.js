@@ -14,7 +14,13 @@ const Tab = createBottomTabNavigator();
 
 function ExploreStackGroup() {
   return (
-    <ExploreStack.Navigator initialRouteName="Explore">
+    <ExploreStack.Navigator
+      initialRouteName="Explore"
+      screenOptions={{
+        headerLargeTitle: true,
+        headerTitleAlign: "center",
+      }}
+    >
       <ExploreStack.Screen name="Explore" component={Explore} />
       <ExploreStack.Screen
         name="DestinationScreen"

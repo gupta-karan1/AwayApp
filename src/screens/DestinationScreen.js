@@ -1,4 +1,11 @@
-import { StyleSheet, Text, View, FlatList, Image } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  Image,
+  ActivityIndicator,
+} from "react-native";
 import { useState, useEffect } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { FIREBASE_DB } from "../../firebaseConfig";
@@ -29,7 +36,7 @@ const DestinationScreen = ({ route }) => {
 
   return (
     <View style={styles.container}>
-      {loading && <Text>Loading...</Text>}
+      {loading && <ActivityIndicator size="large" />}
       {!loading && (
         <FlatList
           data={articleData}
