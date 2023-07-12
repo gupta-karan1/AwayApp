@@ -2,9 +2,9 @@ import {
   StyleSheet,
   Text,
   View,
-  StatusBar,
   FlatList,
   Image,
+  ActivityIndicator,
 } from "react-native";
 import { useState, useEffect } from "react";
 import { collection, getDocs } from "firebase/firestore";
@@ -41,7 +41,7 @@ const ArticleScreen = ({ route }) => {
 
   return (
     <View style={styles.container}>
-      {loading && <Text>Loading...</Text>}
+      {loading && <ActivityIndicator size="large" />}
 
       {!loading && (
         <FlatList
