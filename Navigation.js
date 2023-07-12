@@ -7,6 +7,7 @@ import Profile from "./src/screens/tabScreens/Profile";
 import { Feather } from "@expo/vector-icons";
 import DestinationScreen from "./src/screens/DestinationScreen";
 import ArticleScreen from "./src/screens/ArticleScreen";
+import PlaceScreen from "./src/screens/PlaceScreen";
 
 const ExploreStack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -17,6 +18,7 @@ function ExploreStackGroup() {
       <ExploreStack.Screen name="Explore" component={Explore} />
       <ExploreStack.Screen name="DestinationScreen" component={DestinationScreen} />
       <ExploreStack.Screen name="ArticleScreen" component={ArticleScreen} />
+      <ExploreStack.Screen name="PlaceScreen" component={PlaceScreen} />
     </ExploreStack.Navigator>
   );
 }
