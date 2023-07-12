@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Image } from "react-native";
 import { useState, useEffect } from "react";
 import { doc, getDoc } from "firebase/firestore";
 import { FIREBASE_DB } from "../../firebaseConfig";
@@ -28,8 +28,13 @@ const PlaceScreen = ({ route }) => {
 
   return (
     <View>
+      {loading && <Text>Loading...</Text>}
       {!loading && (
         <View>
+          <Image
+            source={{ uri: singlePlaceData.placeImage }}
+            style={styles.image}
+          />
           <Text>{singlePlaceData.placeTitle}</Text>
           <Text>{singlePlaceData.placeAddress}</Text>
           <Text>{singlePlaceData.placeCategory}</Text>
@@ -37,7 +42,6 @@ const PlaceScreen = ({ route }) => {
           <Text>{singlePlaceData.placeDescription}</Text>
           <Text>{singlePlaceData.placeGoogleMapLink}</Text>
           <Text>{singlePlaceData.placeHours}</Text>
-          <Text>{singlePlaceData.placeImage}</Text>
           <Text>{singlePlaceData.placeLattitude}</Text>
           <Text>{singlePlaceData.placeLongitude}</Text>
           <Text>{singlePlaceData.placeSaved}</Text>
@@ -51,4 +55,9 @@ const PlaceScreen = ({ route }) => {
 
 export default PlaceScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  image: {
+    height: 200,
+    width: 200,
+  },
+});
