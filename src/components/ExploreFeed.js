@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { FIREBASE_DB } from "../../firebaseConfig";
 import DestinationCard from "./DestinationCard";
+import { FlatList } from "react-native-gesture-handler";
 
 const ExploreFeed = () => {
   const [exploreData, setExploreData] = useState([]);
@@ -24,17 +25,23 @@ const ExploreFeed = () => {
   return (
     <View>
       {loading && <Text>Loading...</Text>}
-      {!loading &&
-        exploreData.map((item) => (
-          <DestinationCard
-            country={item.country}
-            description={item.description}
-            key={item.destinationId}
-            name={item.destinationName}
-            image={item.imageUrl}
-            path={`destinations/${item.destinationId}/articles`}
-          />
-        ))}
+      {!loading && (
+        <FlatList
+          data={exploreData}
+          renderItem={({ item }) => (
+            <DestinationCard
+              item={item}
+              key={item.destinationId}
+              // country={item.country}
+              // description={item.description}
+              // name={item.destinationName}
+              // image={item.imageUrl}
+              path={`destinations/${item.destinationId}/articles`}
+            />
+          )}
+          keyExtractor={(item) => item.destinationId}
+        />
+      )}
     </View>
   );
 };

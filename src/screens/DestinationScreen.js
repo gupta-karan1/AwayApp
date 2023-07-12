@@ -1,11 +1,24 @@
-import { StyleSheet, Text, View, Image, StatusBar } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  Image,
+  ScrollView,
+} from "react-native";
 import { useState, useEffect } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { FIREBASE_DB } from "../../firebaseConfig";
 import ArticleCard from "../components/ArticleCard";
 
-const DestinationScreen = ({ route, navigation }) => {
-  const { pathId } = route.params;
+const DestinationScreen = ({ route }) => {
+  const {
+    pathId,
+    destinationName,
+    destinationCountry,
+    destinationDescription,
+    destinationImage,
+  } = route.params;
 
   const [articleData, setArticleData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -24,22 +37,36 @@ const DestinationScreen = ({ route, navigation }) => {
   return (
     <View style={styles.container}>
       {loading && <Text>Loading...</Text>}
-      {!loading &&
-        articleData.map((item) => (
-          <ArticleCard 
-          key={item.articleId} 
-          author={item.articleAuthor}
-          category={item.articleCategory}
-          date={item.articleDate}
-          image={item.articleImg}
-          intro={item.articleIntro}ç
-          saved={item.articleSaved}
-          source={item.articleSource}
-          title={item.articleTitle}
-          url={item.articleUrl}
-          path={`${pathId}/${item.articleId}/places`}
-          />
-        ))}
+      {!loading && (
+        <ScrollView>
+          <Image source={{ uri: destinationImage }} style={styles.image} />
+          <Text>{destinationName}</Text>
+          <Text>{destinationCountry}</Text>
+          <Text>{destinationDescription}</Text>
+
+          <ScrollView>
+            <FlatList
+              data={articleData}
+              renderItem={({ item }) => (
+                <ArticleCard
+                  key={item.articleId}
+                  author={item.articleAuthor}
+                  category={item.articleCategory}
+                  date={item.articleDate}
+                  image={item.articleImg}
+                  intro={item.articleIntro}
+                  saved={item.articleSaved}
+                  source={item.articleSource}
+                  title={item.articleTitle}
+                  url={item.articleUrl}
+                  path={`${pathId}/${item.articleId}/places`}
+                />
+              )}
+              keyExtractor={(item) => item.articleId}
+            />
+          </ScrollView>
+        </ScrollView>
+      )}
     </View>
   );
 };
@@ -51,6 +78,9 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: StatusBar.currentHeight || 0,
+  },
+  image: {
+    height: 150,
+    width: 300,
   },
 });

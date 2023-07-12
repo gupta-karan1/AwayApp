@@ -2,7 +2,8 @@ import { StyleSheet, Text, View, Pressable, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 // DestinationCard component
-const DestinationCard = ({ country, description, name, image, path }) => {
+const DestinationCard = ({ item, path }) => {
+  const { country, description, destinationName, imageUrl } = item;
   const { navigate } = useNavigation();
   return (
     <View>
@@ -10,12 +11,15 @@ const DestinationCard = ({ country, description, name, image, path }) => {
         onPress={() =>
           navigate("DestinationScreen", {
             pathId: path,
-            
+            destinationName: destinationName,
+            destinationCountry: country,
+            destinationDescription: description,
+            destinationImage: imageUrl,
           })
         }
       >
-        <Image source={{ uri: image }} style={styles.image} />
-        <Text>{name}</Text>
+        <Image source={{ uri: imageUrl }} style={styles.image} />
+        <Text>{destinationName}</Text>
         <Text>{country}</Text>
         <Text>{description}</Text>
         <Text>{path}</Text>
