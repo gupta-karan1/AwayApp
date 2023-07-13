@@ -7,22 +7,25 @@ const DestinationCard = ({ destinationItem, path }) => {
   const { navigate } = useNavigation();
 
   return (
-    <Pressable
-      onPress={() =>
-        navigate("DestinationScreen", {
-          pathId: path,
-          destinationName: destinationName,
-          destinationCountry: country,
-          destinationDescription: description,
-          destinationImage: imageUrl,
-        })
-      }
-    >
-      <Image source={{ uri: imageUrl }} style={styles.image} />
+    <View>
+      <Pressable
+        style={styles.container}
+        onPress={() =>
+          navigate("DestinationScreen", {
+            pathId: path,
+            destinationName: destinationName,
+            destinationCountry: country,
+            destinationDescription: description,
+            destinationImage: imageUrl,
+          })
+        }
+      >
+        <Image source={{ uri: imageUrl }} style={styles.image} />
 
-      <Text>{destinationName}</Text>
-      <Text>{country}</Text>
-    </Pressable>
+        <Text>{destinationName}</Text>
+        <Text>{country}</Text>
+      </Pressable>
+    </View>
   );
 };
 

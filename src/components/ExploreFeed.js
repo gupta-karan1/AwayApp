@@ -3,10 +3,17 @@ import React, { useState, useEffect, useCallback } from "react";
 import { collection, getDocs, limit, query } from "firebase/firestore";
 import { FIREBASE_DB } from "../../firebaseConfig";
 import DestinationCard from "./DestinationCard";
+import ThingsToDo from "./ThingsToDo";
+import FoodDrink from "./FoodDrink";
+import PlacesToStay from "./PlacesToStay";
+import StyleCulture from "./StyleCulture";
+import WildlifeNature from "./WildlifeNature";
+import FeaturedArticle from "./FeaturedArticle";
 
 const ExploreFeed = () => {
-  const [exploreData, setExploreData] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const [exploreData, setExploreData] = useState([]); // destination state
 
   const getExploreData = async () => {
     const destRef = collection(FIREBASE_DB, "destinations");
@@ -28,7 +35,7 @@ const ExploreFeed = () => {
     return (
       <DestinationCard
         destinationItem={item}
-        // key={item.destinationId}
+        key={item.destinationId}
         path={`destinations/${item.destinationId}/articles`}
       />
     );
@@ -39,23 +46,31 @@ const ExploreFeed = () => {
     <View>
       {loading && <ActivityIndicator size="large" />}
       {!loading && (
-        <FlatList
-          data={exploreData}
-          renderItem={renderDestinationCard}
-          keyExtractor={(item) => item.destinationId}
-          horizontal
-          // Performance settings
-          removeClippedSubviews={true} // Unmount components when outside of window
-          initialNumToRender={2} // Reduce initial render amount
-          maxToRenderPerBatch={2} // Reduce number in each render batch
-          updateCellsBatchingPeriod={100} // Increase time between renders
-          windowSize={2} // Reduce the window size
-        />
+        <View>
+          <FlatList
+            data={exploreData}
+            renderItem={renderDestinationCard}
+            keyExtractor={(item) => item.destinationId}
+            horizontal
+            // Performance settings
+            removeClippedSubviews={true} // Unmount components when outside of window
+            initialNumToRender={2} // Reduce initial render amount
+            maxToRenderPerBatch={2} // Reduce number in each render batch
+            updateCellsBatchingPeriod={100} // Increase time between renders
+            windowSize={2} // Reduce the window size
+          />
+          <FeaturedArticle />
+          <ThingsToDo />
+          <FoodDrink />
+          <PlacesToStay />
+          <StyleCulture />
+          <WildlifeNature />
+        </View>
       )}
     </View>
   );
 };
 
-export default ExploreFeed;
-
 const styles = StyleSheet.create({});
+
+export default ExploreFeed;

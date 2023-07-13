@@ -35,7 +35,7 @@ const ArticleCard = ({ path, articleItem }) => {
       >
         <Image source={{ uri: articleImg }} style={styles.image} />
         <Text>{articleTitle}</Text>
-        <Text>{articleCategory}</Text>
+        <Text>{articleSource}</Text>
       </Pressable>
     </View>
   );
