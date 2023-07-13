@@ -1,6 +1,6 @@
 import { StyleSheet, View, ActivityIndicator, FlatList } from "react-native";
 import React, { useState, useEffect, useCallback } from "react";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, limit, query } from "firebase/firestore";
 import { FIREBASE_DB } from "../../firebaseConfig";
 import DestinationCard from "./DestinationCard";
 
@@ -9,9 +9,12 @@ const ExploreFeed = () => {
   const [loading, setLoading] = useState(true);
 
   const getExploreData = async () => {
-    const querySnapshot = await getDocs(
-      collection(FIREBASE_DB, "destinations")
-    );
+    const destRef = collection(FIREBASE_DB, "destinations");
+    const q = query(destRef, limit(2));
+    const querySnapshot = await getDocs(q);
+    // const querySnapshot = await getDocs(
+    //   collection(FIREBASE_DB, "destinations"),
+    // );
     const data = querySnapshot.docs.map((doc) => doc.data());
     setExploreData(data);
   };
