@@ -17,7 +17,6 @@ function ExploreStackGroup() {
     <ExploreStack.Navigator
       initialRouteName="Explore"
       screenOptions={{
-        headerLargeTitle: true,
         headerTitleAlign: "center",
       }}
     >
