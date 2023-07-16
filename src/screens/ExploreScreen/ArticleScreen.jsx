@@ -6,10 +6,10 @@ import {
   Image,
   ActivityIndicator,
 } from "react-native";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { collection, getDocs } from "firebase/firestore";
-import { FIREBASE_DB } from "../../firebaseConfig";
-import PlaceCard from "../components/PlaceCard";
+import { FIREBASE_DB } from "../../../firebaseConfig";
+import PlaceCard from "../../components/ExploreComp/PlaceCard";
 
 const ArticleScreen = ({ route }) => {
   const {
@@ -34,6 +34,16 @@ const ArticleScreen = ({ route }) => {
     setPlaceData(data);
   };
 
+  const renderPlaceCard = useCallback(({ item }) => {
+    return (
+      <PlaceCard
+        key={item.placeId}
+        placeItem={item}
+        path={`${pathId}/${item.placeId}`}
+      />
+    );
+  }, []);
+
   useEffect(() => {
     getPlaceData();
     setLoading(false);
@@ -46,13 +56,7 @@ const ArticleScreen = ({ route }) => {
       {!loading && (
         <FlatList
           data={placeData}
-          renderItem={({ item }) => (
-            <PlaceCard
-              key={item.placeId}
-              placeItem={item}
-              path={`${pathId}/${item.placeId}`}
-            />
-          )}
+          renderItem={renderPlaceCard}
           keyExtractor={(item) => item.placeId}
           ListHeaderComponent={
             <View>

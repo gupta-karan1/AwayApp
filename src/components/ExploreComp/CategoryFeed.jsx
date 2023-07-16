@@ -7,23 +7,24 @@ import {
   where,
 } from "firebase/firestore";
 import React, { useState, useEffect, useCallback } from "react";
-import { FIREBASE_DB } from "../../firebaseConfig";
+import { FIREBASE_DB } from "../../../firebaseConfig";
 import ArticleCard from "./ArticleCard";
 
-const ThingsToDo = () => {
+const CategoryFeed = ({ articleCategory }) => {
   const [loading, setLoading] = useState(true);
-  const [thingsToDo, setThingsToDo] = useState([]); // things to do state
+  const [data, setData] = useState([]);
   // function to get things to do from firebase
 
-  const getThingsToDo = async () => {
-    const thingsToDoRef = query(
+  const getData = async () => {
+    const articlesRef = query(
       collectionGroup(FIREBASE_DB, "articles"),
-      where("articleCategory", "==", "Things to do")
+      where("articleCategory", "==", articleCategory)
     );
-    const q = query(thingsToDoRef, limit(2));
+    const q = query(articlesRef, limit(2)); // limit to 2 articles for development purposes
+    // const q = query(articlesRef); // use without limit for production
     const querySnapshot = await getDocs(q);
     const data = querySnapshot.docs.map((doc) => doc.data());
-    setThingsToDo(data);
+    setData(data);
   };
 
   const renderArticleCard = useCallback(({ item }) => {
@@ -34,19 +35,20 @@ const ThingsToDo = () => {
         path={`destinations/${item.destinationId}/articles/${item.articleId}/places`}
       />
     );
-  });
+  }, []);
 
   useEffect(() => {
-    getThingsToDo();
+    getData();
     setLoading(false);
   }, []);
+
   return (
     <View>
       {loading && <ActivityIndicator size="large" />}
       {!loading && (
         <View>
           <FlatList
-            data={thingsToDo}
+            data={data}
             renderItem={renderArticleCard}
             keyExtractor={(item) => item.articleId}
             horizontal
@@ -56,13 +58,13 @@ const ThingsToDo = () => {
             maxToRenderPerBatch={2} // Reduce number in each render batch
             updateCellsBatchingPeriod={100} // Increase time between renders
             windowSize={2} // Reduce the window size
+            showsHorizontalScrollIndicator={false}
           />
         </View>
       )}
     </View>
   );
 };
-
-export default ThingsToDo;
-
 const styles = StyleSheet.create({});
+
+export default CategoryFeed;

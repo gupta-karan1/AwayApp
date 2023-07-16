@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { useState, useEffect } from "react";
 import { doc, getDoc } from "firebase/firestore";
-import { FIREBASE_DB } from "../../firebaseConfig";
+import { FIREBASE_DB } from "../../../firebaseConfig";
 
 const PlaceScreen = ({ route }) => {
   const { pathId } = route.params;

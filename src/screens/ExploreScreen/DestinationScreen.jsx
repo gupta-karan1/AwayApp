@@ -8,8 +8,8 @@ import {
 } from "react-native";
 import { useState, useEffect } from "react";
 import { collection, getDocs } from "firebase/firestore";
-import { FIREBASE_DB } from "../../firebaseConfig";
-import ArticleCard from "../components/ArticleCard";
+import { FIREBASE_DB } from "../../../firebaseConfig";
+import ArticleCard from "../../components/ExploreComp/ArticleCard";
 
 const DestinationScreen = ({ route }) => {
   const {
