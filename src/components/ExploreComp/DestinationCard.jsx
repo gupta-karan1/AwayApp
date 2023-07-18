@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View, Pressable, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import GlobalStyles from "../../GlobalStyles";
 
 // DestinationCard component
 const DestinationCard = ({ destinationItem, path }) => {
@@ -22,8 +23,8 @@ const DestinationCard = ({ destinationItem, path }) => {
       >
         <Image source={{ uri: imageUrl }} style={styles.image} />
 
-        <Text>{destinationName}</Text>
-        <Text>{country}</Text>
+        <Text style={GlobalStyles.labelMediumMedium}>{country}</Text>
+        <Text style={GlobalStyles.bodyMediumBold}>{destinationName}</Text>
       </Pressable>
     </View>
   );
@@ -32,8 +33,13 @@ const DestinationCard = ({ destinationItem, path }) => {
 export default DestinationCard;
 
 const styles = StyleSheet.create({
+  container: {
+    width: 220,
+    marginRight: 15,
+  },
   image: {
-    height: 200,
-    width: 200,
+    height: 150,
+    width: 220,
+    borderRadius: 10,
   },
 });

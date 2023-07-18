@@ -5,11 +5,4 @@ export default function App() {
   return <Navigation />;
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: StatusBar.currentHeight || 0,
-  },
-});
+const styles = StyleSheet.create({});

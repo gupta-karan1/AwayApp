@@ -10,6 +10,7 @@ import React, { useState, useEffect } from "react";
 import { FIREBASE_DB } from "../../../firebaseConfig";
 import { doc, getDoc, getDocs, collection } from "firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
+import GlobalStyles from "../../GlobalStyles";
 
 const FeaturedArticle = () => {
   const [featuredPost, setFeaturedPost] = useState({});
@@ -31,10 +32,16 @@ const FeaturedArticle = () => {
     });
 
     // get random destination from destinations array
-    let index = Math.floor(Math.random() * destinations.length + 1); // random number between 1 and destinations.length
+    // let index = Math.floor(Math.random() * destinations.length + 1); // random number between 1 and destinations.length
+    let index = Math.floor(Math.random() * 4 + 1); // random number between 1 and destinations.length
 
     // if index is equal to destinations.length, set index to index - 1 to avoid index out of bounds error
-    if (index === destinations.length) {
+    // if (index === destinations.length) {
+    //   index = index - 1;
+    // } else {
+    //   index = index;
+    // }
+    if (index === 4) {
       index = index - 1;
     } else {
       index = index;
@@ -76,6 +83,7 @@ const FeaturedArticle = () => {
       {loading && <ActivityIndicator />}
       {!loading && (
         <Pressable
+          style={styles.container}
           onPress={() => {
             navigate("ArticleScreen", {
               pathId: `/destinations/${destination}/articles/${destination}article${index}/places`,
@@ -91,13 +99,20 @@ const FeaturedArticle = () => {
             });
           }}
         >
+          <Text style={[GlobalStyles.titleLargeRegular, styles.titleText]}>
+            Featured Article
+          </Text>
           <View>
             <Image
               source={{ uri: featuredPost.articleImg }}
               style={styles.image}
             />
-            <Text>{featuredPost.articleTitle}</Text>
-            <Text>{featuredPost.articleSource}</Text>
+            <Text style={GlobalStyles.labelMediumMedium}>
+              {featuredPost.articleSource}
+            </Text>
+            <Text style={GlobalStyles.bodyMediumBold}>
+              {featuredPost.articleTitle}
+            </Text>
           </View>
         </Pressable>
       )}
@@ -108,9 +123,19 @@ const FeaturedArticle = () => {
 export default FeaturedArticle;
 
 const styles = StyleSheet.create({
+  container: {
+    padding: 15,
+    backgroundColor: "lightgrey",
+    marginBottom: 30,
+  },
+  titleText: {
+    marginBottom: 15,
+  },
   image: {
-    width: 450,
-    height: 450,
-    resizeMode: "cover",
+    width: "100%",
+    height: 300,
+    // resizeMode: "cover",
+    borderRadius: 10,
+    marginBottom: 5,
   },
 });

@@ -1,12 +1,18 @@
 import { StyleSheet, ScrollView, SafeAreaView } from "react-native";
-import React from "react";
 import DestinationFeed from "../../components/ExploreComp/DestinationFeed";
 import FeaturedArticle from "../../components/ExploreComp/FeaturedArticle";
 import CategoryFeed from "../../components/ExploreComp/CategoryFeed";
+import { useCustomFonts } from "../../../hooks/useCustomFonts";
 
 const Explore = () => {
+  const { fontsLoaded, onLayoutRootView } = useCustomFonts();
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
   return (
-    <SafeAreaView>
+    <SafeAreaView onLayout={onLayoutRootView}>
       <ScrollView>
         <DestinationFeed />
         <FeaturedArticle />

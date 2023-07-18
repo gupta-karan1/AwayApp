@@ -1,8 +1,15 @@
-import { StyleSheet, View, ActivityIndicator, FlatList } from "react-native";
+import {
+  StyleSheet,
+  View,
+  ActivityIndicator,
+  FlatList,
+  Text,
+} from "react-native";
 import React, { useState, useEffect, useCallback } from "react";
 import { collection, getDocs, limit, query } from "firebase/firestore";
 import { FIREBASE_DB } from "../../../firebaseConfig";
 import DestinationCard from "./DestinationCard";
+import GlobalStyles from "../../GlobalStyles";
 
 const ExploreFeed = () => {
   const [loading, setLoading] = useState(true);
@@ -41,7 +48,10 @@ const ExploreFeed = () => {
     <View>
       {loading && <ActivityIndicator size="large" />}
       {!loading && (
-        <View>
+        <View style={styles.container}>
+          <Text style={[GlobalStyles.titleLargeRegular, styles.titleText]}>
+            Destinations
+          </Text>
           <FlatList
             data={exploreData}
             renderItem={renderDestinationCard}
@@ -61,6 +71,15 @@ const ExploreFeed = () => {
   );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    marginLeft: 15,
+    marginTop: 20,
+    marginBottom: 30,
+  },
+  titleText: {
+    marginBottom: 15,
+  },
+});
 
 export default ExploreFeed;

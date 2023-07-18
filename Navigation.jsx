@@ -2,6 +2,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Feather } from "@expo/vector-icons";
+import React, { useCallback } from "react";
 
 //Components and Screens
 import Explore from "./src/screens/tabScreens/Explore";
@@ -20,6 +21,7 @@ function ExploreStackGroup() {
       initialRouteName="Explore"
       screenOptions={{
         headerTitleAlign: "center",
+        // headerTitleStyle: { fontFamily: "Mulish-Bold" },
       }}
     >
       <ExploreStack.Screen name="Explore" component={Explore} />
@@ -54,6 +56,7 @@ function Tabs() {
       screenOptions={{
         tabBarActiveTintColor: "tomato",
         tabBarInactiveTintColor: "gray",
+        // tabBarLabelStyle: { fontFamily: "Mulish-Medium" },
       }}
     >
       <Tab.Screen

@@ -34,20 +34,26 @@ const DestinationScreen = ({ route }) => {
     setLoading(false);
   }, []);
 
+  const renderArticleCard = ({ item }) => {
+    return (
+      <ArticleCard
+        key={item.articleId}
+        articleItem={item}
+        path={`${pathId}/${item.articleId}/places`}
+        containerStyle={styles.articleCardContainer}
+      />
+    );
+  };
+
   return (
     <View style={styles.container}>
       {loading && <ActivityIndicator size="large" />}
       {!loading && (
         <FlatList
           data={articleData}
-          renderItem={({ item }) => (
-            <ArticleCard
-              key={item.articleId}
-              articleItem={item}
-              path={`${pathId}/${item.articleId}/places`}
-            />
-          )}
+          renderItem={renderArticleCard}
           keyExtractor={(item) => item.articleId}
+          numColumns={2}
           ListHeaderComponent={
             <View>
               <Image source={{ uri: destinationImage }} style={styles.image} />
@@ -65,10 +71,18 @@ const DestinationScreen = ({ route }) => {
 export default DestinationScreen;
 
 const styles = StyleSheet.create({
+  columnWrapper: {
+    justifyContent: "space-between", // Adjust as per your requirements
+  },
   container: {
+    // flex: 1,
+    // alignItems: "center",
+    // justifyContent: "center",
+  },
+  articleCardContainer: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    aspectRatio: 1, // Maintain aspect ratio of the ArticleCard
+    margin: 5,
   },
   image: {
     height: 150,
