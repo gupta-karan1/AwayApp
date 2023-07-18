@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View, Pressable, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import GlobalStyles from "../../GlobalStyles";
 
 const ArticleCard = ({ path, articleItem }) => {
   const {
@@ -16,35 +17,41 @@ const ArticleCard = ({ path, articleItem }) => {
   const { navigate } = useNavigation();
 
   return (
-    <View>
-      <Pressable
-        onPress={() =>
-          navigate("ArticleScreen", {
-            pathId: path,
-            articleImg,
-            articleTitle,
-            articleCategory,
-            articleAuthor,
-            articleDate,
-            articleIntro,
-            articleSaved,
-            articleSource,
-            articleUrl,
-          })
-        }
-      >
-        <Image source={{ uri: articleImg }} style={styles.image} />
-        <Text>{articleTitle}</Text>
-        <Text>{articleSource}</Text>
-      </Pressable>
-    </View>
+    <Pressable
+      style={styles.container}
+      onPress={() =>
+        navigate("ArticleScreen", {
+          pathId: path,
+          articleImg,
+          articleTitle,
+          articleCategory,
+          articleAuthor,
+          articleDate,
+          articleIntro,
+          articleSaved,
+          articleSource,
+          articleUrl,
+        })
+      }
+    >
+      <Image source={{ uri: articleImg }} style={styles.image} />
+      <Text style={GlobalStyles.labelMediumMedium}>{articleSource}</Text>
+      <Text style={GlobalStyles.bodyMediumBold} numberOfLines={2}>
+        {articleTitle}
+      </Text>
+    </Pressable>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    width: 220,
+    marginRight: 15,
+  },
   image: {
-    height: 200,
-    width: 200,
+    height: 150,
+    width: 220,
+    borderRadius: 10,
   },
 });
 

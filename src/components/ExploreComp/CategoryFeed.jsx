@@ -1,4 +1,10 @@
-import { StyleSheet, View, ActivityIndicator, FlatList } from "react-native";
+import {
+  StyleSheet,
+  View,
+  ActivityIndicator,
+  FlatList,
+  Text,
+} from "react-native";
 import {
   getDocs,
   limit,
@@ -9,6 +15,7 @@ import {
 import React, { useState, useEffect, useCallback } from "react";
 import { FIREBASE_DB } from "../../../firebaseConfig";
 import ArticleCard from "./ArticleCard";
+import GlobalStyles from "../../GlobalStyles";
 
 const CategoryFeed = ({ articleCategory }) => {
   const [loading, setLoading] = useState(true);
@@ -46,7 +53,10 @@ const CategoryFeed = ({ articleCategory }) => {
     <View>
       {loading && <ActivityIndicator size="large" />}
       {!loading && (
-        <View>
+        <View style={styles.container}>
+          <Text style={[GlobalStyles.titleLargeRegular, styles.titleText]}>
+            {articleCategory}
+          </Text>
           <FlatList
             data={data}
             renderItem={renderArticleCard}
@@ -65,6 +75,14 @@ const CategoryFeed = ({ articleCategory }) => {
     </View>
   );
 };
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    marginLeft: 15,
+    marginBottom: 30,
+  },
+  titleText: {
+    marginBottom: 15,
+  },
+});
 
 export default CategoryFeed;
