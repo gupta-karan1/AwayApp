@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: "flex-start",
     marginBottom: 5,
   },
   para: {
