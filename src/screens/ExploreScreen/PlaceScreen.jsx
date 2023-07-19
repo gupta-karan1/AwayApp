@@ -141,7 +141,6 @@ export default PlaceScreen;
 const styles = StyleSheet.create({
   container: {
     padding: 15,
-    paddingBottom: 10,
   },
   image: {
     height: 250,
