@@ -9,7 +9,7 @@ import {
 import { useState, useEffect } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { FIREBASE_DB } from "../../../firebaseConfig";
-import ArticleCard from "../../components/ExploreComp/ArticleCard";
+import ArticleCardDestination from "../../components/ExploreComp/ArticleCardDestination";
 
 const DestinationScreen = ({ route }) => {
   const {
@@ -36,11 +36,10 @@ const DestinationScreen = ({ route }) => {
 
   const renderArticleCard = ({ item }) => {
     return (
-      <ArticleCard
+      <ArticleCardDestination
         key={item.articleId}
         articleItem={item}
         path={`${pathId}/${item.articleId}/places`}
-        containerStyle={styles.articleCardContainer}
       />
     );
   };
@@ -50,6 +49,7 @@ const DestinationScreen = ({ route }) => {
       {loading && <ActivityIndicator size="large" />}
       {!loading && (
         <FlatList
+          style={styles.list}
           data={articleData}
           renderItem={renderArticleCard}
           keyExtractor={(item) => item.articleId}
@@ -71,21 +71,18 @@ const DestinationScreen = ({ route }) => {
 export default DestinationScreen;
 
 const styles = StyleSheet.create({
-  columnWrapper: {
-    justifyContent: "space-between", // Adjust as per your requirements
-  },
   container: {
-    // flex: 1,
-    // alignItems: "center",
-    // justifyContent: "center",
-  },
-  articleCardContainer: {
     flex: 1,
-    aspectRatio: 1, // Maintain aspect ratio of the ArticleCard
-    margin: 5,
+    alignItems: "center",
+    justifyContent: "center",
   },
   image: {
     height: 150,
     width: 300,
+  },
+  list: {
+    backgroundColor: "lightblue",
+    flex: 1,
+    padding: 15,
   },
 });

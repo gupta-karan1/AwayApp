@@ -8,25 +8,23 @@ const DestinationCard = ({ destinationItem, path }) => {
   const { navigate } = useNavigation();
 
   return (
-    <View>
-      <Pressable
-        style={styles.container}
-        onPress={() =>
-          navigate("DestinationScreen", {
-            pathId: path,
-            destinationName: destinationName,
-            destinationCountry: country,
-            destinationDescription: description,
-            destinationImage: imageUrl,
-          })
-        }
-      >
-        <Image source={{ uri: imageUrl }} style={styles.image} />
+    <Pressable
+      style={styles.container}
+      onPress={() =>
+        navigate("DestinationScreen", {
+          pathId: path,
+          destinationName: destinationName,
+          destinationCountry: country,
+          destinationDescription: description,
+          destinationImage: imageUrl,
+        })
+      }
+    >
+      <Image source={{ uri: imageUrl }} style={styles.image} />
 
-        <Text style={GlobalStyles.labelMediumMedium}>{country}</Text>
-        <Text style={GlobalStyles.bodyMediumBold}>{destinationName}</Text>
-      </Pressable>
-    </View>
+      <Text style={GlobalStyles.labelMediumMedium}>{country}</Text>
+      <Text style={GlobalStyles.bodyMediumBold}>{destinationName}</Text>
+    </Pressable>
   );
 };
 
@@ -35,7 +33,6 @@ export default DestinationCard;
 const styles = StyleSheet.create({
   container: {
     width: 220,
-    marginRight: 15,
   },
   image: {
     height: 150,

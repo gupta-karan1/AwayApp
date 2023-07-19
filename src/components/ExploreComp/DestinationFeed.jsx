@@ -57,6 +57,7 @@ const ExploreFeed = () => {
             renderItem={renderDestinationCard}
             keyExtractor={(item) => item.destinationId}
             horizontal
+            ItemSeparatorComponent={() => <View style={{ width: 15 }}></View>} // add space between items
             // Performance settings
             removeClippedSubviews={true} // Unmount components when outside of window
             initialNumToRender={2} // Reduce initial render amount
@@ -64,6 +65,7 @@ const ExploreFeed = () => {
             updateCellsBatchingPeriod={100} // Increase time between renders
             windowSize={2} // Reduce the window size
             showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{ paddingHorizontal: 15 }} // add padding only to the first and last item
           />
         </View>
       )}
@@ -73,12 +75,12 @@ const ExploreFeed = () => {
 
 const styles = StyleSheet.create({
   container: {
-    marginLeft: 15,
     marginTop: 20,
     marginBottom: 30,
   },
   titleText: {
     marginBottom: 15,
+    marginLeft: 15,
   },
 });
 
