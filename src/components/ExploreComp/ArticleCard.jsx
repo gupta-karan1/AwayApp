@@ -46,8 +46,6 @@ const ArticleCard = ({ path, articleItem }) => {
 const styles = StyleSheet.create({
   container: {
     width: 220,
-
-    // marginRight: 15,
   },
   image: {
     height: 150,
