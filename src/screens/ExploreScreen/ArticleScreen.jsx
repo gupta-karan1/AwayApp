@@ -85,19 +85,27 @@ const ArticleScreen = ({ route }) => {
                 {articleTitle}
               </Text>
 
-              <Text
-                style={[
-                  GlobalStyles.bodySmallRegular,
-                  styles.articleAuthorText,
-                ]}
-              >
-                By {articleAuthor}
-              </Text>
-              <Text
-                style={[GlobalStyles.labelMediumMedium, styles.articleDateText]}
-              >
-                {articleDate}
-              </Text>
+              {articleAuthor && (
+                <Text
+                  style={[
+                    GlobalStyles.bodySmallRegular,
+                    styles.articleAuthorText,
+                  ]}
+                >
+                  By {articleAuthor}
+                </Text>
+              )}
+
+              {articleAuthor && (
+                <Text
+                  style={[
+                    GlobalStyles.labelMediumMedium,
+                    styles.articleDateText,
+                  ]}
+                >
+                  {articleDate}
+                </Text>
+              )}
 
               {showFullText ? (
                 <View>

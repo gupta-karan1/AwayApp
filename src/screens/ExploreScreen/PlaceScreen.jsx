@@ -94,26 +94,41 @@ const PlaceScreen = ({ route }) => {
             </View>
           )}
 
-          <View style={styles.iconContainer}>
-            <FontAwesome
-              style={styles.icon}
-              name="map-marker"
-              size={20}
-              color="grey"
-            />
-            <Text style={[GlobalStyles.bodySmallRegular, styles.bodyText]}>
-              {singlePlaceData.placeAddress}
-            </Text>
-          </View>
+          {singlePlaceData.placeAddress && (
+            <View style={styles.iconContainer}>
+              <FontAwesome
+                style={[styles.icon, styles.AddressIcon]}
+                name="map-marker"
+                size={20}
+                color="grey"
+              />
+              <Text
+                style={[
+                  GlobalStyles.bodySmallRegular,
+                  styles.bodyText,
+                  styles.iconText,
+                ]}
+              >
+                {singlePlaceData.placeAddress}
+              </Text>
+            </View>
+          )}
+
           {singlePlaceData.placeContact && (
             <View style={styles.iconContainer}>
               <FontAwesome
                 style={styles.icon}
                 name="phone"
-                size={20}
+                size={18}
                 color="grey"
               />
-              <Text style={[GlobalStyles.bodySmallRegular, styles.bodyText]}>
+              <Text
+                style={[
+                  GlobalStyles.bodySmallRegular,
+                  styles.bodyText,
+                  styles.iconText,
+                ]}
+              >
                 {singlePlaceData.placeContact}
               </Text>
             </View>
@@ -123,15 +138,23 @@ const PlaceScreen = ({ route }) => {
               <FontAwesome
                 style={styles.icon}
                 name="clock-o"
-                size={20}
+                size={18}
                 color="grey"
               />
-              <Text style={[GlobalStyles.bodySmallRegular, styles.bodyText]}>
+              <Text
+                style={[
+                  GlobalStyles.bodySmallRegular,
+                  styles.bodyText,
+                  styles.iconText,
+                ]}
+              >
                 {formatPlaceHours()}
               </Text>
             </View>
           )}
-          <Button title="Save Place" onPress={() => {}} />
+          <View style={styles.button}>
+            <Button title="Save Place" onPress={() => {}} />
+          </View>
         </ScrollView>
       )}
     </View>
@@ -152,7 +175,7 @@ const styles = StyleSheet.create({
   },
   subtitleText: {
     marginTop: 5,
-    marginBottom: 30,
+    marginBottom: 10,
   },
   titleText: {
     marginBottom: 10,
@@ -161,11 +184,17 @@ const styles = StyleSheet.create({
   bodyText: {
     overflow: "hidden",
     // width: 350,
-    maxWidth: 350,
+    maxWidth: 340,
     marginBottom: 5,
   },
   icon: {
     marginRight: 15,
+  },
+  AddressIcon: {
+    marginRight: 18,
+  },
+  iconText: {
+    maxWidth: 300,
   },
   iconContainer: {
     flexDirection: "row",
@@ -176,5 +205,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 30,
     textDecorationLine: "underline",
+  },
+  button: {
+    marginVertical: 10,
   },
 });
