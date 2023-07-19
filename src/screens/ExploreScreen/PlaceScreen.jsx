@@ -118,17 +118,19 @@ const PlaceScreen = ({ route }) => {
               </Text>
             </View>
           )}
-          <View style={styles.iconContainer}>
-            <FontAwesome
-              style={styles.icon}
-              name="clock-o"
-              size={20}
-              color="grey"
-            />
-            <Text style={[GlobalStyles.bodySmallRegular, styles.bodyText]}>
-              {formatPlaceHours()}
-            </Text>
-          </View>
+          {singlePlaceData.placeHours && (
+            <View style={styles.iconContainer}>
+              <FontAwesome
+                style={styles.icon}
+                name="clock-o"
+                size={20}
+                color="grey"
+              />
+              <Text style={[GlobalStyles.bodySmallRegular, styles.bodyText]}>
+                {formatPlaceHours()}
+              </Text>
+            </View>
+          )}
           <Button title="Save Place" onPress={() => {}} />
         </ScrollView>
       )}
