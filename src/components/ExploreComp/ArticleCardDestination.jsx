@@ -47,12 +47,11 @@ const ArticleCardDestination = ({ path, articleItem }) => {
 
 const styles = StyleSheet.create({
   container: {
-    width: 176,
+    width: "48%",
     marginBottom: 30,
   },
   image: {
     height: 130,
-    width: 176,
     borderRadius: 10,
   },
   sourceText: {

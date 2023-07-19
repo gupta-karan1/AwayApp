@@ -52,7 +52,7 @@ const DestinationScreen = ({ route }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <View>
       {loading && <ActivityIndicator size="large" />}
       {!loading && (
         <FlatList
@@ -69,52 +69,47 @@ const DestinationScreen = ({ route }) => {
               <Image source={{ uri: destinationImage }} style={styles.image} />
               <View>
                 <Text
-                  style={[GlobalStyles.bodySmallRegular, styles.countryText]}
+                  style={[GlobalStyles.bodySmallRegular, styles.subtitleText]}
                 >
                   {destinationCountry}
                 </Text>
                 <Text
-                  style={[
-                    GlobalStyles.titleLargeRegular,
-                    styles.destinationText,
-                  ]}
+                  style={[GlobalStyles.titleLargeRegular, styles.titleText]}
                 >
                   {destinationName}
                 </Text>
-                <Text>
-                  {showFullText ? (
-                    <View>
+                {showFullText ? (
+                  <View>
+                    <Text
+                      style={[GlobalStyles.bodySmallRegular, styles.bodyText]}
+                    >
+                      {destinationDescription}
+                    </Text>
+                    <TouchableOpacity onPress={toggleFullText}>
                       <Text
-                        style={[GlobalStyles.bodySmallRegular, styles.bodyText]}
+                        style={[styles.para, GlobalStyles.bodySmallRegular]}
                       >
-                        {destinationDescription}
+                        Read Less
                       </Text>
-                      <TouchableOpacity onPress={toggleFullText}>
-                        <Text
-                          style={[styles.para, GlobalStyles.bodySmallRegular]}
-                        >
-                          Read Less
-                        </Text>
-                      </TouchableOpacity>
-                    </View>
-                  ) : (
-                    <View>
+                    </TouchableOpacity>
+                  </View>
+                ) : (
+                  <View>
+                    <Text
+                      style={[GlobalStyles.bodySmallRegular, styles.bodyText]}
+                    >
+                      {destinationDescription.slice(0, 150)}
+                      {"... "}
+                    </Text>
+                    <TouchableOpacity onPress={toggleFullText}>
                       <Text
-                        style={[GlobalStyles.bodySmallRegular, styles.bodyText]}
+                        style={[GlobalStyles.bodySmallRegular, styles.para]}
                       >
-                        {destinationDescription.slice(0, 150)}
-                        {"... "}
+                        Read More
                       </Text>
-                      <TouchableOpacity onPress={toggleFullText}>
-                        <Text
-                          style={[GlobalStyles.bodySmallRegular, styles.para]}
-                        >
-                          Read More
-                        </Text>
-                      </TouchableOpacity>
-                    </View>
-                  )}
-                </Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
               </View>
             </View>
           }
@@ -128,28 +123,24 @@ const DestinationScreen = ({ route }) => {
 export default DestinationScreen;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
   image: {
     height: 250,
-    width: 365,
+    // width: 365,
     marginTop: 20,
     borderRadius: 5,
   },
-  countryText: {
+  subtitleText: {
     marginTop: 30,
     marginBottom: 10,
   },
-  destinationText: {
+  titleText: {
     marginBottom: 10,
     fontSize: 25,
   },
   bodyText: {
     overflow: "hidden",
-    width: 350,
+    // width: 350,
+    maxWidth: 350,
   },
   para: {
     marginTop: 10,

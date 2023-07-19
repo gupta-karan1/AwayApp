@@ -17,7 +17,7 @@ const GlobalStyles = StyleSheet.create({
   bodySmallRegular: {
     fontFamily: "Mulish-Regular",
     fontSize: 14,
-    lineHeight: 18,
+    lineHeight: 20,
   },
   // Subtitles,
   labelMediumMedium: {
