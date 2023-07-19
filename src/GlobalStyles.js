@@ -1,24 +1,30 @@
 import { StyleSheet } from "react-native";
 
 const GlobalStyles = StyleSheet.create({
+  // Category Titles,
   titleLargeRegular: {
     fontFamily: "Mulish-Regular",
     fontSize: 22,
     lineHeight: 28,
-    // other common text styles
   },
+  // Body Text, Subtitles
   bodyMediumBold: {
     fontFamily: "Mulish-Bold",
     fontSize: 14,
     lineHeight: 20,
-    // other common text styles
   },
+  // Destination Title,
+  bodySmallRegular: {
+    fontFamily: "Mulish-Regular",
+    fontSize: 14,
+    lineHeight: 18,
+  },
+  // Subtitles,
   labelMediumMedium: {
     fontFamily: "Mulish-Medium",
     fontSize: 12,
     fontStyle: "normal",
     lineHeight: 16,
-    // other common text styles
   },
 });
 

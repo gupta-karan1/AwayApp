@@ -69,6 +69,8 @@ const CategoryFeed = ({ articleCategory }) => {
             updateCellsBatchingPeriod={100} // Increase time between renders
             windowSize={2} // Reduce the window size
             showsHorizontalScrollIndicator={false}
+            ItemSeparatorComponent={() => <View style={{ width: 15 }}></View>} // add space between items
+            contentContainerStyle={{ paddingHorizontal: 15 }} // add padding only to the first and last item
           />
         </View>
       )}
@@ -77,10 +79,10 @@ const CategoryFeed = ({ articleCategory }) => {
 };
 const styles = StyleSheet.create({
   container: {
-    marginLeft: 15,
     marginBottom: 30,
   },
   titleText: {
+    marginLeft: 15,
     marginBottom: 15,
   },
 });

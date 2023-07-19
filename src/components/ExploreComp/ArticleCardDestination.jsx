@@ -35,7 +35,9 @@ const ArticleCardDestination = ({ path, articleItem }) => {
       }
     >
       <Image source={{ uri: articleImg }} style={styles.image} />
-      <Text style={GlobalStyles.labelMediumMedium}>{articleSource}</Text>
+      <Text style={[GlobalStyles.labelMediumMedium, styles.sourceText]}>
+        {articleSource}
+      </Text>
       <Text style={GlobalStyles.bodyMediumBold} numberOfLines={2}>
         {articleTitle}
       </Text>
@@ -45,12 +47,16 @@ const ArticleCardDestination = ({ path, articleItem }) => {
 
 const styles = StyleSheet.create({
   container: {
-    width: "50%",
+    width: 176,
+    marginBottom: 30,
   },
   image: {
-    height: 150,
-    width: "100%",
+    height: 130,
+    width: 176,
     borderRadius: 10,
+  },
+  sourceText: {
+    marginTop: 10,
   },
 });
 

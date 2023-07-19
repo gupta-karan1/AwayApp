@@ -5,11 +5,13 @@ import {
   FlatList,
   Image,
   ActivityIndicator,
+  TouchableOpacity,
 } from "react-native";
 import { useState, useEffect } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { FIREBASE_DB } from "../../../firebaseConfig";
 import ArticleCardDestination from "../../components/ExploreComp/ArticleCardDestination";
+import GlobalStyles from "../../GlobalStyles";
 
 const DestinationScreen = ({ route }) => {
   const {
@@ -22,6 +24,11 @@ const DestinationScreen = ({ route }) => {
 
   const [articleData, setArticleData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showFullText, setShowFullText] = useState(false);
+
+  const toggleFullText = () => {
+    setShowFullText(!showFullText);
+  };
 
   const getArticleData = async () => {
     const querySnapshot = await getDocs(collection(FIREBASE_DB, pathId));
@@ -49,19 +56,69 @@ const DestinationScreen = ({ route }) => {
       {loading && <ActivityIndicator size="large" />}
       {!loading && (
         <FlatList
-          style={styles.list}
           data={articleData}
           renderItem={renderArticleCard}
           keyExtractor={(item) => item.articleId}
           numColumns={2}
+          columnWrapperStyle={{
+            justifyContent: "space-between",
+          }}
+          contentContainerStyle={{ paddingHorizontal: 15 }} // add padding only to the first and last item
           ListHeaderComponent={
             <View>
               <Image source={{ uri: destinationImage }} style={styles.image} />
-              <Text>{destinationName}</Text>
-              <Text>{destinationCountry}</Text>
-              <Text>{destinationDescription}</Text>
+              <View>
+                <Text
+                  style={[GlobalStyles.bodySmallRegular, styles.countryText]}
+                >
+                  {destinationCountry}
+                </Text>
+                <Text
+                  style={[
+                    GlobalStyles.titleLargeRegular,
+                    styles.destinationText,
+                  ]}
+                >
+                  {destinationName}
+                </Text>
+                <Text>
+                  {showFullText ? (
+                    <View>
+                      <Text
+                        style={[GlobalStyles.bodySmallRegular, styles.bodyText]}
+                      >
+                        {destinationDescription}
+                      </Text>
+                      <TouchableOpacity onPress={toggleFullText}>
+                        <Text
+                          style={[styles.para, GlobalStyles.bodySmallRegular]}
+                        >
+                          Read Less
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                  ) : (
+                    <View>
+                      <Text
+                        style={[GlobalStyles.bodySmallRegular, styles.bodyText]}
+                      >
+                        {destinationDescription.slice(0, 150)}
+                        {"... "}
+                      </Text>
+                      <TouchableOpacity onPress={toggleFullText}>
+                        <Text
+                          style={[GlobalStyles.bodySmallRegular, styles.para]}
+                        >
+                          Read More
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                  )}
+                </Text>
+              </View>
             </View>
           }
+          showsVerticalScrollIndicator={false}
         />
       )}
     </View>
@@ -77,12 +134,26 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   image: {
-    height: 150,
-    width: 300,
+    height: 250,
+    width: 365,
+    marginTop: 20,
+    borderRadius: 5,
   },
-  list: {
-    backgroundColor: "lightblue",
-    flex: 1,
-    padding: 15,
+  countryText: {
+    marginTop: 30,
+    marginBottom: 10,
+  },
+  destinationText: {
+    marginBottom: 10,
+    fontSize: 25,
+  },
+  bodyText: {
+    overflow: "hidden",
+    width: 350,
+  },
+  para: {
+    marginTop: 10,
+    marginBottom: 30,
+    textDecorationLine: "underline",
   },
 });
