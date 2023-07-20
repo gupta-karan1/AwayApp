@@ -23,15 +23,22 @@ const CategoryFeed = ({ articleCategory }) => {
   // function to get things to do from firebase
 
   const getData = async () => {
-    const articlesRef = query(
-      collectionGroup(FIREBASE_DB, "articles"),
-      where("articleCategory", "==", articleCategory)
-    );
-    const q = query(articlesRef, limit(2)); // limit to 2 articles for development purposes
-    // const q = query(articlesRef); // use without limit for production
-    const querySnapshot = await getDocs(q);
-    const data = querySnapshot.docs.map((doc) => doc.data());
-    setData(data);
+    try {
+      const articlesRef = query(
+        collectionGroup(FIREBASE_DB, "articles"),
+        where("articleCategory", "==", articleCategory)
+      );
+      const q = query(articlesRef, limit(2)); // limit to 2 articles for development purposes
+      // const q = query(articlesRef); // use without limit for production
+      const querySnapshot = await getDocs(q);
+      const data = querySnapshot.docs.map((doc) => doc.data());
+      setData(data);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching explore data:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const renderArticleCard = useCallback(({ item }) => {
@@ -46,13 +53,13 @@ const CategoryFeed = ({ articleCategory }) => {
 
   useEffect(() => {
     getData();
-    setLoading(false);
   }, []);
 
   return (
     <View>
-      {loading && <ActivityIndicator size="large" />}
-      {!loading && (
+      {loading ? (
+        <ActivityIndicator size="large" />
+      ) : (
         <View style={styles.container}>
           <Text style={[GlobalStyles.titleLargeRegular, styles.titleText]}>
             {articleCategory}

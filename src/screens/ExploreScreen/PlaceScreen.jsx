@@ -26,14 +26,20 @@ const PlaceScreen = ({ route }) => {
   };
 
   const getSinglePlaceData = async () => {
-    const docRef = doc(FIREBASE_DB, pathId);
-    const docSnap = await getDoc(docRef);
+    try {
+      const docRef = doc(FIREBASE_DB, pathId);
+      const docSnap = await getDoc(docRef);
 
-    if (docSnap.exists()) {
-      const data = docSnap.data();
-      setSinglePlaceData(data);
-    } else {
-      console.log("No such document!");
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        setSinglePlaceData(data);
+      } else {
+        console.log("No such document!");
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -49,13 +55,13 @@ const PlaceScreen = ({ route }) => {
 
   useEffect(() => {
     getSinglePlaceData();
-    setLoading(false);
   }, []);
 
   return (
     <View style={styles.container}>
-      {loading && <ActivityIndicator size="large" />}
-      {!loading && (
+      {loading ? (
+        <ActivityIndicator size="large" />
+      ) : (
         <ScrollView showsVerticalScrollIndicator={false}>
           <Image
             source={{ uri: singlePlaceData.placeImage }}

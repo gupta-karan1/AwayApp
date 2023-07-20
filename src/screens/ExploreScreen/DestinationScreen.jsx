@@ -31,14 +31,20 @@ const DestinationScreen = ({ route }) => {
   };
 
   const getArticleData = async () => {
-    const querySnapshot = await getDocs(collection(FIREBASE_DB, pathId));
-    const data = querySnapshot.docs.map((doc) => doc.data());
-    setArticleData(data);
+    try {
+      const querySnapshot = await getDocs(collection(FIREBASE_DB, pathId));
+      const data = querySnapshot.docs.map((doc) => doc.data());
+      setArticleData(data);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
     getArticleData();
-    setLoading(false);
   }, []);
 
   const renderArticleCard = ({ item }) => {
@@ -53,8 +59,9 @@ const DestinationScreen = ({ route }) => {
 
   return (
     <View>
-      {loading && <ActivityIndicator size="large" />}
-      {!loading && (
+      {loading ? (
+        <ActivityIndicator size="large" />
+      ) : (
         <FlatList
           data={articleData}
           renderItem={renderArticleCard}

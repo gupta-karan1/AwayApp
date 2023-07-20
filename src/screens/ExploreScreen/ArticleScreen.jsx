@@ -35,9 +35,16 @@ const ArticleScreen = ({ route }) => {
   };
 
   const getPlaceData = async () => {
-    const querySnapshot = await getDocs(collection(FIREBASE_DB, pathId));
-    const data = querySnapshot.docs.map((doc) => doc.data());
-    setPlaceData(data);
+    try {
+      const querySnapshot = await getDocs(collection(FIREBASE_DB, pathId));
+      const data = querySnapshot.docs.map((doc) => doc.data());
+      setPlaceData(data);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const renderPlaceCard = useCallback(({ item }) => {
@@ -52,14 +59,13 @@ const ArticleScreen = ({ route }) => {
 
   useEffect(() => {
     getPlaceData();
-    setLoading(false);
   }, []);
 
   return (
     <View>
-      {loading && <ActivityIndicator size="large" />}
-
-      {!loading && (
+      {loading ? (
+        <ActivityIndicator size="large" />
+      ) : (
         <FlatList
           data={placeData}
           renderItem={renderPlaceCard}
