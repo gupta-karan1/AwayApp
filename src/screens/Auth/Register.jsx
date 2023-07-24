@@ -1,25 +1,24 @@
 import {
   StyleSheet,
-  Text,
   View,
   KeyboardAvoidingView,
   TextInput,
   Button,
+  ActivityIndicator,
 } from "react-native";
-import {
-  createUserWithEmailAndPassword,
-  onAuthStateChanged,
-} from "firebase/auth";
-import { FIREBASE_AUTH } from "../../../firebaseConfig";
-import React, { useState, useEffect } from "react";
-import { useNavigation } from "@react-navigation/native";
+// import { createUserWithEmailAndPassword } from "firebase/auth";
+// import { FIREBASE_AUTH } from "../../../firebaseConfig";
+import React, { useState } from "react";
+import { useAuth } from "../../../hooks/useAuth";
 
 const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [userName, setUserName] = useState("");
+  const { register, loading } = useAuth();
+  // const [userName, setUserName] = useState("");
+  // const [loading, setLoading] = useState(false);
 
-  const navigation = useNavigation();
+  // const navigation = useNavigation();
 
   //   useEffect(() => {
   //     onAuthStateChanged(FIREBASE_AUTH, (user) => {
@@ -32,37 +31,59 @@ const Register = () => {
   //   }, []);
 
   //function to handle Register User
-  const handleRegister = () => {
-    createUserWithEmailAndPassword(FIREBASE_AUTH, email, password)
-      .then((userCredential) => {
-        // Signed in
-        const user = userCredential.user;
-        console.log(user.email);
-        navigation.navigate("ExploreStackGroup");
-        // ...
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // ..
-        console.log(errorMessage);
-        alert(errorCode, errorMessage);
-      });
+  const handleRegister = async () => {
+    // createUserWithEmailAndPassword(FIREBASE_AUTH, email, password)
+    //   .then((userCredential) => {
+    //     // Signed in
+    //     const user = userCredential.user;
+    //     console.log(user.email);
+    //     navigation.navigate("ExploreStackGroup");
+    //     // ...
+    //   })
+    //   .catch((error) => {
+    //     const errorCode = error.code;
+    //     const errorMessage = error.message;
+    //     // ..
+    //     console.log(errorMessage);
+    //     alert(errorCode, errorMessage);
+    //   });
+
+    // setLoading(true);
+
+    // try {
+    //   const userCredential = await createUserWithEmailAndPassword(
+    //     FIREBASE_AUTH,
+    //     email,
+    //     password
+    //   );
+    //   console.log(userCredential);
+    // } catch (error) {
+    //   console.log(error);
+    //   alert("Registration failed: ", error.message);
+    // } finally {
+    //   setLoading(false);
+    // }
+
+    try {
+      await register(email, password);
+    } catch (error) {
+      alert("Registration failed: ", error.message);
+    }
   };
 
   return (
     <KeyboardAvoidingView
       style={styles.container}
-      //   behavior="padding"
+      // behavior="padding"
       keyboardVerticalOffset={40}
     >
       <View style={styles.inputContainer}>
-        <TextInput
+        {/* <TextInput
           placeholder="Name"
           value={userName}
           onChangeText={(text) => setUserName(text)}
           style={styles.input}
-        />
+        /> */}
         <TextInput
           placeholder="Email"
           value={email}
@@ -77,13 +98,17 @@ const Register = () => {
           secureTextEntry
         />
       </View>
-      <View style={styles.buttonContainer}>
-        <Button
-          title="Register"
-          onPress={handleRegister}
-          style={styles.button}
-        />
-      </View>
+      {loading ? (
+        <ActivityIndicator size="large" color="#0782F9" />
+      ) : (
+        <View style={styles.buttonContainer}>
+          <Button
+            title="Register"
+            onPress={handleRegister}
+            style={styles.button}
+          />
+        </View>
+      )}
     </KeyboardAvoidingView>
   );
 };
@@ -107,7 +132,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   buttonContainer: {
-    width: "60%",
+    width: "100%",
     justifyContent: "center",
     alignItems: "center",
     marginTop: 48,

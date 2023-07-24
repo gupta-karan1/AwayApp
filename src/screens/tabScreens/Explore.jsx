@@ -13,7 +13,7 @@ const Explore = () => {
 
   return (
     <SafeAreaView onLayout={onLayoutRootView}>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <DestinationFeed />
         <FeaturedArticle />
         <CategoryFeed articleCategory="Things to do" />

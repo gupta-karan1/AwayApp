@@ -39,5 +39,6 @@ const styles = StyleSheet.create({
     width: 220,
     borderRadius: 10,
     marginBottom: 5,
+    backgroundColor: "lightgrey",
   },
 });
