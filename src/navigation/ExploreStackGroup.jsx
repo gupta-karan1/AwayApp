@@ -12,7 +12,7 @@ const ExploreStackGroup = () => {
       initialRouteName="Explore"
       screenOptions={{
         headerTitleAlign: "center",
-        // headerTitleStyle: { fontFamily: "Mulish-Bold" },
+        animation: "slide_from_right",
       }}
     >
       <ExploreStack.Screen name="Explore" component={Explore} />

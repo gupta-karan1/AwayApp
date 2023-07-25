@@ -1,14 +1,12 @@
 import {
   StyleSheet,
-  Text,
   View,
   KeyboardAvoidingView,
   TextInput,
   Button,
   ActivityIndicator,
 } from "react-native";
-// import { signInWithEmailAndPassword } from "firebase/auth";
-// import { FIREBASE_AUTH } from "../../../firebaseConfig";
+
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../../../hooks/useAuth";
@@ -17,52 +15,11 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { login, loading } = useAuth(); // custom hook to handle login and register user
-  // const [loading, setLoading] = useState(false);
 
   const navigation = useNavigation();
 
-  // useEffect(() => {
-  //   onAuthStateChanged(FIREBASE_AUTH, (user) => {
-  //     if (user) {
-  //       navigation.navigate("ExploreStackGroup"); // navigate to ExploreStackGroup
-  //     } else {
-  //       navigation.navigate("Login");
-  //     }
-  //   });
-  // }, []);
-
   // function to handle Login User
   const handleLogin = async () => {
-    // signInWithEmailAndPassword(FIREBASE_AUTH, email, password)
-    //   .then((userCredential) => {
-    //     // Signed in
-    //     const user = userCredential.user;
-    //     // console.log(user.email);
-    //     navigation.navigate("ExploreStackGroup");
-    //     // ...
-    //   })
-    //   .catch((error) => {
-    //     const errorCode = error.code;
-    //     const errorMessage = error.message;
-    //     // ..
-    //     console.log(errorMessage);
-    //     alert(errorCode, errorMessage);
-    //   });
-    // setLoading(true);
-    // try {
-    //   const userCredential = signInWithEmailAndPassword(
-    //     FIREBASE_AUTH,
-    //     email,
-    //     password
-    //   );
-    //   console.log(userCredential);
-    // } catch (error) {
-    //   console.log(error);
-    //   alert("Login failed: ", error.message);
-    // } finally {
-    //   setLoading(false);
-    // }
-
     try {
       await login(email, password);
     } catch (error) {
@@ -139,18 +96,4 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 30,
   },
-  // loginButton: {
-  //   marginBottom: 2,
-  // },
-  //   buttonOutline: {
-  //     backgroundColor: "",
-  //     marginTop: 5,
-  //     borderColor: "#0782F9",
-  //     borderWidth: 2,
-  //   },
-  //   buttonText: {
-  //     color: "white",
-  //     fontWeight: "700",
-  //     fontSize: 16,
-  //   },
 });

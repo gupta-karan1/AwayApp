@@ -5,40 +5,43 @@ import {
   FlatList,
   Text,
 } from "react-native";
-import {
-  getDocs,
-  limit,
-  query,
-  collectionGroup,
-  where,
-} from "firebase/firestore";
-import React, { useState, useEffect, useCallback } from "react";
-import { FIREBASE_DB } from "../../../firebaseConfig";
+// import {
+//   getDocs,
+//   limit,
+//   query,
+//   collectionGroup,
+//   where,
+// } from "firebase/firestore";
+// import React, { useState, useEffect, useCallback } from "react";
+// import { FIREBASE_DB } from "../../../firebaseConfig";
+import { useCallback } from "react";
 import ArticleCard from "./ArticleCard";
 import GlobalStyles from "../../GlobalStyles";
+import useCategoryFeed from "../../../hooks/useCategoryFeed";
 
 const CategoryFeed = ({ articleCategory }) => {
-  const [loading, setLoading] = useState(true);
-  const [data, setData] = useState([]);
+  // const [loading, setLoading] = useState(true);
+  // const [data, setData] = useState([]);
 
-  const getData = async () => {
-    try {
-      const articlesRef = query(
-        collectionGroup(FIREBASE_DB, "articles"),
-        where("articleCategory", "==", articleCategory)
-      );
-      const q = query(articlesRef, limit(2)); // limit to 2 articles for development purposes
-      // const q = query(articlesRef); // use without limit for production
-      const querySnapshot = await getDocs(q);
-      const data = querySnapshot.docs.map((doc) => doc.data());
-      setData(data);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching explore data:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const getData = async () => {
+  //   try {
+  //     const articlesRef = query(
+  //       collectionGroup(FIREBASE_DB, "articles"),
+  //       where("articleCategory", "==", articleCategory)
+  //     );
+  //     const q = query(articlesRef, limit(2)); // limit to 2 articles for development purposes
+  //     // const q = query(articlesRef); // use without limit for production
+  //     const querySnapshot = await getDocs(q);
+  //     const data = querySnapshot.docs.map((doc) => doc.data());
+  //     setData(data);
+  //     setLoading(false);
+  //   } catch (error) {
+  //     console.error("Error fetching explore data:", error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+  const { loading, categoryData } = useCategoryFeed(articleCategory);
 
   const renderArticleCard = useCallback(({ item }) => {
     return (
@@ -50,9 +53,9 @@ const CategoryFeed = ({ articleCategory }) => {
     );
   }, []);
 
-  useEffect(() => {
-    getData();
-  }, []);
+  // useEffect(() => {
+  //   getData();
+  // }, []);
 
   return (
     <View>
@@ -64,7 +67,7 @@ const CategoryFeed = ({ articleCategory }) => {
             {articleCategory}
           </Text>
           <FlatList
-            data={data}
+            data={categoryData}
             renderItem={renderArticleCard}
             keyExtractor={(item) => item.articleId}
             horizontal

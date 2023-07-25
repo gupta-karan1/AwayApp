@@ -14,16 +14,23 @@ const TripsStackGroup = () => {
       initialRouteName="Trips"
       screenOptions={{
         headerTitleAlign: "center",
+        animation: "slide_from_right",
         // headerTitleStyle: { fontFamily: "Mulish-Bold" },
       }}
     >
-      <TripsStack.Screen name="Trips" component={Trips} />
+      <TripsStack.Screen
+        name="Trips"
+        component={Trips}
+        options={{
+          headerTitle: "My Trips",
+        }}
+      />
       <TripsStack.Screen
         name="CreateTripForm"
         component={CreateTripForm}
         options={{
           headerTitle: "Create New Trip",
-          // presentation: "modal",
+          animation: "slide_from_bottom",
         }}
       />
       <TripsStack.Screen
@@ -31,6 +38,7 @@ const TripsStackGroup = () => {
         component={TripPlan}
         options={{
           headerTitle: "Trip Plan",
+
           headerLeft: () => (
             <Pressable onPress={() => Navigation.navigate("Trips")}>
               <Text>Back</Text>

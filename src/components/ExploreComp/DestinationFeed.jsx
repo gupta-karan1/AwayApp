@@ -5,34 +5,38 @@ import {
   FlatList,
   Text,
 } from "react-native";
-import React, { useState, useEffect, useCallback } from "react";
-import { collection, getDocs, limit, query } from "firebase/firestore";
-import { FIREBASE_DB } from "../../../firebaseConfig";
+import { useCallback } from "react";
+// import React, { useState, useEffect, useCallback } from "react";
+// import { collection, getDocs, limit, query } from "firebase/firestore";
+// import { FIREBASE_DB } from "../../../firebaseConfig";
 import DestinationCard from "./DestinationCard";
 import GlobalStyles from "../../GlobalStyles";
+import useDestinationFeed from "../../../hooks/useDestinationFeed";
 
 const ExploreFeed = () => {
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
 
-  const [exploreData, setExploreData] = useState([]); // destination state
+  // const [exploreData, setExploreData] = useState([]); // destination state
 
-  const getExploreData = async () => {
-    try {
-      const destRef = collection(FIREBASE_DB, "destinations");
-      const q = query(destRef, limit(2));
-      const querySnapshot = await getDocs(q);
-      const data = querySnapshot.docs.map((doc) => doc.data());
-      setExploreData(data);
-    } catch (error) {
-      console.error("Error fetching explore data:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const getExploreData = async () => {
+  //   try {
+  //     const destRef = collection(FIREBASE_DB, "destinations");
+  //     const q = query(destRef, limit(2));
+  //     const querySnapshot = await getDocs(q);
+  //     const data = querySnapshot.docs.map((doc) => doc.data());
+  //     setExploreData(data);
+  //   } catch (error) {
+  //     console.error("Error fetching explore data:", error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
-  useEffect(() => {
-    getExploreData();
-  }, []);
+  // useEffect(() => {
+  //   getExploreData();
+  // }, []);
+
+  const { loading, destinationData } = useDestinationFeed();
 
   const renderDestinationCard = useCallback(({ item }) => {
     return (
@@ -54,7 +58,7 @@ const ExploreFeed = () => {
             Destinations
           </Text>
           <FlatList
-            data={exploreData}
+            data={destinationData}
             renderItem={renderDestinationCard}
             keyExtractor={(item) => item.destinationId}
             horizontal

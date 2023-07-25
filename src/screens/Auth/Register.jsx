@@ -14,8 +14,8 @@ import { FIREBASE_DB } from "../../../firebaseConfig";
 const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { register, loading } = useAuth();
   const [userName, setUserName] = useState("");
+  const { register, loading } = useAuth();
 
   //function to handle Register User
   const handleRegister = async () => {

@@ -7,11 +7,11 @@ import {
   ActivityIndicator,
   TouchableOpacity,
 } from "react-native";
-import { useState, useEffect, useCallback } from "react";
-import { collection, getDocs } from "firebase/firestore";
-import { FIREBASE_DB } from "../../../firebaseConfig";
+import { useState, useCallback } from "react";
+
 import PlaceCard from "../../components/ExploreComp/PlaceCard";
 import GlobalStyles from "../../GlobalStyles";
+import useArticleScreen from "../../../hooks/useArticleScreen";
 
 const ArticleScreen = ({ route }) => {
   const {
@@ -27,25 +27,27 @@ const ArticleScreen = ({ route }) => {
     articleUrl,
   } = route.params;
 
-  const [placeData, setPlaceData] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { loading, placeData } = useArticleScreen(pathId);
+
+  // const [placeData, setPlaceData] = useState([]);
+  // const [loading, setLoading] = useState(true);
   const [showFullText, setShowFullText] = useState(false);
   const toggleFullText = () => {
     setShowFullText(!showFullText);
   };
 
-  const getPlaceData = async () => {
-    try {
-      const querySnapshot = await getDocs(collection(FIREBASE_DB, pathId));
-      const data = querySnapshot.docs.map((doc) => doc.data());
-      setPlaceData(data);
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const getPlaceData = async () => {
+  //   try {
+  //     const querySnapshot = await getDocs(collection(FIREBASE_DB, pathId));
+  //     const data = querySnapshot.docs.map((doc) => doc.data());
+  //     setPlaceData(data);
+  //     setLoading(false);
+  //   } catch (error) {
+  //     console.log(error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   const renderPlaceCard = useCallback(({ item }) => {
     return (
@@ -57,9 +59,9 @@ const ArticleScreen = ({ route }) => {
     );
   }, []);
 
-  useEffect(() => {
-    getPlaceData();
-  }, []);
+  // useEffect(() => {
+  //   getPlaceData();
+  // }, []);
 
   return (
     <View>
