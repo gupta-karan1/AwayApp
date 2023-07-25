@@ -1,8 +1,8 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import DestinationScreen from "../src/screens/ExploreScreen/DestinationScreen";
-import ArticleScreen from "../src/screens/ExploreScreen/ArticleScreen";
-import PlaceScreen from "../src/screens/ExploreScreen/PlaceScreen";
-import Explore from "../src/screens/tabScreens/Explore";
+import DestinationScreen from "../screens/ExploreScreen/DestinationScreen";
+import ArticleScreen from "../screens/ExploreScreen/ArticleScreen";
+import PlaceScreen from "../screens/ExploreScreen/PlaceScreen";
+import Explore from "../screens/tabScreens/Explore";
 
 const ExploreStack = createNativeStackNavigator();
 

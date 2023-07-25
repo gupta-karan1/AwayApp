@@ -1,7 +1,7 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Profile from "../src/screens/tabScreens/Profile";
-import Login from "../src/screens/Auth/Login";
-import Register from "../src/screens/Auth/Register";
+import Profile from "../screens/tabScreens/Profile";
+import Login from "../screens/Auth/Login";
+import Register from "../screens/Auth/Register";
 
 const ProfileStack = createNativeStackNavigator();
 const ProfileStackGroup = () => {

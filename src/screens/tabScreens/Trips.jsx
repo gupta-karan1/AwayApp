@@ -1,10 +1,15 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View, Button } from "react-native";
 import React from "react";
 
-const Trips = () => {
+const Trips = ({ navigation }) => {
+  // Use the 'navigation' prop to navigate to the TripForm screen
+  const handleAddTrip = () => {
+    navigation.navigate("CreateTripForm");
+  };
+
   return (
-    <View>
-      <Text>Trips</Text>
+    <View style={styles.container}>
+      <Button title="Add Trip" onPress={handleAddTrip} />
     </View>
   );
 };

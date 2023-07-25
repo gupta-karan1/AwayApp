@@ -26,6 +26,14 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photoPermission": "The app needs access to your camera roll so you can put pictures of your items on the app."
+        }
+      ]
+    ]
   }
 }

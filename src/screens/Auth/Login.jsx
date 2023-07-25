@@ -83,6 +83,7 @@ const Login = () => {
           value={email}
           onChangeText={(text) => setEmail(text)}
           style={styles.input}
+          inputMode="email"
         />
         <TextInput
           placeholder="Password"

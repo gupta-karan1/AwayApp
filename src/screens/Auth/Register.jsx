@@ -6,66 +6,35 @@ import {
   Button,
   ActivityIndicator,
 } from "react-native";
-// import { createUserWithEmailAndPassword } from "firebase/auth";
-// import { FIREBASE_AUTH } from "../../../firebaseConfig";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useAuth } from "../../../hooks/useAuth";
+import { collection, addDoc } from "firebase/firestore";
+import { FIREBASE_DB } from "../../../firebaseConfig";
 
 const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { register, loading } = useAuth();
-  // const [userName, setUserName] = useState("");
-  // const [loading, setLoading] = useState(false);
-
-  // const navigation = useNavigation();
-
-  //   useEffect(() => {
-  //     onAuthStateChanged(FIREBASE_AUTH, (user) => {
-  //       if (user) {
-  //         navigation.navigate("ExploreStackGroup");
-  //       } else {
-  //         navigation.navigate("Register");
-  //       }
-  //     });
-  //   }, []);
+  const [userName, setUserName] = useState("");
 
   //function to handle Register User
   const handleRegister = async () => {
-    // createUserWithEmailAndPassword(FIREBASE_AUTH, email, password)
-    //   .then((userCredential) => {
-    //     // Signed in
-    //     const user = userCredential.user;
-    //     console.log(user.email);
-    //     navigation.navigate("ExploreStackGroup");
-    //     // ...
-    //   })
-    //   .catch((error) => {
-    //     const errorCode = error.code;
-    //     const errorMessage = error.message;
-    //     // ..
-    //     console.log(errorMessage);
-    //     alert(errorCode, errorMessage);
-    //   });
-
-    // setLoading(true);
-
-    // try {
-    //   const userCredential = await createUserWithEmailAndPassword(
-    //     FIREBASE_AUTH,
-    //     email,
-    //     password
-    //   );
-    //   console.log(userCredential);
-    // } catch (error) {
-    //   console.log(error);
-    //   alert("Registration failed: ", error.message);
-    // } finally {
-    //   setLoading(false);
-    // }
-
     try {
-      await register(email, password);
+      const userCredential = await register(email, password);
+
+      // Create a new document in the 'users' collection in Firestore
+      const userData = {
+        userId: userCredential.user.uid,
+        email: email,
+        username: userName, // Add the 'username' field to the user data
+      };
+
+      // Add the new document to the 'users' collection
+      const usersCollectionRef = collection(FIREBASE_DB, "users");
+      await addDoc(usersCollectionRef, userData);
+
+      // User registration and 'users' collection creation successful
+      console.log("User registered and 'users' collection created!");
     } catch (error) {
       alert("Registration failed: ", error.message);
     }
@@ -78,17 +47,18 @@ const Register = () => {
       keyboardVerticalOffset={40}
     >
       <View style={styles.inputContainer}>
-        {/* <TextInput
+        <TextInput
           placeholder="Name"
           value={userName}
           onChangeText={(text) => setUserName(text)}
           style={styles.input}
-        /> */}
+        />
         <TextInput
           placeholder="Email"
           value={email}
           onChangeText={(text) => setEmail(text)}
           style={styles.input}
+          inputMode="email"
         />
         <TextInput
           placeholder="Password"
@@ -143,15 +113,4 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 10,
   },
-  //   buttonOutline: {
-  //     backgroundColor: "",
-  //     marginTop: 5,
-  //     borderColor: "#0782F9",
-  //     borderWidth: 2,
-  //   },
-  //   buttonText: {
-  //     color: "white",
-  //     fontWeight: "700",
-  //     fontSize: 16,
-  //   },
 });

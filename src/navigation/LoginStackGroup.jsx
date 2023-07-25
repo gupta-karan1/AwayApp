@@ -1,6 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Login from "../src/screens/Auth/Login";
-import Register from "../src/screens/Auth/Register";
+import Login from "../screens/Auth/Login";
+import Register from "../screens/Auth/Register";
 import ExploreStackGroup from "./ExploreStackGroup";
 import TripsStackGroup from "./TripsStackGroup";
 import ProfileStackGroup from "./ProfileStackGroup";
