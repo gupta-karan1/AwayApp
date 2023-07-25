@@ -8,6 +8,7 @@ import {
   Pressable,
   Image,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import { TextInput, Button } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -38,6 +39,7 @@ const CreateTripForm = () => {
   const [coverImage, setCoverImage] = useState(null);
   const [showStartDateModal, setShowStartDateModal] = useState(false);
   const [showEndDateModal, setShowEndDateModal] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const navigation = useNavigation();
 
@@ -103,22 +105,16 @@ const CreateTripForm = () => {
 
       // add trip to user's trips array
       await addDoc(collection(userRef, "trips"), tripData);
-
-      console.log("Trip details saved successfully!");
-      Alert.alert("Trip details saved successfully!");
-
-      // navigate to
-      // return true;
     } catch (error) {
-      console.error("Error saving trip details:", error);
+      // console.error("Error saving trip details:", error);
       Alert.alert("Error saving trip details:", error);
-      // return false;
     }
   };
 
   // Function to handle form submission
   const handleSubmit = async () => {
     try {
+      setLoading(true);
       const tripData = {
         tripTitle: tripTitle,
         tripLocation: tripLocation,
@@ -131,13 +127,15 @@ const CreateTripForm = () => {
       };
 
       await saveTripDetails(user.uid, tripData);
+
+      Alert.alert("Trip details saved successfully!");
+
       navigation.navigate("TripPlan");
     } catch (error) {
       console.error("Error saving trip details:", error);
     } finally {
-      // setLoading(false);
+      setLoading(false);
     }
-    // Process the form data here (e.g., save to Firebase, etc.)
     // Remember to handle the invitees array and cover image accordingly
   };
 
@@ -186,7 +184,7 @@ const CreateTripForm = () => {
               value={startDate}
               mode={"date"}
               onChange={onStartChange}
-              display={"compact"}
+              // display={"compact"}
             />
           )}
 
@@ -264,12 +262,15 @@ const CreateTripForm = () => {
           )}
         </View>
 
-        <Button
-          title="Save Trip"
-          // mode="contained"
-          onPress={handleSubmit}
-          style={styles.button}
-        />
+        {loading ? (
+          <ActivityIndicator size="large" color="#0000ff" />
+        ) : (
+          <Button
+            title="Save Trip"
+            onPress={handleSubmit}
+            style={styles.button}
+          />
+        )}
       </View>
     </KeyboardAvoidingView>
   );
@@ -323,7 +324,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   radioButtonActive: {
-    backgroundColor: "#0782F9",
+    backgroundColor: "lightblue",
   },
   radioButtonText: {
     color: "black",
