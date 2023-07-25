@@ -150,7 +150,7 @@ const CreateTripForm = () => {
   return (
     <KeyboardAvoidingView
       style={styles.container}
-      behavior="height"
+      // behavior="padding"
       keyboardVerticalOffset={5}
     >
       <View style={styles.inputContainer}>
