@@ -20,7 +20,6 @@ import GlobalStyles from "../../GlobalStyles";
 const CategoryFeed = ({ articleCategory }) => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
-  // function to get things to do from firebase
 
   const getData = async () => {
     try {
