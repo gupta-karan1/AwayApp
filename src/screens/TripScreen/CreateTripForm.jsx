@@ -330,7 +330,7 @@ const styles = StyleSheet.create({
   image: {
     width: "100%",
     height: 200,
-    backgroundColor: "lightblue",
+    backgroundColor: "lightgrey",
     borderRadius: 10,
     marginVertical: 10,
     alignItems: "center",
