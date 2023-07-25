@@ -150,7 +150,7 @@ const CreateTripForm = () => {
   return (
     <KeyboardAvoidingView
       style={styles.container}
-      // behavior="padding"
+      behavior="height"
       keyboardVerticalOffset={5}
     >
       <View style={styles.inputContainer}>
@@ -253,10 +253,12 @@ const CreateTripForm = () => {
           </TouchableOpacity>
         </View>
         <View>
-          <Button
-            title="Select an image from camera roll"
-            onPress={pickImage}
-          />
+          <Button title="Upload Cover Image" onPress={pickImage} />
+          {!coverImage && (
+            <View style={styles.image}>
+              <Text>Your Cover Image will Appear Here</Text>
+            </View>
+          )}
           {coverImage && (
             <Image source={{ uri: coverImage }} style={styles.image} />
           )}
@@ -304,19 +306,14 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     marginBottom: 16,
   },
-  radioButton: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
+
   button: {
     marginTop: 16,
   },
-  radioButtonContainer: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    marginBottom: 16,
-  },
+
   radioButton: {
+    flexDirection: "row",
+    alignItems: "center",
     borderWidth: 1,
     borderColor: "gray",
     paddingVertical: 8,
@@ -333,6 +330,11 @@ const styles = StyleSheet.create({
   image: {
     width: "100%",
     height: 200,
+    backgroundColor: "lightblue",
+    borderRadius: 10,
+    marginVertical: 10,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
 
