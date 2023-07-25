@@ -3,7 +3,7 @@ import Trips from "../screens/tabScreens/Trips";
 import CreateTripForm from "../screens/TripScreen/CreateTripForm";
 import TripPlan from "../screens/TripScreen/TripPlan";
 import { useNavigation } from "@react-navigation/native";
-import { Button } from "react-native";
+import { Pressable, Text } from "react-native";
 
 const TripsStack = createNativeStackNavigator();
 
@@ -32,11 +32,9 @@ const TripsStackGroup = () => {
         options={{
           headerTitle: "Trip Plan",
           headerLeft: () => (
-            <Button
-              title="Back"
-              color="#fff"
-              onPress={() => Navigation.navigate("Trips")}
-            />
+            <Pressable onPress={() => Navigation.navigate("Trips")}>
+              <Text>Back</Text>
+            </Pressable>
           ),
         }}
       />
