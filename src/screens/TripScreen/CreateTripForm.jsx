@@ -17,7 +17,7 @@ import { Platform } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { useContext } from "react";
 import { AuthContext } from "../../../hooks/AuthContext";
-import { FIREBASE_DB } from "../../../firebaseConfig";
+import { FIREBASE_DB, FIREBASE_STORAGE } from "../../../firebaseConfig";
 import {
   collection,
   addDoc,
@@ -27,6 +27,10 @@ import {
   getDocs,
 } from "firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
+import uuid from "react-native-uuid";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+
+// import { v4 as uuidv4 } from "uuid";
 
 const CreateTripForm = () => {
   const [tripTitle, setTripTitle] = useState("");
@@ -36,9 +40,11 @@ const CreateTripForm = () => {
   const [tripType, setTripType] = useState("solo");
   const [invitees, setInvitees] = useState([]);
   const [coverImage, setCoverImage] = useState(null);
+  // const [tripId, settripId] = useState("");
   const [showStartDateModal, setShowStartDateModal] = useState(false);
   const [showEndDateModal, setShowEndDateModal] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigation = useNavigation();
 
@@ -47,13 +53,14 @@ const CreateTripForm = () => {
   // console.log(user.uid);
 
   const pickImage = async () => {
-    // Ask for permission to access the image library
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    setIsLoading(true);
+    // // Ask for permission to access the image library
+    // const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
-    if (status !== "granted") {
-      alert("Sorry, we need camera roll permissions to make this work!");
-      return;
-    }
+    // if (status !== "granted") {
+    //   alert("Sorry, we need camera roll permissions to make this work!");
+    //   return;
+    // }
 
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -65,9 +72,44 @@ const CreateTripForm = () => {
     // console.log(coverImage);
 
     if (!result.canceled) {
-      setCoverImage(result.assets[0].uri);
+      // setCoverImage(result.assets[0].uri);
+      const uploadURL = await uploadImageAsync(result.assets[0].uri);
+      setCoverImage(uploadURL);
+      setInterval(() => {
+        setIsLoading(false);
+      }, 1000);
 
       delete result["cancelled"];
+    } else {
+      setCoverImage(null);
+      setInterval(() => {
+        setIsLoading(false);
+      }, 1000);
+    }
+  };
+
+  const uploadImageAsync = async (uri) => {
+    const blob = await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.onload = function () {
+        resolve(xhr.response);
+      };
+      xhr.onerror = function (e) {
+        console.log(e);
+        reject(new TypeError("Network request failed"));
+      };
+      xhr.responseType = "blob";
+      xhr.open("GET", uri, true);
+      xhr.send(null);
+    });
+
+    try {
+      const storageRef = ref(FIREBASE_STORAGE, `Images/image-${Date.now()}`);
+      const result = await uploadBytes(storageRef, blob);
+      blob.close();
+      return await getDownloadURL(storageRef);
+    } catch (error) {
+      alert(`Error: ${error}`);
     }
   };
 
@@ -103,6 +145,7 @@ const CreateTripForm = () => {
       const userRef = doc(FIREBASE_DB, "users", querySnapshot.docs[0].id);
 
       // add trip to user's trips array
+      // await addDoc(collection(userRef, "trips"), tripData);
       await addDoc(collection(userRef, "trips"), tripData);
     } catch (error) {
       // console.error("Error saving trip details:", error);
@@ -123,7 +166,11 @@ const CreateTripForm = () => {
         invitees: invitees,
         coverImage: coverImage,
         userId: user.uid,
+        tripId: uuid.v4(),
+        createdAt: new Date(),
       };
+
+      // await saveTripDetails(user.uid, tripData);
 
       await saveTripDetails(user.uid, tripData);
 
@@ -183,6 +230,7 @@ const CreateTripForm = () => {
               value={startDate}
               mode={"date"}
               onChange={onStartChange}
+              minimumDate={startDate}
               // display={"compact"}
             />
           )}
@@ -195,6 +243,7 @@ const CreateTripForm = () => {
                 value={startDate}
                 mode={"date"}
                 onChange={onStartChange}
+                minimumDate={startDate}
               />
             </View>
           )}
@@ -251,17 +300,22 @@ const CreateTripForm = () => {
             <Text style={styles.radioButtonText}>Group Trip</Text>
           </TouchableOpacity>
         </View>
-        <View>
-          <Button title="Upload Cover Image" onPress={pickImage} />
-          {!coverImage && (
-            <View style={styles.image}>
-              <Text>Your Cover Image will Appear Here</Text>
-            </View>
-          )}
-          {coverImage && (
-            <Image source={{ uri: coverImage }} style={styles.image} />
-          )}
-        </View>
+
+        {isLoading ? (
+          <ActivityIndicator />
+        ) : (
+          <View>
+            <Button title="Upload Cover Image" onPress={pickImage} />
+            {!coverImage && (
+              <View style={styles.image}>
+                <Text>Your Cover Image will Appear Here</Text>
+              </View>
+            )}
+            {coverImage && (
+              <Image source={{ uri: coverImage }} style={styles.image} />
+            )}
+          </View>
+        )}
 
         {loading ? (
           <ActivityIndicator size="large" color="#0000ff" />

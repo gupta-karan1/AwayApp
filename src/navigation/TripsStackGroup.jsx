@@ -4,6 +4,10 @@ import CreateTripForm from "../screens/TripScreen/CreateTripForm";
 import TripPlan from "../screens/TripScreen/TripPlan";
 import { useNavigation } from "@react-navigation/native";
 import { Pressable, Text } from "react-native";
+import Plan from "../screens/TripScreen/Plan";
+import Chat from "../screens/TripScreen/Chat";
+import Find from "../screens/TripScreen/Find";
+import TripTopNav from "../screens/TripScreen/TripTopNav";
 
 const TripsStack = createNativeStackNavigator();
 
@@ -46,6 +50,10 @@ const TripsStackGroup = () => {
           ),
         }}
       />
+      <TripsStack.Screen name="Plan" component={Plan} />
+      <TripsStack.Screen name="Chat" component={Chat} />
+      <TripsStack.Screen name="Find" component={Find} />
+      <TripsStack.Screen name="TripTopNav" component={TripTopNav} />
     </TripsStack.Navigator>
   );
 };

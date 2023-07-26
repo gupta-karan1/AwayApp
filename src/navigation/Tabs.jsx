@@ -43,6 +43,7 @@ const Tabs = () => {
           ),
           headerShown: false,
           tabBarLabel: "Trips",
+          // unmountOnBlur: true,
         }}
       />
 
