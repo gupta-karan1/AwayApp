@@ -1,9 +1,9 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, ScrollView, View } from "react-native";
 import React from "react";
 
 const Plan = () => {
   return (
-    <View>
+    <View showsVerticalScrollIndicator={false} style={styles.container}>
       <Text>Plan</Text>
     </View>
   );
@@ -11,4 +11,8 @@ const Plan = () => {
 
 export default Plan;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});

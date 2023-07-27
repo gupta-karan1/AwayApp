@@ -12,7 +12,6 @@ import {
 } from "react-native";
 import { TextInput, Button } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import moment from "moment/moment";
 import { Platform } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { useContext } from "react";
@@ -29,6 +28,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import uuid from "react-native-uuid";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import moment from "moment";
 
 // import { v4 as uuidv4 } from "uuid";
 
@@ -176,7 +176,15 @@ const CreateTripForm = () => {
 
       Alert.alert("Trip details saved successfully!");
 
-      navigation.navigate("TripPlan");
+      navigation.navigate("TripPlan", {
+        tripTitle: tripTitle,
+        startDate: moment(startDate).format("DD MMM YYYY"),
+        endDate: moment(endDate).format("DD MMM YYYY"),
+        coverImage: coverImage,
+        tripLocation: tripLocation,
+        invitees: invitees,
+        // Include any other parameters you need in the TripPlan screen
+      });
     } catch (error) {
       console.error("Error saving trip details:", error);
     } finally {

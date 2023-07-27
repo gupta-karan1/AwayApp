@@ -21,6 +21,7 @@ const TripCard = ({ tripItem, path }) => {
     userId,
     tripId,
   } = tripItem;
+
   const { navigate } = useNavigation();
 
   const startDateTime = moment(startDate.toDate()).format("DD MMM YYYY");
@@ -36,6 +37,10 @@ const TripCard = ({ tripItem, path }) => {
           startDate: startDateTime,
           endDate: endDateTime,
           coverImage: coverImage,
+          tripLocation: tripLocation,
+          tripType: tripType,
+          invitees: invitees,
+          userId: userId,
         })
       }
     >

@@ -1,12 +1,8 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import React from "react";
 
 const Chat = () => {
-  return (
-    <View>
-      <Text>Chat</Text>
-    </View>
-  );
+  return <View style={styles.container}></View>;
 };
 
 export default Chat;

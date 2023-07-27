@@ -7,7 +7,7 @@ import {
   ActivityIndicator,
   FlatList,
 } from "react-native";
-import { useState, useEffect, useContext, useCallback } from "react";
+import { useState, useContext, useCallback } from "react";
 import { useNavigation } from "@react-navigation/native";
 
 import { AuthContext } from "../../../hooks/AuthContext";
@@ -54,15 +54,11 @@ const Trips = () => {
       // console.log(data);
     } catch (error) {
       console.error(error);
-      // Alert.alert("Error saving trip details:", error);
+      Alert.alert("Error saving trip details:", error);
     } finally {
       setLoading(false);
     }
   };
-
-  // useEffect(() => {
-  //   getUserTripData();
-  // }, []);
 
   useFocusEffect(
     useCallback(() => {
@@ -81,7 +77,6 @@ const Trips = () => {
         key={item.tripId}
         tripItem={item}
         path={`users/${userId}/trips`}
-        // path={`destinations/${item.destinationId}/articles`}
       />
     );
   });
@@ -116,7 +111,7 @@ export default Trips;
 
 const styles = StyleSheet.create({
   container: {
-    // position: "relative",
+    flex: 1,
   },
   fabButton: {
     position: "absolute",
