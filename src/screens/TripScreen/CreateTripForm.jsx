@@ -30,8 +30,6 @@ import uuid from "react-native-uuid";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import moment from "moment";
 
-// import { v4 as uuidv4 } from "uuid";
-
 const CreateTripForm = () => {
   const [tripTitle, setTripTitle] = useState("");
   const [tripLocation, setTripLocation] = useState("");
@@ -40,7 +38,7 @@ const CreateTripForm = () => {
   const [tripType, setTripType] = useState("solo");
   const [invitees, setInvitees] = useState([]);
   const [coverImage, setCoverImage] = useState(null);
-  // const [tripId, settripId] = useState("");
+
   const [showStartDateModal, setShowStartDateModal] = useState(false);
   const [showEndDateModal, setShowEndDateModal] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -49,8 +47,6 @@ const CreateTripForm = () => {
   const navigation = useNavigation();
 
   const { user } = useContext(AuthContext);
-
-  // console.log(user.uid);
 
   const pickImage = async () => {
     setIsLoading(true);
@@ -145,7 +141,6 @@ const CreateTripForm = () => {
       const userRef = doc(FIREBASE_DB, "users", querySnapshot.docs[0].id);
 
       // add trip to user's trips array
-      // await addDoc(collection(userRef, "trips"), tripData);
       await addDoc(collection(userRef, "trips"), tripData);
     } catch (error) {
       // console.error("Error saving trip details:", error);

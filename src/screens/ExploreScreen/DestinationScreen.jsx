@@ -7,9 +7,8 @@ import {
   ActivityIndicator,
   TouchableOpacity,
 } from "react-native";
-import { useState, useEffect } from "react";
-import { collection, getDocs } from "firebase/firestore";
-import { FIREBASE_DB } from "../../../firebaseConfig";
+import { useState } from "react";
+
 import ArticleCardDestination from "../../components/ExploreComp/ArticleCardDestination";
 import GlobalStyles from "../../GlobalStyles";
 import useArticleData from "../../../hooks/useDestinationScreen";
@@ -25,30 +24,11 @@ const DestinationScreen = ({ route }) => {
 
   const { loading, articleData } = useArticleData(pathId);
 
-  // const [articleData, setArticleData] = useState([]);
-  // const [loading, setLoading] = useState(true);
   const [showFullText, setShowFullText] = useState(false);
 
   const toggleFullText = () => {
     setShowFullText(!showFullText);
   };
-
-  // const getArticleData = async () => {
-  //   try {
-  //     const querySnapshot = await getDocs(collection(FIREBASE_DB, pathId));
-  //     const data = querySnapshot.docs.map((doc) => doc.data());
-  //     setArticleData(data);
-  //     setLoading(false);
-  //   } catch (error) {
-  //     console.log(error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   getArticleData();
-  // }, []);
 
   const renderArticleCard = ({ item }) => {
     return (

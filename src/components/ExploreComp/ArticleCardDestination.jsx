@@ -52,7 +52,9 @@ const styles = StyleSheet.create({
   },
   image: {
     height: 130,
+    width: "100%",
     borderRadius: 10,
+    backgroundColor: "lightgrey",
   },
   sourceText: {
     marginTop: 10,

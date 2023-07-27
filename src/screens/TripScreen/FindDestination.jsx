@@ -43,7 +43,7 @@ const DestinationScreen = ({ pathId, tripLocation }) => {
 
   useEffect(() => {
     getDestinationData();
-    console.log(destinationData);
+    // console.log(destinationData);
   }, []);
 
   const [showFullText, setShowFullText] = useState(false);

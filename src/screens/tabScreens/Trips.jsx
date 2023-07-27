@@ -25,7 +25,7 @@ import { useFocusEffect } from "@react-navigation/native";
 
 const Trips = () => {
   const navigation = useNavigation();
-  const [tripData, settripData] = useState([]);
+  const [tripData, setTripData] = useState([]);
   const [loading, setLoading] = useState(false);
   const { user } = useContext(AuthContext);
   const [userId, setUserId] = useState("");
@@ -50,7 +50,7 @@ const Trips = () => {
       // const querySnapshot2 = await getDocs(collection(userRef, "trips"));
       const querySnapshot2 = await getDocs(tripQuery);
       const data = querySnapshot2.docs.map((doc) => doc.data());
-      settripData(data);
+      setTripData(data);
       // console.log(data);
     } catch (error) {
       console.error(error);

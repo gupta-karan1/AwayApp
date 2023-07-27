@@ -10,7 +10,7 @@ export default function Profile() {
     signOut(FIREBASE_AUTH)
       .then(() => {
         // Sign-out successful.
-        console.log("Sign-out successful.");
+        // console.log("Sign-out successful.");
         alert("Sign-out successful.");
         navigation.navigate("Login");
       })

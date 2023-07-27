@@ -14,7 +14,7 @@ import GlobalStyles from "../../GlobalStyles";
 
 const FeaturedArticle = () => {
   const [featuredPost, setFeaturedPost] = useState({});
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
   const [destination, setDestination] = useState("");
   const [index, setIndex] = useState(0);
 
@@ -72,8 +72,6 @@ const FeaturedArticle = () => {
       }
     } catch (error) {
       console.log(error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -84,45 +82,36 @@ const FeaturedArticle = () => {
   const { navigate } = useNavigation();
 
   return (
-    <View>
-      {loading ? (
-        <ActivityIndicator size={"large"} />
-      ) : (
-        <Pressable
-          style={styles.container}
-          onPress={() => {
-            navigate("ArticleScreen", {
-              pathId: `/destinations/${destination}/articles/${destination}article${index}/places`,
-              articleImg: featuredPost.articleImg,
-              articleTitle: featuredPost.articleTitle,
-              articleCategory: featuredPost.articleCategory,
-              articleAuthor: featuredPost.articleAuthor,
-              articleDate: featuredPost.articleDate,
-              articleIntro: featuredPost.articleIntro,
-              articleSaved: featuredPost.articleSaved,
-              articleSource: featuredPost.articleSource,
-              articleUrl: featuredPost.articleUrl,
-            });
-          }}
-        >
-          <Text style={[GlobalStyles.titleLargeRegular, styles.titleText]}>
-            Featured Article
-          </Text>
-          <View>
-            <Image
-              source={{ uri: featuredPost.articleImg }}
-              style={styles.image}
-            />
-            <Text style={GlobalStyles.labelMediumMedium}>
-              {featuredPost.articleSource}
-            </Text>
-            <Text style={GlobalStyles.bodyMediumBold}>
-              {featuredPost.articleTitle}
-            </Text>
-          </View>
-        </Pressable>
-      )}
-    </View>
+    <Pressable
+      style={styles.container}
+      onPress={() => {
+        navigate("ArticleScreen", {
+          pathId: `/destinations/${destination}/articles/${destination}article${index}/places`,
+          articleImg: featuredPost.articleImg,
+          articleTitle: featuredPost.articleTitle,
+          articleCategory: featuredPost.articleCategory,
+          articleAuthor: featuredPost.articleAuthor,
+          articleDate: featuredPost.articleDate,
+          articleIntro: featuredPost.articleIntro,
+          articleSaved: featuredPost.articleSaved,
+          articleSource: featuredPost.articleSource,
+          articleUrl: featuredPost.articleUrl,
+        });
+      }}
+    >
+      <Text style={[GlobalStyles.titleLargeRegular, styles.titleText]}>
+        Featured Article
+      </Text>
+      <View>
+        <Image source={{ uri: featuredPost.articleImg }} style={styles.image} />
+        <Text style={GlobalStyles.labelMediumMedium}>
+          {featuredPost.articleSource}
+        </Text>
+        <Text style={GlobalStyles.bodyMediumBold}>
+          {featuredPost.articleTitle}
+        </Text>
+      </View>
+    </Pressable>
   );
 };
 
@@ -141,7 +130,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 300,
     // resizeMode: "cover",
-    backgroundColor: "lightgrey",
+    backgroundColor: "grey",
     borderRadius: 10,
     marginBottom: 5,
   },

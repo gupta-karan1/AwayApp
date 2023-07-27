@@ -16,7 +16,13 @@ function TripTopNav({ tripLocation }) {
   const screenHeight = Dimensions.get("window").height;
   return (
     <View style={{ flex: 1 }}>
-      <Tab.Navigator>
+      <Tab.Navigator
+        screenOptions={
+          {
+            // tabBarScrollEnabled: true,
+          }
+        }
+      >
         <Tab.Screen name="Plan" component={Plan} />
         <Tab.Screen name="Chat" component={Chat} />
         <Tab.Screen

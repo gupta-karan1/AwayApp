@@ -58,6 +58,7 @@ const styles = StyleSheet.create({
     height: 130,
     borderRadius: 10,
     marginBottom: 5,
+    backgroundColor: "lightgrey",
   },
 });
 

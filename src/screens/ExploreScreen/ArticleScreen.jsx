@@ -29,25 +29,10 @@ const ArticleScreen = ({ route }) => {
 
   const { loading, placeData } = useArticleScreen(pathId);
 
-  // const [placeData, setPlaceData] = useState([]);
-  // const [loading, setLoading] = useState(true);
   const [showFullText, setShowFullText] = useState(false);
   const toggleFullText = () => {
     setShowFullText(!showFullText);
   };
-
-  // const getPlaceData = async () => {
-  //   try {
-  //     const querySnapshot = await getDocs(collection(FIREBASE_DB, pathId));
-  //     const data = querySnapshot.docs.map((doc) => doc.data());
-  //     setPlaceData(data);
-  //     setLoading(false);
-  //   } catch (error) {
-  //     console.log(error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
 
   const renderPlaceCard = useCallback(({ item }) => {
     return (
@@ -58,10 +43,6 @@ const ArticleScreen = ({ route }) => {
       />
     );
   }, []);
-
-  // useEffect(() => {
-  //   getPlaceData();
-  // }, []);
 
   return (
     <View>

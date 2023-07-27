@@ -5,13 +5,11 @@ import {
   Image,
   ActivityIndicator,
   ScrollView,
-  Pressable,
   Button,
   TouchableOpacity,
 } from "react-native";
-import { useState, useEffect } from "react";
-import { doc, getDoc } from "firebase/firestore";
-import { FIREBASE_DB } from "../../../firebaseConfig";
+import { useState } from "react";
+
 import GlobalStyles from "../../GlobalStyles";
 import { FontAwesome } from "@expo/vector-icons";
 import usePlaceScreen from "../../../hooks/usePlaceScreen";
@@ -20,30 +18,10 @@ const PlaceScreen = ({ route }) => {
   const { pathId } = route.params;
   const { loading, singlePlaceData } = usePlaceScreen(pathId);
 
-  // const [singlePlaceData, setSinglePlaceData] = useState({});
-  // const [loading, setLoading] = useState(true);
   const [showFullText, setShowFullText] = useState(false);
   const toggleFullText = () => {
     setShowFullText(!showFullText);
   };
-
-  // const getSinglePlaceData = async () => {
-  //   try {
-  //     const docRef = doc(FIREBASE_DB, pathId);
-  //     const docSnap = await getDoc(docRef);
-
-  //     if (docSnap.exists()) {
-  //       const data = docSnap.data();
-  //       setSinglePlaceData(data);
-  //     } else {
-  //       console.log("No such document!");
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
 
   const formatPlaceHours = () => {
     if (singlePlaceData.placeHours) {
@@ -54,10 +32,6 @@ const PlaceScreen = ({ route }) => {
     }
     return "";
   };
-
-  // useEffect(() => {
-  //   getSinglePlaceData();
-  // }, []);
 
   return (
     <View style={styles.container}>
