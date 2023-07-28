@@ -4,10 +4,6 @@ import GlobalStyles from "../../GlobalStyles";
 
 // display places on the destination screen based on the pathId prop passed to it.
 const PlaceCard = ({ placeItem, path }) => {
-  // The PlaceCard component accepts the placeItem and path props.
-  // The placeItem prop contains the data for the place to be displayed.
-  // The path prop contains the pathId of the destination that the place is from.
-
   // The useNavigation hook is used to access the navigation prop of the component. This allows the component to navigate to other screens.
   const { navigate } = useNavigation();
 
@@ -27,7 +23,6 @@ const PlaceCard = ({ placeItem, path }) => {
     placeWebsite,
   } = placeItem;
 
-  // The component returns a Pressable component that displays the place image, category, and title.
   return (
     <Pressable
       style={styles.container}

@@ -1,17 +1,16 @@
-import { useState, useEffect } from "react"; // These are used to manage state and side effects in functional components.
-import { collection, getDocs, limit, query } from "firebase/firestore"; // imported from the Firebase Firestore library. These are used to interact with the Firestore database and retrieve documents from a collection.
-import { FIREBASE_DB } from "../firebaseConfig"; //  It represents the Firebase Firestore database instance
+import { useState, useEffect } from "react";
+import { collection, getDocs, limit, query } from "firebase/firestore";
+import { FIREBASE_DB } from "../firebaseConfig";
 
 // custom React Hook that fetches destinations data from the Firestore database for the explore page. It is used to display destinations from the Firestore collection.
 const useDestinationFeed = () => {
-  const [loading, setLoading] = useState(true); // This state variable holds a boolean value that indicates whether the data is still being fetched from the database. It is initialized as true.
+  const [loading, setLoading] = useState(true);
 
-  const [destinationData, setDestinationData] = useState([]); // This state variable holds an array that will contain the data fetched from the Firestore collection. It is initialized as an empty array.
+  const [destinationData, setDestinationData] = useState([]);
 
   const getDestinationData = async () => {
     // an asynchronous function that fetches data from the Firestore collection
 
-    //uses a try-catch block to handle any errors that may occur during the data retrieval process.
     try {
       const destRef = collection(FIREBASE_DB, "destinations"); // The collection function is used to create a reference to the destinations collection in the Firestore database.
 
@@ -40,12 +39,7 @@ const useDestinationFeed = () => {
     getDestinationData();
   }, []);
 
-  // The loading state variable is returned from the hook so that it can be used to display a loading indicator while the data is being fetched.
-  // The destinationData state variable is returned from the hook so that it can be used to display the data fetched from the Firestore collection.
   return { loading, destinationData };
 };
 
-// The useDestinationFeed hook is exported so that it can be used in other parts of the application.
 export default useDestinationFeed;
-
-//Overall, this custom hook encapsulates the data fetching logic for the destinations collection. It is designed to be used in React components, allowing them to fetch and manage data from Firestore easily and consistently.

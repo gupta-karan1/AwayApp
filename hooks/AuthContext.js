@@ -1,16 +1,14 @@
 // React context for managing authentication state using Firebase Authentication
 
-import { createContext, useState, useEffect } from "react"; //  used to create a React context and manage state and side effects in functional components.
-import { onAuthStateChanged } from "firebase/auth"; //Firebase function used to listen for changes in the authentication state, such as when a user logs in or out.
-import { FIREBASE_AUTH } from "../firebaseConfig"; //Firebase Authentication instance
+import { createContext, useState, useEffect } from "react";
+import { onAuthStateChanged } from "firebase/auth";
+import { FIREBASE_AUTH } from "../firebaseConfig";
 
 const AuthContext = createContext(); // new context will be used to store and share the authentication state across components in the React component tree.
 
-// custom React component that serves as a wrapper for the entire application or a specific part of it. It is responsible for managing the authentication state and providing it to other components
-
 const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null); // holds the current user object if a user is logged in or null if no user is logged in.
-  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false); // holds a boolean value that indicates whether a user is logged in or not.
+  const [user, setUser] = useState(null);
+  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
 
   //The useEffect hook is used to subscribe to changes in the authentication state using Firebase's onAuthStateChanged function.
   useEffect(() => {
@@ -32,8 +30,6 @@ const AuthProvider = ({ children }) => {
   }, []);
 
   return (
-    // The AuthProvider component wraps its children with the AuthContext.Provider component, which is provided by the React context created earlier (AuthContext).
-
     // The value prop of AuthContext.Provider is an object containing the user and isUserLoggedIn state variables, making them accessible to all child components that consume the AuthContext.
 
     <AuthContext.Provider value={{ user, isUserLoggedIn }}>
@@ -41,8 +37,6 @@ const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
-
-// The AuthContext and AuthProvider components are exported, allowing other parts of the application to use the authentication context and provider.
 
 export { AuthContext, AuthProvider };
 

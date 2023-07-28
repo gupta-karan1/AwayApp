@@ -5,10 +5,6 @@ import GlobalStyles from "../../GlobalStyles";
 // This component is used to display articles on the destination screen based on the path and articleItem props passed to it.
 
 const ArticleCardDestination = ({ path, articleItem }) => {
-  // The path prop is used to create a reference to the document in the Firestore database based on the pathId prop passed to the hook.
-
-  // The articleItem prop is used to display the data fetched from the Firestore collection.
-
   // The articleItem prop is destructured to extract the data to be displayed from the articleItem object.
   const {
     articleAuthor,
@@ -25,8 +21,6 @@ const ArticleCardDestination = ({ path, articleItem }) => {
   // The useNavigation hook is used to access the navigation prop of the component.
   const { navigate } = useNavigation();
 
-  // The navigate function is used to navigate to the ArticleScreen component when the article card is pressed. The data to be displayed on the ArticleScreen component is passed to it as props.
-  //  The pathId prop is passed to the ArticleScreen component so that it can be used to fetch the data to be displayed on the screen.
   return (
     <Pressable
       style={styles.container}

@@ -8,7 +8,6 @@ import { AuthContext } from "../../hooks/AuthContext"; // Import the AuthContext
 const Navigation = () => {
   const { isUserLoggedIn } = useContext(AuthContext); // The isUserLoggedIn state variable is retrieved from the AuthContext using the useContext hook.
 
-  // The NavigationContainer component is used to wrap the navigation for the application. It is used to ensure that the navigation is displayed correctly.
   // The Tabs component is displayed if the user is logged in.
   // The LoginStackGroup component is displayed if the user is not logged in.
   return (

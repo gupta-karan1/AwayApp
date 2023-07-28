@@ -1,7 +1,7 @@
 //defines a custom React Hook called useCustomFonts, which is designed to load and manage custom fonts in an Expo project. It also handles the SplashScreen behavior during the font loading process.
 
-import { useEffect, useState } from "react"; // These are used to manage state and side effects in functional components.
-import * as Font from "expo-font"; // used to load custom fonts in an Expo project.
+import { useEffect, useState } from "react";
+import * as Font from "expo-font";
 import {
   Mulish_400Regular,
   Mulish_500Medium,
@@ -11,12 +11,11 @@ import {
   Mulish_300Light,
   Mulish_600SemiBold,
   Mulish_200ExtraLight,
-} from "@expo-google-fonts/mulish"; // imported from the Expo Google Fonts library. These are the custom fonts used in the application.
-import * as SplashScreen from "expo-splash-screen"; // used to manage the SplashScreen behavior in an Expo project.
+} from "@expo-google-fonts/mulish";
+import * as SplashScreen from "expo-splash-screen";
 
-// custom React Hook that loads and manages custom fonts in an Expo project. It also handles the SplashScreen behavior during the font loading process.
 export const useCustomFonts = () => {
-  const [fontsLoaded, setFontsLoaded] = useState(false); // state variable that holds a boolean value that indicates whether the fonts have been loaded. It is initialized as false.
+  const [fontsLoaded, setFontsLoaded] = useState(false);
 
   // The useEffect hook is used to load the custom fonts and hide the SplashScreen when the component is mounted.
   useEffect(() => {
@@ -55,6 +54,5 @@ export const useCustomFonts = () => {
     }
   };
 
-  // The fontsLoaded state variable and the onLayoutRootView function are returned from the hook so that they can be used to manage the SplashScreen behavior in the root component of the application.
   return { fontsLoaded, onLayoutRootView };
 };

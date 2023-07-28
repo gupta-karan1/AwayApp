@@ -7,6 +7,7 @@ import { Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 // TripsStackGroup is a stack navigator that contains the Trips, CreateTripForm, and TripPlan screens.
+
 const TripsStack = createNativeStackNavigator(); // The createNativeStackNavigator function is used to create a stack navigator.
 
 const TripsStackGroup = () => {
@@ -16,7 +17,7 @@ const TripsStackGroup = () => {
       initialRouteName="Trips"
       screenOptions={{
         headerTitleAlign: "center",
-        animation: "slide_from_right", // The animation prop is used to set the animation for the screen transitions.
+        animation: "slide_from_right",
         // headerTitleStyle: { fontFamily: "Mulish-Bold" },
       }}
     >
@@ -32,7 +33,7 @@ const TripsStackGroup = () => {
         component={CreateTripForm}
         options={{
           headerTitle: "Create New Trip",
-          animation: "slide_from_bottom", // The animation prop is used to set the animation for the screen transitions.
+          animation: "slide_from_bottom",
         }}
       />
       <TripsStack.Screen
@@ -41,7 +42,6 @@ const TripsStackGroup = () => {
         options={{
           headerTitle: "Trip Plan",
           headerLeft: () => (
-            // The headerLeft prop is used to set the headerLeft component for the screen.
             <Pressable onPress={() => Navigation.navigate("Trips")}>
               <Ionicons name="arrow-back" size={24} color="black" />
             </Pressable>

@@ -1,24 +1,22 @@
 // Used to fetch data for the explore page from the Firestore database. It is used to display articles from the Firestore collection based on the articleCategory prop passed to it.
 
-import { useState, useEffect } from "react"; // These are used to manage state and side effects in functional components.
+import { useState, useEffect } from "react";
 import {
   getDocs,
   limit,
   query,
   collectionGroup,
   where,
-} from "firebase/firestore"; // imported from the Firebase Firestore library. These are used to interact with the Firestore database and retrieve documents from a collection.
-import { FIREBASE_DB } from "../firebaseConfig"; //  It represents the Firebase Firestore database instance
+} from "firebase/firestore";
+import { FIREBASE_DB } from "../firebaseConfig";
 
 const useCategoryFeed = (articleCategory) => {
-  // custom React Hook that fetches data from the Firestore database based on the provided articleCategory.
-  const [loading, setLoading] = useState(true); // This state variable holds a boolean value that indicates whether the data is still being fetched from the database. It is initialized as true.
-  const [categoryData, setCategoryData] = useState([]); // This state variable holds an array that will contain the data fetched from the Firestore collection. It is initialized as an empty array.
+  const [loading, setLoading] = useState(true);
+  const [categoryData, setCategoryData] = useState([]);
 
   const getCategoryData = async () => {
     // an asynchronous function that fetches data from the Firestore collection based on the provided articleCategory.
 
-    //uses a try-catch block to handle any errors that may occur during the data retrieval process.
     try {
       // The query function is used to create a query that fetches documents from the articles collection based on the articleCategory prop passed to the hook.
 
@@ -51,12 +49,9 @@ const useCategoryFeed = (articleCategory) => {
     getCategoryData();
   }, [articleCategory]);
 
-  // The loading state variable is returned from the hook so that it can be used to display a loading indicator while the data is being fetched.
-  // The categoryData state variable is returned from the hook so that it can be used to display the data fetched from the Firestore collection.
   return { loading, categoryData };
 };
 
-// The useCategoryFeed hook is exported so that it can be used in other parts of the application.
 export default useCategoryFeed;
 
 // Overall, this custom hook encapsulates the data fetching logic for a specific Firestore collection based on the provided articleCategory. It is designed to be used in React components, allowing them to fetch and manage data from Firestore easily and consistently.

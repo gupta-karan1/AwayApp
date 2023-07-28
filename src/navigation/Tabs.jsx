@@ -7,8 +7,6 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 // This component is used to create the bottom tab navigation for the application.
 const Tab = createBottomTabNavigator(); // The createBottomTabNavigator function is used to create the bottom tab navigation.
 
-// The Tab.Navigator component is used to create the bottom tab navigation.
-// The Tab.Screen component is used to create the screens for the bottom tab navigation.
 const Tabs = () => {
   return (
     <Tab.Navigator

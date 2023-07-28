@@ -25,20 +25,19 @@ const DestinationFeed = () => {
         Destinations
       </Text>
       <FlatList
-        data={destinationData} // The destinationData state variable is passed to the data prop of the FlatList component to display the data fetched from the Firestore collection.
-        renderItem={renderDestinationCard} // The renderDestinationCard function is passed to the renderItem prop of the FlatList component to render each destination item.
-        keyExtractor={(item) => item.destinationId} // The keyExtractor prop is used to extract the destinationId from each destination item and use it as the key for each item in the FlatList component.
-        horizontal // The horizontal prop is used to display the FlatList component horizontally.
-        ItemSeparatorComponent={() => <View style={{ width: 15 }}></View>} // The ItemSeparatorComponent prop is used to add a separator between each destination item in the FlatList component.
-        removeClippedSubviews={true} // The removeClippedSubviews prop is used to improve the performance of the FlatList component by removing items that are not currently visible on the screen.
-        initialNumToRender={2} // The initialNumToRender prop is used to specify the number of items to render initially.
-        maxToRenderPerBatch={2} // The maxToRenderPerBatch prop is used to specify the maximum number of items to render per batch.
-        updateCellsBatchingPeriod={100} // The updateCellsBatchingPeriod prop is used to specify the time between each batch of items to render.
-        windowSize={2} // The windowSize prop is used to specify the number of items to render before and after the current item.
-        showsHorizontalScrollIndicator={false} // The showsHorizontalScrollIndicator prop is used to hide the horizontal scroll indicator.
-        contentContainerStyle={{ paddingHorizontal: 15 }} // The contentContainerStyle prop is used to add padding to the FlatList component.
+        data={destinationData}
+        renderItem={renderDestinationCard}
+        keyExtractor={(item) => item.destinationId}
+        horizontal
+        ItemSeparatorComponent={() => <View style={{ width: 15 }}></View>}
+        removeClippedSubviews={true}
+        initialNumToRender={2}
+        maxToRenderPerBatch={2}
+        updateCellsBatchingPeriod={100}
+        windowSize={2}
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={{ paddingHorizontal: 15 }}
         ListEmptyComponent={
-          // The ListEmptyComponent prop is used to display a message when the FlatList component is empty.
           <View
             style={{
               width: 220,

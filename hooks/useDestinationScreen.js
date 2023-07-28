@@ -1,19 +1,18 @@
-import { useState, useEffect } from "react"; // These are used to manage state and side effects in functional components.
-import { collection, getDocs } from "firebase/firestore"; // imported from the Firebase Firestore library. These are used to interact with the Firestore database and retrieve documents from a collection.
-import { FIREBASE_DB } from "../firebaseConfig"; // It represents the Firebase Firestore database instance
+import { useState, useEffect } from "react";
+import { collection, getDocs } from "firebase/firestore";
+import { FIREBASE_DB } from "../firebaseConfig";
 
 // display articles on the destination screen based on the pathId prop passed to it.
 
 const useDestinationScreen = (pathId) => {
   // custom React Hook that fetches data from the Firestore database based on the provided pathId.
-  const [articleData, setArticleData] = useState([]); // This state variable holds an array that will contain the data fetched from the Firestore collection. It is initialized as an empty array.
-  const [loading, setLoading] = useState(true); // This state variable holds a boolean value that indicates whether the data is still being fetched from the database. It is initialized as true.
+  const [articleData, setArticleData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const getArticleData = async () => {
     // an asynchronous function that fetches data from the Firestore collection based on the provided pathId.
 
     try {
-      //uses a try-catch block to handle any errors that may occur during the data retrieval process.
       const querySnapshot = await getDocs(collection(FIREBASE_DB, pathId)); // The getDocs function is used to fetch the documents from the collection based on the query created earlier.
 
       const data = querySnapshot.docs.map((doc) => doc.data()); // The data is then extracted from the querySnapshot using the map function to retrieve the actual data from each document using doc.data().
@@ -36,7 +35,7 @@ const useDestinationScreen = (pathId) => {
     getArticleData();
   }, [pathId]);
 
-  return { loading, articleData }; // The loading state variable is returned from the hook so that it can be used to display a loading indicator while the data is being fetched.
+  return { loading, articleData };
 };
 
-export default useDestinationScreen; // The useDestinationScreen hook is exported so that it can be used in other parts of the application.
+export default useDestinationScreen;

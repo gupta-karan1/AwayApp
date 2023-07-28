@@ -8,16 +8,15 @@ import GlobalStyles from "../../GlobalStyles";
 // display featured article on the explore page based on a random destination and article from the destinations collection
 
 const FeaturedArticle = () => {
-  const [featuredPost, setFeaturedPost] = useState({}); // This state variable holds an object that will contain the data fetched from the Firestore collection. It is initialized as an empty object.
+  const [featuredPost, setFeaturedPost] = useState({});
 
-  const [destination, setDestination] = useState(""); // This state variable holds a string that will contain the destination name of the destination that the featured article is from. It is initialized as an empty string.
+  const [destination, setDestination] = useState("");
 
-  const [index, setIndex] = useState(0); // This state variable holds a number that will contain the index of the featured article. It is initialized as 0.
+  const [index, setIndex] = useState(0);
 
   const getFeaturedPost = async () => {
     // an asynchronous function that fetches data from the Firestore collection based on the provided pathId.
 
-    //uses a try-catch block to handle any errors that may occur during the data retrieval process.
     try {
       const destinations = ["Null Destination"]; // This state variable holds an array that will contain the destination names of all the destinations in the destinations collection. It is initialized as an array with one element. This is done to avoid an error that occurs when the destinations array is empty.
 

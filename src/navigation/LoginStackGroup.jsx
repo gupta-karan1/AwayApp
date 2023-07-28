@@ -13,9 +13,9 @@ const LoginStackGroup = () => {
     <LoginStack.Navigator
       initialRouteName="Login"
       screenOptions={{
-        animation: "slide_from_right", // This option is used to set the animation for the screens in the stack navigator. It is set to slide_from_right to ensure that the screens slide in from the right when they are displayed.
-        presentation: "formSheet", // This option is used to set the presentation style of the screens in the stack navigator. It is set to formSheet to ensure that the screens are presented as modal screens.
-        headerTitleAlign: "center", // This option is used to set the alignment of the header title. It is set to center to ensure that the header title is centered.
+        animation: "slide_from_right",
+        presentation: "formSheet",
+        headerTitleAlign: "center",
       }}
     >
       <LoginStack.Screen name="Login" component={Login} />
