@@ -25,3 +25,5 @@ const LoginStackGroup = () => {
 };
 
 export default LoginStackGroup;
+
+// SUMMARY: Overall, this component is used to group the login screens together. It is used to navigate between the login screens.

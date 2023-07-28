@@ -43,3 +43,5 @@ const ExploreStackGroup = () => {
 };
 
 export default ExploreStackGroup;
+
+// SUMMARY: Overall, this component is used to group the screens in the Explore tab together. It is used to display the screens in the Explore tab.

@@ -59,8 +59,6 @@ const TripCard = ({ tripItem, path }) => {
   );
 };
 
-export default TripCard;
-
 const styles = StyleSheet.create({
   container: {
     marginTop: 10,
@@ -87,3 +85,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
 });
+
+export default TripCard;
+
+// SUMMARY: This component is used to display a trip card on the trips screen based on the tripItem and path props passed to it. It uses the useNavigation hook to access the navigation prop of the component. The moment library is used to format the date and time.

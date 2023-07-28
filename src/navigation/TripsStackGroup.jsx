@@ -54,4 +54,4 @@ const TripsStackGroup = () => {
 
 export default TripsStackGroup;
 
-// Overall this stack navigator is used to display the Trips, CreateTripForm, and TripPlan screens. It is used to display the screens in a stack, allowing the user to navigate between them. It is also used to set the screen options for the screens in the stack.
+// SUMMARY: Overall this stack navigator is used to display the Trips, CreateTripForm, and TripPlan screens. It is used to display the screens in a stack, allowing the user to navigate between them. It is also used to set the screen options for the screens in the stack.

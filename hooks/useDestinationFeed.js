@@ -43,3 +43,5 @@ const useDestinationFeed = () => {
 };
 
 export default useDestinationFeed;
+
+// SUMMARY: Overall, this custom hook encapsulates the data fetching logic for the destinations collection. It is designed to be used in React components, allowing them to fetch and manage data from Firestore easily and consistently.

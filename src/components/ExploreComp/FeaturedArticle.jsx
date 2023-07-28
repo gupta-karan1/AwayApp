@@ -115,8 +115,6 @@ const FeaturedArticle = () => {
   );
 };
 
-export default FeaturedArticle;
-
 const styles = StyleSheet.create({
   container: {
     padding: 15,
@@ -134,3 +132,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
 });
+
+export default FeaturedArticle;
+
+// SUMMARY: This component is used to display a featured article on the explore page. It uses the useFeaturedArticle hook to fetch data from the Firestore database and display it in a Pressable component.

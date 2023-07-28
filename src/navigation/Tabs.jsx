@@ -71,4 +71,4 @@ const Tabs = () => {
 
 export default Tabs;
 
-// Overall this tabs component is used to create the bottom tab navigation for the application.
+// SUMMARY:  Overall this tabs component is used to create the bottom tab navigation for the application.

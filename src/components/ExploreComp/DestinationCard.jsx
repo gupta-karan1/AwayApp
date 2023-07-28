@@ -31,8 +31,6 @@ const DestinationCard = ({ destinationItem, path }) => {
   );
 };
 
-export default DestinationCard;
-
 const styles = StyleSheet.create({
   container: {
     width: 220,
@@ -45,3 +43,7 @@ const styles = StyleSheet.create({
     backgroundColor: "lightgrey",
   },
 });
+
+export default DestinationCard;
+
+// SUMMARY: Overall, this component encapsulates the logic for displaying a single destination on the explore page. It is designed to be used in React components, allowing them to display destinations from the Firestore collection easily and consistently.

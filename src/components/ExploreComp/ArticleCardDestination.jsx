@@ -67,3 +67,5 @@ const styles = StyleSheet.create({
 });
 
 export default ArticleCardDestination;
+
+// SUMMARY: Overall, this component is used to display articles on the destination screen based on the path and articleItem props passed to it.

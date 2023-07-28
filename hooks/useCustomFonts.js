@@ -56,3 +56,5 @@ export const useCustomFonts = () => {
 
   return { fontsLoaded, onLayoutRootView };
 };
+
+// SUMMARY: Overall, this custom hook encapsulates the logic for loading and managing custom fonts in an Expo project. It is designed to be used in React components, allowing them to load and manage custom fonts easily and consistently.

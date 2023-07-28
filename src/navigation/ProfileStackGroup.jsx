@@ -23,3 +23,5 @@ const ProfileStackGroup = () => {
 };
 
 export default ProfileStackGroup;
+
+// SUMMARY: This component is used to create a stack navigator for the profile screen group. It is used to allow for navigation between the profile, login, and register screens.

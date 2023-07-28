@@ -18,3 +18,5 @@ const Navigation = () => {
 };
 
 export default Navigation;
+
+// SUMMARY: This component is used to display the navigation for the application. It uses the AuthContext to determine which navigation to display based on whether the user is logged in or not.

@@ -53,3 +53,5 @@ const styles = StyleSheet.create({
 });
 
 export default CategoryFeed;
+
+// SUMMARY: Overall, this component encapsulates the logic for displaying articles from the Firestore collection based on the articleCategory prop passed to it. It is designed to be used in the ExploreScreen component, allowing it to display articles from the Firestore collection based on the articleCategory prop passed to it.

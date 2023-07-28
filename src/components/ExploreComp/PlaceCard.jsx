@@ -67,3 +67,5 @@ const styles = StyleSheet.create({
 });
 
 export default PlaceCard;
+
+// SUMMARY: This component renders the place card on article screen.

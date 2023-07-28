@@ -54,4 +54,4 @@ const useCategoryFeed = (articleCategory) => {
 
 export default useCategoryFeed;
 
-// Overall, this custom hook encapsulates the data fetching logic for a specific Firestore collection based on the provided articleCategory. It is designed to be used in React components, allowing them to fetch and manage data from Firestore easily and consistently.
+//SUMMARY:  Overall, this custom hook encapsulates the data fetching logic for a specific Firestore collection based on the provided articleCategory. It is designed to be used in React components, allowing them to fetch and manage data from Firestore easily and consistently.

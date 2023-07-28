@@ -64,3 +64,5 @@ const styles = StyleSheet.create({
 });
 
 export default DestinationFeed;
+
+// SUMMARY: This component is used to display destinations from the Firestore collection. It uses the useDestinationFeed hook to fetch data from the Firestore database and display it in a FlatList component.

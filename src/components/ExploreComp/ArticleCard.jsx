@@ -62,3 +62,5 @@ const styles = StyleSheet.create({
 });
 
 export default ArticleCard;
+
+// SUMMARY: Overall, this component is used to display articles on the explore screen based on the path and articleItem props passed to it.
