@@ -12,3 +12,5 @@ const Chat = () => {
 export default Chat;
 
 const styles = StyleSheet.create({});
+
+// SUMMARY: This code sets up the Chat section of the TripTopNav.
