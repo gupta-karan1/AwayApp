@@ -30,7 +30,9 @@ import uuid from "react-native-uuid";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import moment from "moment";
 
+// Component to render the Trip Form
 const CreateTripForm = () => {
+  // State variables to manage form data
   const [tripTitle, setTripTitle] = useState("");
   const [tripLocation, setTripLocation] = useState("");
   const [startDate, setStartDate] = useState(new Date());
@@ -39,44 +41,54 @@ const CreateTripForm = () => {
   const [invitees, setInvitees] = useState([]);
   const [coverImage, setCoverImage] = useState(null);
 
+  // State variables to manage date picker modal
   const [showStartDateModal, setShowStartDateModal] = useState(false);
   const [showEndDateModal, setShowEndDateModal] = useState(false);
+
+  // State variables to manage loading indicator
   const [loading, setLoading] = useState(false);
+  // State variables to manage image upload progress
   const [isLoading, setIsLoading] = useState(false);
 
+  // Access navigation object from React Navigation
   const navigation = useNavigation();
 
+  // Access user object from AuthContext to get user id
   const { user } = useContext(AuthContext);
 
+  // Fucntion to pick an image from image library
   const pickImage = async () => {
-    setIsLoading(true);
-    // // Ask for permission to access the image library
-    // const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    setIsLoading(true); // Show loading image
 
-    // if (status !== "granted") {
-    //   alert("Sorry, we need camera roll permissions to make this work!");
-    //   return;
-    // }
+    /*  Ask for permission to access the image library
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
-    // No permissions request is necessary for launching the image library
+    if (status !== "granted") {
+      alert("Sorry, we need camera roll permissions to make this work!");
+      return;
+    }
+    No permissions request is necessary for launching the image library */
+
+    // Launch image picker
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
       aspect: [4, 3],
-      quality: 1,
+      quality: 1, // 0 is lowest and 1 is highest quality
     });
-    // console.log(coverImage);
 
+    // Check if image is selected
     if (!result.canceled) {
-      // setCoverImage(result.assets[0].uri);
+      // Upload slected image to Firebase Storage
       const uploadURL = await uploadImageAsync(result.assets[0].uri);
-      setCoverImage(uploadURL);
+      setCoverImage(uploadURL); // Set coverImage state to uploaded image URL
       setInterval(() => {
         setIsLoading(false);
-      }, 1000);
+      }, 1000); // 1 second delay before hiding loading indicator
 
       delete result["cancelled"];
     } else {
+      // If no image selected set coverImage to null
       setCoverImage(null);
       setInterval(() => {
         setIsLoading(false);
@@ -84,7 +96,9 @@ const CreateTripForm = () => {
     }
   };
 
+  // Function to upload image to Firebase Storage
   const uploadImageAsync = async (uri) => {
+    // Convert image to blob
     const blob = await new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.onload = function () {
@@ -100,35 +114,41 @@ const CreateTripForm = () => {
     });
 
     try {
-      const storageRef = ref(FIREBASE_STORAGE, `Images/image-${Date.now()}`);
-      const result = await uploadBytes(storageRef, blob);
-      blob.close();
-      return await getDownloadURL(storageRef);
+      const storageRef = ref(FIREBASE_STORAGE, `Images/image-${Date.now()}`); // Create reference to Firebase Storage location using current timestamp to make it unique
+      const result = await uploadBytes(storageRef, blob); // Upload the Blob (image data) to the specified Firebase Storage location and await the result
+      blob.close(); // Close blob after uploading to free resources
+      return await getDownloadURL(storageRef); // Return download URL
     } catch (error) {
+      // Catch errors and display alert
       alert(`Error: ${error}`);
     }
   };
 
+  // Function to handle start date picker changes
   const onStartChange = (event, selectedDate) => {
     const currentDate = selectedDate;
     setShowStartDateModal(false);
     setStartDate(currentDate);
   };
 
+  // Function to handle end date picker changes
   const onEndChange = (event, selectedDate) => {
     const currentDate = selectedDate;
     setShowEndDateModal(false);
     setEndDate(currentDate);
   };
 
+  // Function to show start date picker
   const showStartDatePicker = () => {
     setShowStartDateModal(true);
   };
 
+  // Function to show end date picker
   const showEndDatePicker = () => {
     setShowEndDateModal(true);
   };
 
+  // SaveTripDetails function to save trip to Firebase under specific user
   const saveTripDetails = async (userId, tripData) => {
     try {
       const q = query(
@@ -136,14 +156,11 @@ const CreateTripForm = () => {
         where("userId", "==", userId)
       );
 
-      const querySnapshot = await getDocs(q);
-      //create reference to this doc
-      const userRef = doc(FIREBASE_DB, "users", querySnapshot.docs[0].id);
+      const querySnapshot = await getDocs(q); // get user documents from user collection based on user id
+      const userRef = doc(FIREBASE_DB, "users", querySnapshot.docs[0].id); //Create a reference to this user's document
 
-      // add trip to user's trips array
-      await addDoc(collection(userRef, "trips"), tripData);
+      await addDoc(collection(userRef, "trips"), tripData); // Add the trip data to the "trips" subcollection under specific user
     } catch (error) {
-      // console.error("Error saving trip details:", error);
       Alert.alert("Error saving trip details:", error);
     }
   };
@@ -151,7 +168,8 @@ const CreateTripForm = () => {
   // Function to handle form submission
   const handleSubmit = async () => {
     try {
-      setLoading(true);
+      setLoading(true); // show loading indicator
+      // Prepare the trip data object with the form inputs etc
       const tripData = {
         tripTitle: tripTitle,
         tripLocation: tripLocation,
@@ -165,12 +183,12 @@ const CreateTripForm = () => {
         createdAt: new Date(),
       };
 
-      // await saveTripDetails(user.uid, tripData);
-
+      // Save the trip details to Firebase using the saveTripDetails function
       await saveTripDetails(user.uid, tripData);
 
       Alert.alert("Trip details saved successfully!");
 
+      // Navigate to Trip Plan Screen with trip details as parameters
       navigation.navigate("TripPlan", {
         tripTitle: tripTitle,
         startDate: moment(startDate).format("DD MMM YYYY"),
@@ -178,12 +196,11 @@ const CreateTripForm = () => {
         coverImage: coverImage,
         tripLocation: tripLocation,
         invitees: invitees,
-        // Include any other parameters you need in the TripPlan screen
       });
     } catch (error) {
       console.error("Error saving trip details:", error);
     } finally {
-      setLoading(false);
+      setLoading(false); // set laoding state to flase after form submission
     }
     // Remember to handle the invitees array and cover image accordingly
   };
@@ -218,6 +235,7 @@ const CreateTripForm = () => {
           placeholder="Location"
         />
         <View style={styles.dateContainer}>
+          {/* Start date picker for Android */}
           {Platform.OS === "android" && (
             <Pressable onPress={showStartDatePicker}>
               <Text>Start Date: </Text>
@@ -238,6 +256,7 @@ const CreateTripForm = () => {
             />
           )}
 
+          {/* Start date picker for iOS */}
           {Platform.OS === "ios" && (
             <View>
               <Text>Start Date</Text>
@@ -251,6 +270,7 @@ const CreateTripForm = () => {
             </View>
           )}
 
+          {/* End date picker for Android */}
           {Platform.OS === "android" && (
             <Pressable onPress={showEndDatePicker}>
               <Text>End Date: </Text>
@@ -260,6 +280,7 @@ const CreateTripForm = () => {
             </Pressable>
           )}
 
+          {/* End Date picker for iOS */}
           {Platform.OS === "ios" && (
             <View>
               <Text>End Date</Text>
@@ -283,6 +304,7 @@ const CreateTripForm = () => {
             />
           )}
         </View>
+        {/* Radio buttons for trip type selection */}
         <View style={styles.radioButtonContainer}>
           <TouchableOpacity
             style={[
@@ -308,7 +330,9 @@ const CreateTripForm = () => {
           <ActivityIndicator />
         ) : (
           <View>
+            {/* Cover Image Upload */}
             <Button title="Upload Cover Image" onPress={pickImage} />
+            {/* Placeholder for Image */}
             {!coverImage && (
               <View style={styles.image}>
                 <Text>Your Cover Image will Appear Here</Text>
@@ -395,3 +419,5 @@ const styles = StyleSheet.create({
 });
 
 export default CreateTripForm;
+
+//SUMMARY: This code renders the trip form. It uses state variables to manage the form data. It also includes state variables like "showStartDateModal" and "showEndDateModal" to handle date picker modals and "loading" and "isLoading" to manage loading indicators for the image upload process. The component accesses the navigation object from React Navigation and the user object from the "AuthContext" using hooks. It allows users to pick an image from their device's image library using the "ImagePicker" library, upload the selected image to Firebase Storage, and set the coverImage state to the uploaded image's URL. Various functions are defined to handle changes in the date pickers, show or hide the date picker modals, save trip details to Firebase under the specific user, handle form submissions, and manage trip type changes (solo or group).
