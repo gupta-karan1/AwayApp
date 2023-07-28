@@ -40,4 +40,4 @@ const AuthProvider = ({ children }) => {
 
 export { AuthContext, AuthProvider };
 
-//By using this context and provider setup, any component within the application can subscribe to changes in the authentication state and access the current user and login status without having to pass props through multiple layers of the component tree.
+//SUMMARY: By using this context and provider setup, any component within the application can subscribe to changes in the authentication state and access the current user and login status without having to pass props through multiple layers of the component tree.

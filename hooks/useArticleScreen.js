@@ -48,4 +48,4 @@ const useArticleScreen = (pathId) => {
 
 export default useArticleScreen;
 
-//Overall, this custom hook encapsulates the data fetching logic for a specific Firestore collection based on the provided pathId. It is designed to be used in React components, allowing them to fetch and manage data from Firestore easily and consistently.
+//SUMMARY: Overall, this custom hook encapsulates the data fetching logic for a specific Firestore collection based on the provided pathId. It is designed to be used in React components, allowing them to fetch and manage data from Firestore easily and consistently.
