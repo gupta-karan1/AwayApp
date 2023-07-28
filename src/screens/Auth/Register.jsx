@@ -6,27 +6,31 @@ import {
   Button,
   ActivityIndicator,
 } from "react-native";
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { useAuth } from "../../../hooks/useAuth";
 import { collection, addDoc } from "firebase/firestore";
 import { FIREBASE_DB } from "../../../firebaseConfig";
 
 const Register = () => {
+  // State variables to store user input
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [userName, setUserName] = useState("");
+
+  // Custom hook to register user
   const { register, loading } = useAuth();
 
-  //function to handle Register User
+  // Function to handle registration
   const handleRegister = async () => {
     try {
+      // Reguster function to create a new user with the provided email and password
       const userCredential = await register(email, password);
 
       // Create a new document in the 'users' collection in Firestore
       const userData = {
-        userId: userCredential.user.uid,
+        userId: userCredential.user.uid, // Get the user's ID from the userCredential object
         email: email,
-        username: userName, // Add the 'username' field to the user data
+        username: userName,
       };
 
       // Add the new document to the 'users' collection
@@ -36,16 +40,13 @@ const Register = () => {
       // User registration and 'users' collection creation successful
       console.log("User registered and 'users' collection created!");
     } catch (error) {
+      // error alert
       alert("Registration failed: ", error.message);
     }
   };
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      // behavior="padding"
-      keyboardVerticalOffset={40}
-    >
+    <KeyboardAvoidingView style={styles.container} keyboardVerticalOffset={40}>
       <View style={styles.inputContainer}>
         <TextInput
           placeholder="Name"
@@ -114,3 +115,5 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
 });
+
+// SUMMARY: Register component includes input fields for the user's name, email, and password. When the user fills in the required details and taps the "Register" button, the "handleRegister" function is called. This function attempts to create a new user with the provided email and password using Firebase authentication. Upon successful registration, it creates a new document in the Firestore database's "users" collection with additional user data, including the user's ID and username.
