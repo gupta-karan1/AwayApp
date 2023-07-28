@@ -40,7 +40,7 @@ const Trips = () => {
       const querySnapshot1 = await getDocs(q);
       //create reference to this doc
       const userRef = doc(FIREBASE_DB, "users", querySnapshot1.docs[0].id);
-      setUserId(userRef);
+      setUserId(userRef.id);
 
       const tripQuery = query(
         collection(userRef, "trips"),

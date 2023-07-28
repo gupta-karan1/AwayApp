@@ -4,15 +4,16 @@ import ArticleScreen from "../screens/ExploreScreen/ArticleScreen";
 import PlaceScreen from "../screens/ExploreScreen/PlaceScreen";
 import Explore from "../screens/tabScreens/Explore";
 
-const ExploreStack = createNativeStackNavigator();
+const ExploreStack = createNativeStackNavigator(); // The createNativeStackNavigator function is used to create a stack navigator for the Explore tab.
 
+// The ExploreStackGroup component is used to group the screens in the Explore tab together. It is used to display the screens in the Explore tab.
 const ExploreStackGroup = () => {
   return (
     <ExploreStack.Navigator
       initialRouteName="Explore"
       screenOptions={{
         headerTitleAlign: "center",
-        animation: "slide_from_right",
+        animation: "slide_from_right", // The animation prop is used to set the animation for the screen transitions in the stack navigator.
       }}
     >
       <ExploreStack.Screen name="Explore" component={Explore} />

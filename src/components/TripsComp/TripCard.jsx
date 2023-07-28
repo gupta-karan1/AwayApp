@@ -9,7 +9,11 @@ import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import moment from "moment";
 
+// component that displays a trip card on the trips screen based on the tripItem and path props passed to it. It will be different for different users.
 const TripCard = ({ tripItem, path }) => {
+  // tripItem is an object that contains the data for the trip. path is a string that contains the path to the trip in the Firestore database.
+
+  // The object destructuring syntax is used to extract the data from the tripItem object.
   const {
     tripTitle,
     tripLocation,
@@ -22,11 +26,13 @@ const TripCard = ({ tripItem, path }) => {
     tripId,
   } = tripItem;
 
-  const { navigate } = useNavigation();
+  const { navigate } = useNavigation(); // The useNavigation hook is used to access the navigation prop of the component.
 
-  const startDateTime = moment(startDate.toDate()).format("DD MMM YYYY");
+  const startDateTime = moment(startDate.toDate()).format("DD MMM YYYY"); // The moment library is used to format the date and time.
   const endDateTime = moment(endDate.toDate()).format("DD MMM YYYY");
 
+  // The Pressable component is used to wrap the trip card. It is used to navigate to the TripPlan screen when the trip card is pressed.
+  // The navigate function is used to navigate to the TripPlan screen. The tripId, tripTitle, startDate, endDate, coverImage, tripLocation, tripType, invitees, userId, and path props are passed to the TripPlan screen.
   return (
     <Pressable
       style={styles.container}
@@ -41,6 +47,7 @@ const TripCard = ({ tripItem, path }) => {
           tripType: tripType,
           invitees: invitees,
           userId: userId,
+          path: path,
         })
       }
     >
@@ -48,8 +55,6 @@ const TripCard = ({ tripItem, path }) => {
         <View style={styles.textContainer}>
           <Text style={styles.title}>{tripTitle}</Text>
           <Text style={styles.subtitle}>
-            {/* {moment(startDateTime).format("DD MMM YYYY")} -{" "}
-            {moment(endDateTime).format("DD MMM YYYY")} */}
             {startDateTime} - {endDateTime}
           </Text>
         </View>

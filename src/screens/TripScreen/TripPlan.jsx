@@ -1,11 +1,4 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  ImageBackground,
-  ScrollView,
-  Dimensions,
-} from "react-native";
+import { StyleSheet, Text, View, ImageBackground } from "react-native";
 import React from "react";
 import { useRoute } from "@react-navigation/native";
 import TripTopNav from "./TripTopNav";
@@ -23,6 +16,7 @@ const TripPlan = () => {
     invitees,
     tripId,
     userId,
+    path,
   } = route.params;
 
   return (

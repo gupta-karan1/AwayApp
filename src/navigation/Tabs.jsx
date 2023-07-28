@@ -3,16 +3,22 @@ import ExploreStackGroup from "./ExploreStackGroup";
 import TripsStackGroup from "./TripsStackGroup";
 import ProfileStackGroup from "./ProfileStackGroup";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-const Tab = createBottomTabNavigator();
 
+// This component is used to create the bottom tab navigation for the application.
+const Tab = createBottomTabNavigator(); // The createBottomTabNavigator function is used to create the bottom tab navigation.
+
+// The Tab.Navigator component is used to create the bottom tab navigation.
+// The Tab.Screen component is used to create the screens for the bottom tab navigation.
 const Tabs = () => {
   return (
     <Tab.Navigator
       screenOptions={{
         tabBarActiveTintColor: "tomato",
         tabBarInactiveTintColor: "gray",
-        tabBarHideOnKeyboard: true,
-        tabBarAllowFontScaling: true,
+        tabBarHideOnKeyboard: true, // hide tab bar when keyboard is open
+        tabBarAllowFontScaling: true, // allow font scaling for tab bar
+        headerShown: false, // hide header
+        freezeOnBlur: true, // freeze tab bar when screen is not focused
       }}
     >
       <Tab.Screen
@@ -23,10 +29,10 @@ const Tabs = () => {
             <Feather
               name={"globe"}
               size={25}
-              color={focused ? "tomato" : "black"}
+              color={focused ? "tomato" : "gray"}
             />
           ),
-          headerShown: false,
+
           tabBarLabel: "Explore",
         }}
       />
@@ -38,12 +44,11 @@ const Tabs = () => {
             <Feather
               name={"clipboard"}
               size={25}
-              color={focused ? "tomato" : "black"}
+              color={focused ? "tomato" : "gray"}
             />
           ),
-          headerShown: false,
+
           tabBarLabel: "Trips",
-          // unmountOnBlur: true,
         }}
       />
 
@@ -55,10 +60,10 @@ const Tabs = () => {
             <Feather
               name={"user"}
               size={25}
-              color={focused ? "tomato" : "black"}
+              color={focused ? "tomato" : "gray"}
             />
           ),
-          headerShown: false,
+
           tabBarLabel: "Profile",
         }}
       />
@@ -67,3 +72,5 @@ const Tabs = () => {
 };
 
 export default Tabs;
+
+// Overall this tabs component is used to create the bottom tab navigation for the application.

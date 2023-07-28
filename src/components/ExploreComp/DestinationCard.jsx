@@ -2,10 +2,13 @@ import { StyleSheet, Text, View, Pressable, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import GlobalStyles from "../../GlobalStyles";
 
-// DestinationCard component
+// This component is used to display a single destination on the explore page. It is used to display destinations from the Firestore collection.
 const DestinationCard = ({ destinationItem, path }) => {
-  const { country, description, destinationName, imageUrl } = destinationItem;
-  const { navigate } = useNavigation();
+  // The destinationItem prop contains the data for the destination to be displayed. The path prop contains the pathId for the destination.
+
+  const { country, description, destinationName, imageUrl } = destinationItem; // The data for the destination is extracted from the destinationItem prop. This data is used to display the destination on the explore page.
+
+  const { navigate } = useNavigation(); // The useNavigation hook is used to get the navigation object from the nearest navigation context. This navigation object is used to navigate to the destination screen when the destination card is pressed.
 
   return (
     <Pressable
