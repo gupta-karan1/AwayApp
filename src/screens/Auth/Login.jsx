@@ -6,34 +6,36 @@ import {
   Button,
   ActivityIndicator,
 } from "react-native";
-
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../../../hooks/useAuth";
 
+// Login component
 const Login = () => {
+  // State variables to store user input
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { login, loading } = useAuth(); // custom hook to handle login and register user
 
+  // Custom hook for loading and to login user
+  const { login, loading } = useAuth();
+
+  // Navigation object from useNavigation hook
   const navigation = useNavigation();
 
-  // function to handle Login User
+  // Function to handle login
   const handleLogin = async () => {
     try {
+      // Call the login function to authenticate the user with the provided email and password
       await login(email, password);
     } catch (error) {
+      // error alert
       console.log(error);
       alert("Login failed: ", error.message);
     }
   };
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      // behavior="padding"
-      keyboardVerticalOffset={5}
-    >
+    <KeyboardAvoidingView style={styles.container} keyboardVerticalOffset={5}>
       <View style={styles.inputContainer}>
         <TextInput
           placeholder="Email"
@@ -60,6 +62,7 @@ const Login = () => {
       <View style={styles.button}>
         <Button
           title="Register"
+          // Navigate to the Register screen
           onPress={() => navigation.navigate("Register")}
         />
       </View>
@@ -97,3 +100,5 @@ const styles = StyleSheet.create({
     borderRadius: 30,
   },
 });
+
+// SUMMARY: The code defines the "Login" component, which provides an interface for users to log in with their email and password. It utilizes state variables to store user input, a custom hook for user authentication, and the "useNavigation" hook for screen navigation. The "handleLogin" function is responsible for authenticating the user using the provided email and password. The component also renders input fields for email and password, along with a "Login" button that triggers the login process. If the user is not logged in, a "Register" button is displayed to navigate to the registration screen.
