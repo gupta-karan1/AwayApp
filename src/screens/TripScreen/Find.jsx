@@ -8,6 +8,7 @@ const Find = () => {
   const route = useRoute();
   // Destructure route params
   const { tripLocation } = route.params;
+  console.log(tripLocation);
   // pathId for article data based on tripLocation. Lowercase to match database.
   const pathId = `destinations/${tripLocation.toLowerCase()}/articles`;
 

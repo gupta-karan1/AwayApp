@@ -11,10 +11,10 @@ import { collectionGroup, getDocs, query, where } from "firebase/firestore";
 import { FIREBASE_DB } from "../../../firebaseConfig";
 import GlobalStyles from "../../GlobalStyles";
 import useArticleData from "../../../hooks/useDestinationScreen";
-import ArticleCardDestination from "../../components/ExploreComp/ArticleCardDestination";
+import FindArticleCard from "../../components/TripsComp/FindArticleCard";
 
 // Component to render destination content for Find screen, passing pathId and tripLocation props
-const DestinationScreen = ({ pathId, tripLocation }) => {
+const FindDestination = ({ pathId, tripLocation }) => {
   // State variables to store destination data and loading state
   const [destinationData, setDestinationData] = useState({});
   const [isLoading, setIsLoading] = useState(true);
@@ -71,7 +71,7 @@ const DestinationScreen = ({ pathId, tripLocation }) => {
   // ArticleCard component for Find Destination screen with path prop
   const renderArticleCard = ({ item }) => {
     return (
-      <ArticleCardDestination
+      <FindArticleCard
         key={item.articleId}
         articleItem={item}
         path={`${pathId}/${item.articleId}/places`}
@@ -153,7 +153,7 @@ const DestinationScreen = ({ pathId, tripLocation }) => {
   );
 };
 
-export default DestinationScreen;
+export default FindDestination;
 
 const styles = StyleSheet.create({
   image: {

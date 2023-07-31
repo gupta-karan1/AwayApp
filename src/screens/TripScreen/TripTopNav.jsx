@@ -2,36 +2,86 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import Plan from "./Plan";
 import Chat from "./Chat";
 import Find from "./Find";
-import { View, Dimensions } from "react-native";
+import { View } from "react-native";
+import { useRoute } from "@react-navigation/native";
+
+import FindDestination from "./FindDestination";
+import FindArticle from "./FindArticle";
+import FindPlace from "./FindPlace";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 // Create Material Top Tab Navigator instance for Trip Screen
 const Tab = createMaterialTopTabNavigator();
+const Stack = createNativeStackNavigator();
 
 // Functional componenet to render top navigation, passing tripLocation prop
 function TripTopNav({ tripLocation }) {
-  // Get height of the window
-  const screenHeight = Dimensions.get("window").height;
-
   return (
     <View style={{ flex: 1 }}>
       {/* Create Material Top Tab Navigator with 3 screens */}
       <Tab.Navigator
-        screenOptions={
-          {
-            // tabBarScrollEnabled: true,
-          }
-        }
+        screenOptions={{
+          // tabBarScrollEnabled: true,
+          swipeEnabled: false,
+        }}
       >
         <Tab.Screen name="Plan" component={Plan} />
         <Tab.Screen name="Chat" component={Chat} />
         <Tab.Screen
-          name="Find"
-          component={Find}
+          name="FindStack"
+          component={FindStack}
           // tripLocation prop as initial parameter
           initialParams={{ tripLocation }}
+          options={{
+            tabBarLabel: "Find",
+            lazy: true,
+          }}
         />
       </Tab.Navigator>
     </View>
+  );
+}
+
+// stack navigator for Find screen and its components like FindDestination and FindArticle and FindPlace
+function FindStack() {
+  const route = useRoute();
+  const { tripLocation } = route.params;
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        animation: "slide_from_right",
+      }}
+    >
+      <Stack.Screen
+        name="Find"
+        component={Find}
+        initialParams={{ tripLocation }}
+        options={{
+          headerShown: false,
+          // headerSearchBarOptions: {
+          //   headerTitle: "Find",
+          //   headerTitleAlign: "center",
+          // },
+        }}
+      />
+      <Stack.Screen name="FindDestination" component={FindDestination} />
+      <Stack.Screen
+        name="FindArticle"
+        component={FindArticle}
+        options={{
+          headerTitle: "Article",
+          headerTitleAlign: "center",
+        }}
+      />
+      <Stack.Screen
+        name="FindPlace"
+        component={FindPlace}
+        options={{
+          headerTitle: "Place",
+          headerTitleAlign: "center",
+        }}
+      />
+    </Stack.Navigator>
   );
 }
 

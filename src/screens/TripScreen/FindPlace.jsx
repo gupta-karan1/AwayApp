@@ -13,8 +13,8 @@ import GlobalStyles from "../../GlobalStyles";
 import { FontAwesome } from "@expo/vector-icons";
 import usePlaceScreen from "../../../hooks/usePlaceScreen";
 
-// PlaceScreen component
-const PlaceScreen = ({ route }) => {
+// PlaceScreen component for the find section within a trip
+const FindPlace = ({ route }) => {
   // Get the pathId from the route params
   const { pathId } = route.params;
 
@@ -152,7 +152,7 @@ const PlaceScreen = ({ route }) => {
   );
 };
 
-export default PlaceScreen;
+export default FindPlace;
 
 const styles = StyleSheet.create({
   container: {
