@@ -1,6 +1,7 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, TextInput } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import FindDestination from "./FindDestination";
+import { useState } from "react";
 
 // Component for Find section of TripTopNav
 const Find = () => {
@@ -8,14 +9,12 @@ const Find = () => {
   const route = useRoute();
   // Destructure route params
   const { tripLocation } = route.params;
-  console.log(tripLocation);
-  // pathId for article data based on tripLocation. Lowercase to match database.
-  const pathId = `destinations/${tripLocation.toLowerCase()}/articles`;
 
   return (
     <View showsVerticalScrollIndicator={false} style={styles.container}>
       {/* FindDestination component, passing pathId and tripLocation as props */}
-      <FindDestination pathId={pathId} tripLocation={tripLocation} />
+
+      <FindDestination tripLocation={tripLocation} />
     </View>
   );
 };

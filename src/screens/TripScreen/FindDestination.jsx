@@ -5,27 +5,41 @@ import {
   ActivityIndicator,
   Text,
   TouchableOpacity,
+  Alert,
+  TextInput,
 } from "react-native";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { collectionGroup, getDocs, query, where } from "firebase/firestore";
 import { FIREBASE_DB } from "../../../firebaseConfig";
 import GlobalStyles from "../../GlobalStyles";
 import useArticleData from "../../../hooks/useDestinationScreen";
 import FindArticleCard from "../../components/TripsComp/FindArticleCard";
+import { useFocusEffect } from "@react-navigation/native";
 
 // Component to render destination content for Find screen, passing pathId and tripLocation props
-const FindDestination = ({ pathId, tripLocation }) => {
+const FindDestination = ({ tripLocation }) => {
   // State variables to store destination data and loading state
-  const [destinationData, setDestinationData] = useState({});
+  const [destinationData, setDestinationData] = useState();
   const [isLoading, setIsLoading] = useState(true);
+  const [searchTripLocation, setSearchTripLocation] = useState(tripLocation);
+  // pathId for article data based on tripLocation. Lowercase to match database.
+  const [pathId, setPathId] = useState(
+    `destinations/${searchTripLocation.toLowerCase()}/articles`
+  );
 
   // Function to fetch destination data from Firebase based on tripLocation
   const getDestinationData = async () => {
     try {
       // Query destinations collection group where the destinationName matches tripLocation
+      // Extract the first letter and capitalize it
+      const firstLetterCapitalized = searchTripLocation.charAt(0).toUpperCase();
+
+      // Join the capitalized letter with the rest of the text
+      const capitalizedLocation =
+        firstLetterCapitalized + searchTripLocation.slice(1);
       const destinationRef = query(
         collectionGroup(FIREBASE_DB, "destinations"),
-        where("destinationName", "==", tripLocation)
+        where("destinationName", "==", capitalizedLocation)
       );
       // query reference to destinationRef
       const q = query(destinationRef);
@@ -38,27 +52,32 @@ const FindDestination = ({ pathId, tripLocation }) => {
       querySnapshot.forEach((doc) => {
         setDestinationData(doc.data());
       });
-
-      //   const data = querySnapshot.docs.map((doc) => doc.data());
-      //   setDestinationData(data);
+      // console.log(destinationData);
 
       // Handle errors
     } catch (error) {
       console.log("Error:" + error);
+      Alert.alert("Error", error.message);
       // Regardless of result set loading to false
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Custom hook to fetch article data from Firebase using pathId
+  // Function to handle search input
+  const handleSearch = (event) => {
+    const text = event.nativeEvent.text;
+    setSearchTripLocation(text);
+    setPathId(`destinations/${text.toLowerCase()}/articles`);
+
+    // console.log(text);
+  };
   const { loading, articleData } = useArticleData(pathId);
 
-  // useEffect to call getDestinationData
+  // useEffect to call getDestinationData whenever searchTripLocation changes
   useEffect(() => {
     getDestinationData();
-    // console.log(destinationData);
-  }, []);
+  }, [searchTripLocation]);
 
   // State variable to toggle text description
   const [showFullText, setShowFullText] = useState(false);
@@ -95,6 +114,11 @@ const FindDestination = ({ pathId, tripLocation }) => {
           contentContainerStyle={{ paddingHorizontal: 15 }} // add padding to left and right
           ListHeaderComponent={
             <View>
+              <TextInput
+                style={styles.input}
+                placeholder="Search Destination"
+                onSubmitEditing={handleSearch}
+              />
               {isLoading ? (
                 <ActivityIndicator />
               ) : (
@@ -178,6 +202,13 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 30,
     textDecorationLine: "underline",
+  },
+  input: {
+    backgroundColor: "white",
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    borderRadius: 10,
+    marginTop: 15,
   },
 });
 
