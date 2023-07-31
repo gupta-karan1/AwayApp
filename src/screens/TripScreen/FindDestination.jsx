@@ -8,13 +8,12 @@ import {
   Alert,
   TextInput,
 } from "react-native";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { collectionGroup, getDocs, query, where } from "firebase/firestore";
 import { FIREBASE_DB } from "../../../firebaseConfig";
 import GlobalStyles from "../../GlobalStyles";
 import useArticleData from "../../../hooks/useDestinationScreen";
 import FindArticleCard from "../../components/TripsComp/FindArticleCard";
-import { useFocusEffect } from "@react-navigation/native";
 
 // Component to render destination content for Find screen, passing pathId and tripLocation props
 const FindDestination = ({ tripLocation }) => {
