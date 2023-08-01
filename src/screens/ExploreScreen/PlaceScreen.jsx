@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
   },
   image: {
     height: 250,
-    borderRadius: 20,
+    borderRadius: 10,
     marginBottom: 15,
   },
   subtitleText: {

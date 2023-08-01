@@ -6,11 +6,15 @@ import {
   Image,
   ActivityIndicator,
   TouchableOpacity,
+  Pressable,
 } from "react-native";
 import { useState, useCallback } from "react";
 import useArticleScreen from "../../../hooks/useArticleScreen";
 import GlobalStyles from "../../GlobalStyles";
 import FindPlaceCard from "../../components/TripsComp/FindPlaceCard";
+import { ImageBackground } from "react-native";
+import { AntDesign } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 
 // ArticleScreen component with route params to display article with places within the find section
 const FindArticle = ({ route }) => {
@@ -50,6 +54,8 @@ const FindArticle = ({ route }) => {
     );
   }, []); // add an empty array as the second argument to useCallback to avoid re-rendering the component
 
+  const Navigation = useNavigation();
+
   return (
     <View>
       {loading ? (
@@ -68,7 +74,19 @@ const FindArticle = ({ route }) => {
           // List header component to display the article details
           ListHeaderComponent={
             <View>
-              <Image source={{ uri: articleImg }} style={styles.image} />
+              {/* <Image source={{ uri: articleImg }} style={styles.image} /> */}
+              <ImageBackground
+                source={{ uri: articleImg }}
+                style={styles.image}
+                imageStyle={{ borderRadius: 10 }}
+              >
+                <Pressable
+                  onPress={() => Navigation.goBack()}
+                  style={styles.backButton}
+                >
+                  <AntDesign name="arrowleft" size={24} color="black" />
+                </Pressable>
+              </ImageBackground>
               <View style={styles.subtitleText}>
                 <Text style={GlobalStyles.bodySmallRegular}>
                   {articleCategory}
@@ -145,7 +163,6 @@ const styles = StyleSheet.create({
   image: {
     height: 250,
     marginTop: 20,
-    borderRadius: 5,
   },
   subtitleText: {
     flexDirection: "row",
@@ -170,6 +187,14 @@ const styles = StyleSheet.create({
   articleAuthorText: {},
   articleDateText: {
     marginBottom: 30,
+  },
+  backButton: {
+    position: "absolute",
+    top: 10,
+    left: 10,
+    padding: 5,
+    borderRadius: 50,
+    backgroundColor: "rgba(255, 255, 255, 0.7)",
   },
 });
 

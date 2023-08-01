@@ -49,7 +49,7 @@ const Trips = () => {
 
       const tripQuery = query(
         collection(userRef, "trips"),
-        orderBy("startDate", "asc") // Query to get the user's trips sorted by startDate in ascending order
+        orderBy("startDate", "desc") // Query to get the user's trips sorted by startDate in ascending order
       );
 
       const querySnapshot2 = await getDocs(tripQuery);

@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
   image: {
     height: 250,
     marginTop: 20,
-    borderRadius: 5,
+    borderRadius: 10,
   },
   subtitleText: {
     flexDirection: "row",

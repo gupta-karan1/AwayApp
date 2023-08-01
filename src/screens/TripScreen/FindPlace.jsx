@@ -7,19 +7,38 @@ import {
   ScrollView,
   Button,
   TouchableOpacity,
+  ImageBackground,
+  Pressable,
 } from "react-native";
 import { useState } from "react";
 import GlobalStyles from "../../GlobalStyles";
 import { FontAwesome } from "@expo/vector-icons";
 import usePlaceScreen from "../../../hooks/usePlaceScreen";
+import { useContext } from "react";
+import { AuthContext } from "../../../hooks/AuthContext";
+import { Alert } from "react-native";
+import {
+  addDoc,
+  collection,
+  doc,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
+import { FIREBASE_DB } from "../../../firebaseConfig";
+import { useNavigation } from "@react-navigation/native";
+import { AntDesign } from "@expo/vector-icons";
 
 // PlaceScreen component for the find section within a trip
 const FindPlace = ({ route }) => {
   // Get the pathId from the route params
-  const { pathId } = route.params;
+  const { pathId, tripId } = route.params;
+  // console.log("tripId", tripId);
+  const navigation = useNavigation();
 
   // Custom hook to fetch the single place data based on the pathId
   const { loading, singlePlaceData } = usePlaceScreen(pathId);
+  const [isLoading, setIsLoading] = useState(false);
 
   // State variable to toggle the full text
   const [showFullText, setShowFullText] = useState(false);
@@ -40,16 +59,114 @@ const FindPlace = ({ route }) => {
     return ""; // Return empty string if placeHours is not available
   };
 
+  // Access user object from AuthContext to get user id
+  const { user } = useContext(AuthContext);
+
+  const savePlaceDetails = async (placeData) => {
+    try {
+      const q = query(
+        collection(FIREBASE_DB, "users"),
+        where("userId", "==", user.uid)
+      );
+
+      const querySnapshot = await getDocs(q); // get user documents from user collection based on user id
+      const userRef = doc(FIREBASE_DB, "users", querySnapshot.docs[0].id); //Create a reference to this user's document
+
+      // create a trip reference to the trip document
+      const q2 = query(
+        collection(userRef, "trips"),
+        where("tripId", "==", tripId)
+      );
+      const querySnapshot2 = await getDocs(q2);
+      const tripRef = doc(userRef, "trips", querySnapshot2.docs[0].id);
+
+      await addDoc(collection(tripRef, "saved"), placeData);
+
+      // Add the place data to the "saved" subcollection under specific user
+    } catch (error) {
+      Alert.alert("Error saving place details:", error.message);
+    }
+  };
+
+  // Function to save the place
+  const savePlace = async () => {
+    try {
+      setIsLoading(true); // show loading indicator
+      // Prepare the place data object with the form inputs etc
+      const placeData = {
+        placeTitle: singlePlaceData.placeTitle,
+        placeCategory: singlePlaceData.placeCategory,
+        placeDescription: singlePlaceData.placeDescription,
+        placeAddress: singlePlaceData.placeAddress,
+        placeContact: singlePlaceData.placeContact,
+        placeHours: singlePlaceData.placeHours,
+        placeImage: singlePlaceData.placeImage,
+        placeGoogleMapLink: singlePlaceData.placeGoogleMapLink,
+        placeLongitude: singlePlaceData.placeLongitude,
+        placeLatitude: singlePlaceData.placeLatitude,
+        placeSaved: true,
+        placeId: singlePlaceData.placeId,
+        placeWebsite: singlePlaceData.placeWebsite,
+        userId: user.uid,
+        createdAt: new Date(),
+      };
+
+      // Save the place details to Firebase using the savePlaceDetails function
+      await savePlaceDetails(placeData);
+
+      Alert.alert(
+        "Place Saved",
+        "Place saved successfully to Plan!",
+        [
+          {
+            text: "Cancel",
+            onPress: () => {},
+            style: "cancel",
+          },
+          {
+            text: "Go to Saved",
+            onPress: () => {
+              //navigate to the saved places screen
+              navigation.navigate("Plan");
+            },
+          },
+        ],
+        {
+          cancelable: true,
+          onDismiss: () => {},
+        }
+      );
+
+      console.log("Place details saved successfully!");
+    } catch (error) {
+      Alert.alert("Error saving place details:", error.message);
+      console.error("Error saving place details:", error.message);
+    } finally {
+      setIsLoading(false); // set loading state to false after form submission
+    }
+  };
+
+  const Navigation = useNavigation();
   return (
     <View style={styles.container}>
       {loading ? (
         <ActivityIndicator size="large" />
       ) : (
         <ScrollView showsVerticalScrollIndicator={false}>
-          <Image
-            source={{ uri: singlePlaceData.placeImage }}
+          <ImageBackground
+            resizeMode="cover"
             style={styles.image}
-          />
+            source={{ uri: singlePlaceData.placeImage }}
+            imageStyle={{ borderRadius: 10 }}
+          >
+            <Pressable
+              onPress={() => Navigation.goBack()}
+              style={styles.backButton}
+            >
+              <AntDesign name="arrowleft" size={24} color="black" />
+            </Pressable>
+          </ImageBackground>
+
           <Text style={[GlobalStyles.bodySmallRegular, styles.subtitleText]}>
             {singlePlaceData.placeCategory}
           </Text>
@@ -144,7 +261,11 @@ const FindPlace = ({ route }) => {
           )}
           <View style={styles.button}>
             {/* Save Place button not functional yet */}
-            <Button title="Save Place" onPress={() => {}} />
+            {isLoading ? (
+              <ActivityIndicator size="large" />
+            ) : (
+              <Button title="Save Place" type="submit" onPress={savePlace} />
+            )}
           </View>
         </ScrollView>
       )}
@@ -159,8 +280,8 @@ const styles = StyleSheet.create({
     padding: 15,
   },
   image: {
+    width: "100%",
     height: 250,
-    borderRadius: 20,
     marginBottom: 15,
   },
   subtitleText: {
@@ -197,6 +318,15 @@ const styles = StyleSheet.create({
   },
   button: {
     marginVertical: 10,
+  },
+  backButton: {
+    position: "absolute",
+    top: 10,
+    left: 10,
+    padding: 5,
+    borderRadius: 50,
+    backgroundColor: "rgba(255, 255, 255, 0.8)",
+    elevation: 2,
   },
 });
 

@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
     height: 250,
     // width: 365,
     marginTop: 20,
-    borderRadius: 5,
+    borderRadius: 10,
   },
   subtitleText: {
     marginTop: 30,
