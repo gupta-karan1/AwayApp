@@ -33,7 +33,7 @@ import { AntDesign } from "@expo/vector-icons";
 const FindPlace = ({ route }) => {
   // Get the pathId from the route params
   const { pathId, tripId } = route.params;
-  // console.log("tripId", tripId);
+
   const navigation = useNavigation();
 
   // Custom hook to fetch the single place data based on the pathId
@@ -80,9 +80,42 @@ const FindPlace = ({ route }) => {
       const querySnapshot2 = await getDocs(q2);
       const tripRef = doc(userRef, "trips", querySnapshot2.docs[0].id);
 
+      // Check if the place with the same placeId exists in the "saved" subcollection
+      const placeId = singlePlaceData.placeId;
+      const existingPlacesSnapshot = await getDocs(
+        query(collection(tripRef, "saved"), where("placeId", "==", placeId))
+      );
+
+      if (!existingPlacesSnapshot.empty) {
+        // Place with the same placeId already exists, throw an error
+        throw new Error("Place is already in the saved collection.");
+      }
+
+      // If placeId is unique, add the place data to the "saved" subcollection
       await addDoc(collection(tripRef, "saved"), placeData);
 
-      // Add the place data to the "saved" subcollection under specific user
+      Alert.alert(
+        "Place Saved",
+        "Place saved successfully to Plan!",
+        [
+          {
+            text: "Cancel",
+            onPress: () => {},
+            style: "cancel",
+          },
+          {
+            text: "Go to Saved",
+            onPress: () => {
+              //navigate to the saved places screen
+              navigation.navigate("Plan");
+            },
+          },
+        ],
+        {
+          cancelable: true,
+          onDismiss: () => {},
+        }
+      );
     } catch (error) {
       Alert.alert("Error saving place details:", error.message);
     }
@@ -114,33 +147,10 @@ const FindPlace = ({ route }) => {
       // Save the place details to Firebase using the savePlaceDetails function
       await savePlaceDetails(placeData);
 
-      Alert.alert(
-        "Place Saved",
-        "Place saved successfully to Plan!",
-        [
-          {
-            text: "Cancel",
-            onPress: () => {},
-            style: "cancel",
-          },
-          {
-            text: "Go to Saved",
-            onPress: () => {
-              //navigate to the saved places screen
-              navigation.navigate("Plan");
-            },
-          },
-        ],
-        {
-          cancelable: true,
-          onDismiss: () => {},
-        }
-      );
-
-      console.log("Place details saved successfully!");
+      // console.log("Place details saved successfully!");
     } catch (error) {
       Alert.alert("Error saving place details:", error.message);
-      console.error("Error saving place details:", error.message);
+      // console.error("Error saving place details:", error.message);
     } finally {
       setIsLoading(false); // set loading state to false after form submission
     }

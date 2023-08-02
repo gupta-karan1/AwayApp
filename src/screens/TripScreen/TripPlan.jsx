@@ -1,10 +1,11 @@
 import {
   StyleSheet,
   Text,
-  View,
+  SafeAreaView,
   ImageBackground,
   StatusBar,
   Pressable,
+  View,
 } from "react-native";
 import React from "react";
 import { useRoute } from "@react-navigation/native";
@@ -34,7 +35,7 @@ const TripPlan = () => {
   } = route.params;
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       {/* Trip Details Header */}
       <ImageBackground source={{ uri: coverImage }} style={styles.image}>
         <Pressable
@@ -58,7 +59,7 @@ const TripPlan = () => {
         tripId={tripId}
         invitees={invitees}
       />
-    </View>
+    </SafeAreaView>
   );
 };
 

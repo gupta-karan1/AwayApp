@@ -1,12 +1,4 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  Button,
-  ActivityIndicator,
-} from "react-native";
-import React, { useEffect } from "react";
-
+import { StyleSheet, View, ActivityIndicator } from "react-native";
 import { useState, useContext } from "react";
 import { AuthContext } from "../../../hooks/AuthContext";
 import { Alert } from "react-native";
@@ -50,8 +42,6 @@ const Saved = ({ tripId }) => {
       const querySnapshot2 = await getDocs(q2);
       const tripRef = doc(userRef, "trips", querySnapshot2.docs[0].id);
 
-      // await addDoc(collection(tripRef, "saved"), placeData);
-
       // get documents from the "saved" subcollection under specific user
       const q3 = query(
         collection(tripRef, "saved"),
@@ -77,13 +67,7 @@ const Saved = ({ tripId }) => {
   );
 
   const renderPlaceCard = ({ item }) => {
-    return (
-      <SavedPlaceCard
-        key={item.placeId}
-        placeItem={item}
-        // path={`${pathId}/${item.articleId}/places`}
-      />
-    );
+    return <SavedPlaceCard key={item.placeId} placeItem={item} />;
   };
 
   return (
@@ -96,17 +80,12 @@ const Saved = ({ tripId }) => {
             data={savedPlaces}
             renderItem={renderPlaceCard}
             keyExtractor={(item) => item.placeId}
-            // numColumns={2} // display items in 2 columns
-            // columnWrapperStyle={{
-            //   justifyContent: "space-between", // add space between columns
-            // }}
             showsVerticalScrollIndicator={false} // hide scroll bar
             contentContainerStyle={{
               paddingHorizontal: 15,
               paddingTop: 15,
               paddingBottom: 60,
-            }} // add padding to left and right
-            // List header component to display the article details
+            }}
           />
         )}
       </View>
