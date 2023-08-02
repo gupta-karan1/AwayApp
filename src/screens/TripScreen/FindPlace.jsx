@@ -146,11 +146,8 @@ const FindPlace = ({ route }) => {
 
       // Save the place details to Firebase using the savePlaceDetails function
       await savePlaceDetails(placeData);
-
-      // console.log("Place details saved successfully!");
     } catch (error) {
       Alert.alert("Error saving place details:", error.message);
-      // console.error("Error saving place details:", error.message);
     } finally {
       setIsLoading(false); // set loading state to false after form submission
     }

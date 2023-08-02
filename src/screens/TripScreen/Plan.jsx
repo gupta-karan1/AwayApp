@@ -8,7 +8,7 @@ import { useState } from "react";
 // Component to render Plan section
 const Plan = () => {
   const route = useRoute();
-  const { tripId } = route.params;
+  const { tripId, startDate, endDate } = route.params;
   // console.log(tripId);
   const [selectedItem, setSelectedItem] = useState("Itinerary"); // Default selected item is "Plan"
 
@@ -43,7 +43,9 @@ const Plan = () => {
         </View>
       </View>
       <View>
-        {selectedItem === "Itinerary" && <Itinerary />}
+        {selectedItem === "Itinerary" && (
+          <Itinerary startDate={startDate} endDate={endDate} tripId={tripId} />
+        )}
         {selectedItem === "Saved" && <Saved tripId={tripId} />}
       </View>
     </View>

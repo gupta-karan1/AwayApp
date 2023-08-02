@@ -16,7 +16,7 @@ const Tab = createMaterialTopTabNavigator();
 const Stack = createNativeStackNavigator();
 
 // Functional component to render top navigation, passing tripLocation prop
-function TripTopNav({ tripLocation, tripId, invitees }) {
+function TripTopNav({ tripLocation, tripId, invitees, startDate, endDate }) {
   // console.log("tripId " + tripId);
   return (
     <View style={{ flex: 1 }}>
@@ -33,6 +33,8 @@ function TripTopNav({ tripLocation, tripId, invitees }) {
           initialParams={{
             tripId: tripId,
             invitees: invitees,
+            startDate: startDate,
+            endDate: endDate,
           }}
           options={{
             tabBarLabel: "Plan",

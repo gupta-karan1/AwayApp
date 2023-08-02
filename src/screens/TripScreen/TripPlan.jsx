@@ -58,6 +58,8 @@ const TripPlan = () => {
         tripLocation={tripLocation}
         tripId={tripId}
         invitees={invitees}
+        startDate={startDate}
+        endDate={endDate}
       />
     </SafeAreaView>
   );

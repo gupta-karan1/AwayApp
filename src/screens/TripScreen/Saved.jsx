@@ -1,4 +1,4 @@
-import { StyleSheet, View, ActivityIndicator } from "react-native";
+import { StyleSheet, View, ActivityIndicator, Text } from "react-native";
 import { useState, useContext } from "react";
 import { AuthContext } from "../../../hooks/AuthContext";
 import { Alert } from "react-native";
@@ -73,9 +73,11 @@ const Saved = ({ tripId }) => {
   return (
     <View style={styles.container}>
       <View>
-        {isLoading ? (
-          <ActivityIndicator size="large" />
-        ) : (
+        {isLoading && <ActivityIndicator size="large" />}
+        {savedPlaces.length === 0 && !isLoading && (
+          <Text>No saved places. Go to Find Section to Add Places.</Text>
+        )}
+        {!isLoading && savedPlaces.length > 0 && (
           <FlatList
             data={savedPlaces}
             renderItem={renderPlaceCard}

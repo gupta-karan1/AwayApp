@@ -20,7 +20,9 @@ const FindDestination = ({ tripLocation }) => {
   // State variables to store destination data and loading state
   const [destinationData, setDestinationData] = useState();
   const [isLoading, setIsLoading] = useState(true);
-  const [searchTripLocation, setSearchTripLocation] = useState(tripLocation);
+  const [searchTripLocation, setSearchTripLocation] = useState(
+    tripLocation || "Paris"
+  );
   // pathId for article data based on tripLocation. Lowercase to match database.
   const [pathId, setPathId] = useState(
     `destinations/${searchTripLocation.toLowerCase()}/articles`
