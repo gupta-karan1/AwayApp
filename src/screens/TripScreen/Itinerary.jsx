@@ -247,7 +247,7 @@ const Itinerary = ({ startDate, endDate, tripId }) => {
 
   return (
     <View style={styles.container}>
-      {isLoading && <ActivityIndicator />}
+      {isLoading && <ActivityIndicator size={"large"} />}
       {!isLoading && (
         <SectionList
           contentContainerStyle={styles.contentContainer}
@@ -306,7 +306,7 @@ const Itinerary = ({ startDate, endDate, tripId }) => {
                 />
               </View>
               <ScrollView showsVerticalScrollIndicator={false}>
-                {isLoading && <ActivityIndicator />}
+                {isLoading && <ActivityIndicator size={"large"} />}
 
                 {!isLoading &&
                   savedPlaces.map((place) => (
