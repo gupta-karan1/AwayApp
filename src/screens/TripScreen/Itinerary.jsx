@@ -8,6 +8,7 @@ import {
   Alert,
   TouchableOpacity,
   Image,
+  ActivityIndicator,
 } from "react-native";
 import React, { useEffect, useContext } from "react";
 import moment from "moment";
@@ -24,7 +25,6 @@ import {
   setDoc,
 } from "firebase/firestore";
 import { AuthContext } from "../../../hooks/AuthContext";
-import { ActivityIndicator } from "react-native-paper";
 import { FlatList, ScrollView } from "react-native-gesture-handler";
 import SavedPlaceCard from "../../components/TripsComp/SavedPlaceCard";
 // import Saved from "./Saved";
