@@ -209,7 +209,6 @@ const SavedPlaceCard = ({ placeItem }) => {
 
 const styles = StyleSheet.create({
   container: {
-    // width: "48%",
     marginBottom: 15,
   },
   card: {
@@ -224,6 +223,7 @@ const styles = StyleSheet.create({
     width: "55%",
     paddingLeft: 20,
     paddingTop: 20,
+    paddingRight: 10,
   },
   image: {
     height: 130,
@@ -236,7 +236,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    // marginVertical: 60,
     paddingVertical: 75,
     backgroundColor: "rgba(0,0,0,0.6)",
   },
@@ -245,7 +244,6 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 15,
     padding: 20,
-
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {
@@ -256,9 +254,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
-  // modalcontainer: {
-  //   padding: 15,
-  // },
+
   modalImage: {
     width: "100%",
     height: 200,
@@ -301,14 +297,6 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
 
-  // button: {
-  //   borderRadius: 20,
-  //   padding: 10,
-  //   elevation: 2,
-  // },
-  // buttonOpen: {
-  //   backgroundColor: '#F194FF',
-  // },
   buttonClose: {
     backgroundColor: "#2196F3",
     padding: 10,
@@ -319,10 +307,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
   },
-  // modalText: {
-  //   marginBottom: 15,
-  //   textAlign: 'center',
-  // },
 });
 
 export default SavedPlaceCard;

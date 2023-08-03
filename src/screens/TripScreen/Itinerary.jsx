@@ -5,12 +5,10 @@ import {
   SectionList,
   Modal,
   Button,
-  Pressable,
   Alert,
-  ActivityIndicator,
+  TouchableOpacity,
+  Image,
 } from "react-native";
-// import CheckBox from "@react-native-community/checkbox";
-import Checkbox from "expo-checkbox";
 import React, { useEffect, useContext } from "react";
 import moment from "moment";
 import { useState } from "react";
@@ -23,23 +21,25 @@ import {
   where,
   orderBy,
   addDoc,
+  setDoc,
 } from "firebase/firestore";
-import { FlatList } from "react-native-gesture-handler";
 import { AuthContext } from "../../../hooks/AuthContext";
+import { ActivityIndicator } from "react-native-paper";
+import { FlatList, ScrollView } from "react-native-gesture-handler";
+import SavedPlaceCard from "../../components/TripsComp/SavedPlaceCard";
+// import Saved from "./Saved";
+import { Ionicons } from "@expo/vector-icons";
 
 const Itinerary = ({ startDate, endDate, tripId }) => {
   // State variables for modal visibility and selected place
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedDate, setSelectedDate] = useState("");
-  const [selectedPlace, setSelectedPlace] = useState([]);
+  const [selectedPlaces, setSelectedPlaces] = useState([]);
   const [tripReference, setTripReference] = useState("");
   const [savedPlaces, setSavedPlaces] = useState([]); // State to store saved places
   const [isLoading, setIsLoading] = useState(false); // State to show loading indicator
+  const [itineraryData, setItineraryData] = useState({}); // state variable to store itinerary data
 
-  // Access user object from AuthContext to get user id
-  const { user } = useContext(AuthContext);
-
-  // Parse startDate and endDate strings using Moment.js
   const startDateObj = moment(startDate, "DD-MMM-YYYY").toDate();
   const endDateObj = moment(endDate, "DD-MMM-YYYY").toDate();
 
@@ -56,13 +56,15 @@ const Itinerary = ({ startDate, endDate, tripId }) => {
   };
 
   const dateRange = generateDateRange(startDateObj, endDateObj);
-  // console.log(dateRange);
 
   const formatDateString = (date) => {
     return moment(date).format("ddd Do MMM"); // change it to DD later
   };
 
-  const getPlaces = async () => {
+  //   get saved places from firebase:
+  // Access user object from AuthContext to get user id
+  const { user } = useContext(AuthContext);
+  const getSavedPlaces = async () => {
     try {
       setIsLoading(true); // show loading indicator
       const q = query(
@@ -81,7 +83,7 @@ const Itinerary = ({ startDate, endDate, tripId }) => {
       const querySnapshot2 = await getDocs(q2);
       const tripRef = doc(userRef, "trips", querySnapshot2.docs[0].id);
 
-      setTripReference(tripRef);
+      setTripReference(tripRef); // set trip reference to state variable
 
       // get documents from the "saved" subcollection under specific user
       const q3 = query(
@@ -93,7 +95,23 @@ const Itinerary = ({ startDate, endDate, tripId }) => {
 
       setSavedPlaces(saved);
 
-      // Add the place data to the "saved" subcollection under specific user
+      const itineraryData = {}; // Create an object to store the itinerary data for each date
+
+      // Loop through each date in the date range and fetch the itinerary data for that date
+      for (const date of dateRange) {
+        const formattedDate = formatDateString(date);
+
+        const q4 = query(
+          collection(tripRef, "itinerary"),
+          where("date", "==", formattedDate)
+        );
+        const querySnapshot4 = await getDocs(q4);
+        const itineraryForDate = querySnapshot4.docs.map((doc) => doc.data());
+
+        itineraryData[formattedDate] = itineraryForDate;
+      }
+
+      setItineraryData(itineraryData);
     } catch (error) {
       Alert.alert("Error getting places:", error.message);
     } finally {
@@ -101,29 +119,67 @@ const Itinerary = ({ startDate, endDate, tripId }) => {
     }
   };
 
-  useEffect(() => {
-    getPlaces();
-  }, [modalVisible]);
+  const ChecklistItem = ({ place, isSelected, onToggleSelection }) => {
+    const toggleCheckbox = () => {
+      onToggleSelection(place);
+    };
 
-  // Function to handle adding the selected place to the itinerary
+    return (
+      <TouchableOpacity onPress={toggleCheckbox}>
+        <View style={styles.checklistItem}>
+          <View
+            style={[
+              styles.checkbox,
+              isSelected ? styles.checkboxSelected : styles.checkboxUnselected,
+            ]}
+          >
+            {isSelected ? <Text style={styles.checkmark}>✓</Text> : null}
+          </View>
+          <View style={styles.placeCard}>
+            <Image source={{ uri: place.placeImage }} style={styles.image} />
+            <View style={styles.textContainer}>
+              <Text style={styles.checklistText}>{place.placeTitle}</Text>
+              <Text style={styles.checklistText}>{place.placeCategory}</Text>
+            </View>
+          </View>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
+  // Function to toggle the selection of a place
+  const toggleSelection = (place) => {
+    // setSelectedPlaces used to update current array
+    setSelectedPlaces((prevSelectedPlace) =>
+      // some method to check if place with same placeId already exists in prevSelectedPlace array
+      prevSelectedPlace.some((p) => p.placeId === place.placeId)
+        ? //If place exists removed with filter function
+          prevSelectedPlace.filter((p) => p.placeId !== place.placeId)
+        : // Otherwise adds place to array using spread operator
+          [...prevSelectedPlace, place]
+    );
+  };
+
+  // Runs when submit selected, adds places to itinerary in Firebase
   const handleAddPlaceToItinerary = async () => {
     try {
       if (!tripReference) {
-        console.error("Trip reference not available.");
+        Alert.alert.error("Trip reference not available.");
         return;
       }
 
       // Check if at least one place is selected before proceeding
-      if (selectedPlace.length === 0) {
+      if (selectedPlaces.length === 0) {
         Alert.alert(
           "Error",
           "Please select at least one place before submitting."
         );
         return;
       }
+
       const itineraryRef = collection(tripReference, "itinerary");
 
-      // Check if a document with the selected date already exists in the "itinerary" collection
+      //  Check if a document with the selected date already exists in the "itinerary" collection
       const q = query(itineraryRef, where("date", "==", selectedDate));
 
       const querySnapshot = await getDocs(q);
@@ -133,119 +189,143 @@ const Itinerary = ({ startDate, endDate, tripId }) => {
         const existingDoc = querySnapshot.docs[0];
         const existingData = existingDoc.data();
 
-        // // Merge the existing place array with the new selectedPlace array
+        // Merge only the unique places from existingData.places and selectedPlaces
+        const mergedPlaces = [
+          ...existingData.places,
+          ...selectedPlaces.filter(
+            (selectedPlace) =>
+              !existingData.places.some(
+                (existingPlace) =>
+                  existingPlace.placeId === selectedPlace.placeId
+              )
+          ),
+        ];
+
+        if (
+          mergedPlaces.length === existingData.places.length && // If the merged array has the same length as the existing array
+          mergedPlaces.every((place) =>
+            existingData.places.some(
+              (existingPlace) => existingPlace.placeId === place.placeId
+            )
+          )
+        ) {
+          // If all selected places are duplicates, show an error message
+          throw new Error("All selected places are duplicates.");
+        }
+
         const updatedData = {
           ...existingData,
-          places: [...existingData.places, ...selectedPlace], // Merge the two arrays
+          places: mergedPlaces,
         };
-        // const updatedData = {
-        //   ...existingData,
-        //   places: { ...existingData.places, ...selectedPlace }, // Merge the two maps
-        // };
 
-        await doc(itineraryRef, existingDoc.id).update(updatedData);
+        await setDoc(existingDoc.ref, updatedData);
+        Alert.alert("Success", "Place added to the itinerary successfully!");
       } else {
         // Document with the selected date doesn't exist, create a new document
         const itineraryData = {
           date: selectedDate,
-          places: selectedPlace, // Convert selectedPlace to an array
+          places: selectedPlaces, // Convert selectedPlace to an array
         };
         await addDoc(itineraryRef, itineraryData);
+        console.log(itineraryData);
+
+        Alert.alert("Success", "Place added to the itinerary successfully!");
       }
-      console.log("Place added to the itinerary successfully!");
 
       // Clear the selected place
-      setSelectedPlace([]);
-
-      // setModalVisible(false); // Close the modal after adding the place
+      setSelectedPlaces([]);
     } catch (error) {
-      console.error("Error adding place to itinerary: ", error);
+      Alert.alert("Error adding place to itinerary:", error.message);
+    } finally {
+      setModalVisible(false);
     }
   };
 
-  const ChecklistItem = ({ place, isSelected, onToggleSelection }) => {
-    return (
-      <View style={styles.checklistItem}>
-        <Checkbox
-          value={isSelected}
-          onValueChange={() => onToggleSelection(place.placeId)}
-          style={styles.checkbox}
-        />
-        <Text style={styles.checklistText}>{place.placeTitle}</Text>
-      </View>
-    );
-  };
-
-  // // Function to toggle the selection of a place
-  // const toggleSelection = (placeId) => {
-  //   setSelectedPlace((prevSelectedPlace) =>
-  //     prevSelectedPlace.includes(placeId)
-  //       ? prevSelectedPlace.filter((id) => id !== placeId)
-  //       : [...prevSelectedPlace, placeId]
-  //   );
-  // };
-
-  // Function to toggle the selection of a place
-  const toggleSelection = (place) => {
-    // Modify to toggle based on the place object
-    setSelectedPlace((prevSelectedPlace) =>
-      prevSelectedPlace.some((p) => p.placeId === place.placeId)
-        ? prevSelectedPlace.filter((p) => p.placeId !== place.placeId)
-        : [...prevSelectedPlace, place]
-    );
-  };
+  useEffect(() => {
+    getSavedPlaces();
+  }, [modalVisible]);
 
   return (
     <View style={styles.container}>
-      {/* Section List for Itinerary */}
-      <SectionList
-        sections={dateRange.map((date) => ({
-          title: formatDateString(date),
-          data: [],
-        }))}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => (
-          <View>
-            <Text>{item.placeTitle}</Text>{" "}
-            {/* Display added places for the date */}
-          </View>
-        )}
-        renderSectionHeader={({ section: { title } }) => (
-          <View>
-            <Text>{title}</Text>
-            <Button
-              title="Add Place"
-              disabled={!tripReference} // Disable the button until the tripReference is fetched
-              onPress={() => {
-                setModalVisible(true);
-                setSelectedDate(title);
-              }}
-            />
-          </View>
-        )}
-      />
+      {isLoading && <ActivityIndicator />}
+      {!isLoading && (
+        <SectionList
+          contentContainerStyle={styles.contentContainer}
+          scrollEnabled={true}
+          sections={dateRange.map((date) => ({
+            title: formatDateString(date),
+            data: itineraryData[formatDateString(date)] || [], // Use the itinerary data for each date
+          }))}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item }) => (
+            <View style={styles.item}>
+              <FlatList
+                data={item["places"] || []}
+                renderItem={({ item }) => <SavedPlaceCard placeItem={item} />}
+                keyExtractor={(item) => item.placeId}
+              />
+            </View>
+          )}
+          renderSectionHeader={({ section: { title } }) => (
+            <View style={styles.headerContainer}>
+              <Text style={styles.dateTitle}>{title}</Text>
 
-      {/* Modal for selecting and adding saved places */}
+              <TouchableOpacity
+                style={styles.button}
+                title="Add Place"
+                onPress={() => {
+                  setModalVisible(true);
+                  setSelectedDate(title);
+                }}
+              >
+                <Text>Add Place</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        />
+      )}
+
       {tripReference && ( // Show the modal content only when tripReference is available
         <Modal
           animationType="slide"
           visible={modalVisible}
           onRequestClose={() => setModalVisible(false)}
+          //   style={styles.modal}
+          presentationStyle="overFullScreen"
+          transparent={true}
         >
-          <Text>Select a Saved Place</Text>
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <View style={styles.modalHeader}>
+                <Text style={styles.modalText}>Select a Saved Place</Text>
+                <Ionicons
+                  name="ios-close"
+                  size={30}
+                  color="black"
+                  onPress={() => setModalVisible(false)}
+                />
+              </View>
+              <ScrollView showsVerticalScrollIndicator={false}>
+                {isLoading && <ActivityIndicator />}
 
-          {/* Display the list of saved places as a checklist */}
-          {savedPlaces.map((place) => (
-            <ChecklistItem
-              key={place.placeId}
-              place={place}
-              isSelected={selectedPlace.includes(place.placeId)}
-              onToggleSelection={toggleSelection}
-            />
-          ))}
+                {!isLoading &&
+                  savedPlaces.map((place) => (
+                    <ChecklistItem
+                      key={place.placeId}
+                      place={place}
+                      isSelected={selectedPlaces.includes(place)}
+                      onToggleSelection={toggleSelection}
+                    />
+                  ))}
 
-          <Button title="Cancel" onPress={() => setModalVisible(false)} />
-          <Button title="Submit" onPress={handleAddPlaceToItinerary} />
+                <Button
+                  style={styles.submit}
+                  title="Submit"
+                  onPress={handleAddPlaceToItinerary}
+                />
+              </ScrollView>
+            </View>
+          </View>
         </Modal>
       )}
     </View>
@@ -254,4 +334,115 @@ const Itinerary = ({ startDate, endDate, tripId }) => {
 
 export default Itinerary;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  contentContainer: {
+    paddingBottom: 100,
+    paddingHorizontal: 15,
+    paddingTop: 15,
+  },
+  checklistItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: 5,
+  },
+  checkbox: {
+    width: 24,
+    height: 24,
+    borderWidth: 2,
+    borderColor: "#000",
+    borderRadius: 4,
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 10,
+  },
+  checkboxSelected: {
+    backgroundColor: "#007bff",
+  },
+  checkboxUnselected: {
+    backgroundColor: "#fff",
+  },
+  checkmark: {
+    color: "#fff",
+    fontSize: 18,
+  },
+  textContainer: {
+    flex: 1,
+  },
+  checklistText: {
+    fontSize: 16,
+    marginBottom: 2,
+  },
+  dateTitle: {
+    fontSize: 20,
+    padding: 10,
+    paddingLeft: 0,
+    width: "60%",
+  },
+  headerContainer: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingBottom: 10,
+    width: "100%",
+    alignItems: "center",
+  },
+  button: {
+    backgroundColor: "lightblue",
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    borderRadius: 5,
+  },
+  placeCard: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: 5,
+    backgroundColor: "lightgrey",
+    width: "90%",
+    justifyContent: "space-evenly",
+    gap: 10,
+    borderRadius: 10,
+  },
+  image: {
+    width: "35%",
+    height: 80,
+    borderTopLeftRadius: 10,
+    borderBottomLeftRadius: 10,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "flex-end",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.6)",
+  },
+  modalView: {
+    backgroundColor: "#fff",
+    height: "90%",
+    width: "100%",
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    padding: 15,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalText: {
+    fontSize: 20,
+  },
+  submit: {
+    marginBottom: 10,
+  },
+  modalHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+    alignItems: "center",
+    marginBottom: 10,
+    marginHorizontal: 10,
+  },
+});
