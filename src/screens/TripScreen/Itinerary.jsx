@@ -307,8 +307,15 @@ const Itinerary = ({ startDate, endDate, tripId }) => {
               </View>
               <ScrollView showsVerticalScrollIndicator={false}>
                 {isLoading && <ActivityIndicator size={"large"} />}
+                {savedPlaces.length === 0 && !isLoading && (
+                  <Text>
+                    No saved places found. Please add places to Saved from the
+                    Find Section.
+                  </Text>
+                )}
 
                 {!isLoading &&
+                  savedPlaces.length > 0 &&
                   savedPlaces.map((place) => (
                     <ChecklistItem
                       key={place.placeId}
