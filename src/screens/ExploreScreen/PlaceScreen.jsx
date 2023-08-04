@@ -144,7 +144,7 @@ const PlaceScreen = ({ route }) => {
           )}
           <View style={styles.button}>
             {/* Save Place button not functional yet */}
-            <Button title="Save Place" onPress={() => {}} />
+            {/* <Button title="Save Place" onPress={() => {}} /> */}
           </View>
         </ScrollView>
       )}

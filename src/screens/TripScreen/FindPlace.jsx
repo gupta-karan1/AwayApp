@@ -104,7 +104,7 @@ const FindPlace = ({ route }) => {
             style: "cancel",
           },
           {
-            text: "Go to Saved",
+            text: "View Saved Places",
             onPress: () => {
               //navigate to the saved places screen
               navigation.navigate("Plan");

@@ -16,7 +16,14 @@ const Tab = createMaterialTopTabNavigator();
 const Stack = createNativeStackNavigator();
 
 // Functional component to render top navigation, passing tripLocation prop
-function TripTopNav({ tripLocation, tripId, invitees, startDate, endDate }) {
+function TripTopNav({
+  tripLocation,
+  tripId,
+  invitees,
+  startDate,
+  endDate,
+  tripType,
+}) {
   // console.log("tripId " + tripId);
   return (
     <View style={{ flex: 1 }}>
@@ -41,14 +48,17 @@ function TripTopNav({ tripLocation, tripId, invitees, startDate, endDate }) {
             lazy: true,
           }}
         />
-        <Tab.Screen
-          name="Chat"
-          component={Chat}
-          initialParams={{
-            tripId: tripId,
-            invitees: invitees,
-          }}
-        />
+        {tripType === "group" && (
+          <Tab.Screen
+            name="Chat"
+            component={Chat}
+            initialParams={{
+              tripId: tripId,
+              invitees: invitees,
+            }}
+          />
+        )}
+
         <Tab.Screen
           name="FindStack"
           component={FindStack}
@@ -63,39 +73,6 @@ function TripTopNav({ tripLocation, tripId, invitees, startDate, endDate }) {
     </View>
   );
 }
-
-// function PlanStack() {
-//   const route = useRoute();
-//   const { tripId, invitees } = route.params;
-
-//   return (
-//     <Stack.Navigator
-//       screenOptions={{
-//         animation: "fade",
-//       }}
-//     >
-//       <Stack.Screen
-//         name="Plan"
-//         component={Plan}
-//         initialParams={{ tripId: tripId, invitees: invitees }}
-//         options={{
-//           headerShown: false,
-//         }}
-//       />
-//       {/* <Stack.Screen
-//         name="PlanPlace"
-//         component={PlanPlace}
-//         // initialParams={{ tripId: tripId, invitees: invitees }}
-//         options={{
-//           headerShown: false,
-//           presentation: "modal",
-//           animation: "slide_from_bottom",
-//           contentStyle: { backgroundColor: "transparent" },
-//         }}
-//       /> */}
-//     </Stack.Navigator>
-//   );
-// }
 
 // stack navigator for Find screen and its components like FindDestination and FindArticle and FindPlace
 function FindStack() {

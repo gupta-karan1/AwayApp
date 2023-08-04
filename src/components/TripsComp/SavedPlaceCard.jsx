@@ -7,16 +7,16 @@ import {
   Modal,
   ScrollView,
   TouchableOpacity,
-  StatusBar,
 } from "react-native";
 // import { useNavigation } from "@react-navigation/native";
 import GlobalStyles from "../../GlobalStyles";
 import React from "react";
 import { useState } from "react";
 import { FontAwesome } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 
 // display places on the destination screen based on the pathId prop passed to it.
-const SavedPlaceCard = ({ placeItem }) => {
+const SavedPlaceCard = ({ placeItem, onDelete }) => {
   // The placeItem prop is destructured to extract the data for the place to be displayed.
   const {
     placeAddress,
@@ -30,6 +30,7 @@ const SavedPlaceCard = ({ placeItem }) => {
     placeLongitude,
     placeSaved,
     placeTitle,
+    placeId,
     placeWebsite,
     createdAt,
     userId,
@@ -60,7 +61,7 @@ const SavedPlaceCard = ({ placeItem }) => {
 
   return (
     <View style={styles.container}>
-      <Pressable onPress={() => setModalVisible(true)} style={styles.card}>
+      <View style={styles.card}>
         <Image source={{ uri: placeImage }} style={styles.image} />
         <View style={styles.cardText}>
           <Text style={GlobalStyles.labelMediumMedium} numberOfLines={2}>
@@ -70,7 +71,22 @@ const SavedPlaceCard = ({ placeItem }) => {
             {placeTitle}
           </Text>
         </View>
-      </Pressable>
+        <View style={styles.iconBox}>
+          <Ionicons
+            onPress={() => setModalVisible(true)}
+            name="information-circle-outline"
+            size={24}
+            color="black"
+          />
+          <Ionicons
+            onPress={onDelete}
+            name="md-trash-outline"
+            size={24}
+            color="black"
+          />
+        </View>
+      </View>
+
       <Modal
         animationType="fade"
         transparent={true}
@@ -85,112 +101,98 @@ const SavedPlaceCard = ({ placeItem }) => {
           <View style={styles.modalView}>
             <ScrollView showsVerticalScrollIndicator={false}>
               <Image source={{ uri: placeImage }} style={styles.modalImage} />
+              <View style={styles.textContainer}>
+                <Text
+                  style={[GlobalStyles.bodySmallRegular, styles.subtitleText]}
+                >
+                  {placeCategory}
+                </Text>
+                <Text
+                  style={[GlobalStyles.titleLargeRegular, styles.titleText]}
+                >
+                  {placeTitle}
+                </Text>
 
-              <Text
-                style={[GlobalStyles.bodySmallRegular, styles.subtitleText]}
-              >
-                {placeCategory}
-              </Text>
-              <Text style={[GlobalStyles.titleLargeRegular, styles.titleText]}>
-                {placeTitle}
-              </Text>
-
-              {showFullText ? (
-                <View>
-                  <Text
-                    style={[GlobalStyles.bodySmallRegular, styles.bodyText]}
-                  >
-                    {placeDescription || ""}
-                  </Text>
-                  <TouchableOpacity onPress={toggleFullText}>
-                    <Text style={[styles.para, GlobalStyles.bodySmallRegular]}>
-                      Read Less
+                {showFullText ? (
+                  <View>
+                    <Text
+                      style={[GlobalStyles.bodySmallRegular, styles.bodyText]}
+                    >
+                      {placeDescription || ""}
                     </Text>
-                  </TouchableOpacity>
-                </View>
-              ) : (
-                <View>
-                  <Text
-                    style={[GlobalStyles.bodySmallRegular, styles.bodyText]}
-                  >
-                    {placeDescription && placeDescription.slice(0, 150)}
-                    {"... "}
-                  </Text>
-                  <TouchableOpacity onPress={toggleFullText}>
-                    <Text style={[GlobalStyles.bodySmallRegular, styles.para]}>
-                      Read More
+                    <TouchableOpacity onPress={toggleFullText}>
+                      <Text
+                        style={[styles.para, GlobalStyles.bodySmallRegular]}
+                      >
+                        Read Less
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                ) : (
+                  <View>
+                    <Text
+                      style={[GlobalStyles.bodySmallRegular, styles.bodyText]}
+                    >
+                      {placeDescription && placeDescription.slice(0, 150)}
+                      {"... "}
                     </Text>
-                  </TouchableOpacity>
-                </View>
-              )}
+                    <TouchableOpacity onPress={toggleFullText}>
+                      <Text
+                        style={[GlobalStyles.bodySmallRegular, styles.para]}
+                      >
+                        Read More
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
 
-              {/* Only display if data exists */}
-              {placeAddress && (
-                <View style={styles.iconContainer}>
-                  <FontAwesome
-                    style={[styles.icon, styles.AddressIcon]}
-                    name="map-marker"
-                    size={20} // Smaller icon require more margin
-                    color="grey"
-                  />
-                  <Text
-                    style={[
-                      GlobalStyles.bodySmallRegular,
-                      styles.bodyText,
-                      styles.iconText,
-                    ]}
-                  >
-                    {placeAddress}
-                  </Text>
-                </View>
-              )}
+                {/* Only display if data exists */}
+                {placeAddress && (
+                  <View style={styles.iconContainer}>
+                    <FontAwesome
+                      style={[styles.icon, styles.AddressIcon]}
+                      name="map-marker"
+                      size={20} // Smaller icon require more margin
+                      color="grey"
+                    />
+                    <Text
+                      style={[GlobalStyles.bodySmallRegular, styles.bodyText]}
+                    >
+                      {placeAddress}
+                    </Text>
+                  </View>
+                )}
 
-              {placeContact && (
-                <View style={styles.iconContainer}>
-                  <FontAwesome
-                    style={styles.icon}
-                    name="phone"
-                    size={18}
-                    color="grey"
-                  />
-                  <Text
-                    style={[
-                      GlobalStyles.bodySmallRegular,
-                      styles.bodyText,
-                      styles.iconText,
-                    ]}
-                  >
-                    {placeContact}
-                  </Text>
-                </View>
-              )}
-              {placeHours && (
-                <View style={styles.iconContainer}>
-                  <FontAwesome
-                    style={styles.icon}
-                    name="clock-o"
-                    size={18}
-                    color="grey"
-                  />
-                  <Text
-                    style={[
-                      GlobalStyles.bodySmallRegular,
-                      styles.bodyText,
-                      styles.iconText,
-                    ]}
-                  >
-                    {formatPlaceHours()}
-                  </Text>
-                  <Text>{placeSaved}</Text>
-                </View>
-              )}
-              <View style={styles.button}>
-                {/* Save Place button not functional yet
-            {isLoading ? (
-              <ActivityIndicator size="large" />
-            ) : (
-              <Button title="Save Place" type="submit" onPress={savePlace} />
-            )} */}
+                {placeContact && (
+                  <View style={styles.iconContainer}>
+                    <FontAwesome
+                      style={styles.icon}
+                      name="phone"
+                      size={18}
+                      color="grey"
+                    />
+                    <Text
+                      style={[GlobalStyles.bodySmallRegular, styles.bodyText]}
+                    >
+                      {placeContact}
+                    </Text>
+                  </View>
+                )}
+                {placeHours && (
+                  <View style={styles.iconContainer}>
+                    <FontAwesome
+                      style={styles.icon}
+                      name="clock-o"
+                      size={18}
+                      color="grey"
+                    />
+                    <Text
+                      style={[GlobalStyles.bodySmallRegular, styles.bodyText]}
+                    >
+                      {formatPlaceHours()}
+                    </Text>
+                  </View>
+                )}
               </View>
             </ScrollView>
 
@@ -220,10 +222,17 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   cardText: {
-    width: "55%",
-    paddingLeft: 20,
+    width: "45%",
+    paddingLeft: 10,
     paddingTop: 20,
     paddingRight: 10,
+  },
+  iconBox: {
+    flex: 1,
+    flexDirection: "column",
+    alignItems: "center",
+    paddingVertical: 4,
+    gap: 69,
   },
   image: {
     height: 130,
@@ -236,11 +245,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    paddingVertical: 75,
+    paddingVertical: 90,
     backgroundColor: "rgba(0,0,0,0.6)",
+    // overflow: "hidden",
   },
   modalView: {
-    margin: 20,
+    width: "90%",
     backgroundColor: "white",
     borderRadius: 15,
     padding: 20,
@@ -253,8 +263,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
+    // overflow: "hidden",
   },
-
   modalImage: {
     width: "100%",
     height: 200,
@@ -270,8 +280,6 @@ const styles = StyleSheet.create({
     fontSize: 25,
   },
   bodyText: {
-    overflow: "hidden",
-    maxWidth: 290,
     marginBottom: 5,
   },
   icon: {
@@ -280,13 +288,15 @@ const styles = StyleSheet.create({
   AddressIcon: {
     marginRight: 18,
   },
-  iconText: {
-    maxWidth: 300,
+  textContainer: {
+    width: 290,
   },
+
   iconContainer: {
     flexDirection: "row",
     alignItems: "flex-start",
     marginBottom: 5,
+    width: "100%",
   },
   para: {
     marginTop: 10,

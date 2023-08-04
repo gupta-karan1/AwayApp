@@ -1,5 +1,5 @@
 import { StyleSheet, View, ActivityIndicator, Text } from "react-native";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../../../hooks/AuthContext";
 import { Alert } from "react-native";
 import {
@@ -9,6 +9,7 @@ import {
   query,
   where,
   orderBy,
+  deleteDoc,
 } from "firebase/firestore";
 import { FIREBASE_DB } from "../../../firebaseConfig";
 import { FlatList } from "react-native";
@@ -19,11 +20,12 @@ import { useCallback } from "react";
 const Saved = ({ tripId }) => {
   const [savedPlaces, setSavedPlaces] = useState([]); // State to store saved places
   const [isLoading, setIsLoading] = useState(false); // State to show loading indicator
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
   // Access user object from AuthContext to get user id
   const { user } = useContext(AuthContext);
 
-  const getPlaces = async () => {
+  const getSavedPlaces = async () => {
     try {
       setIsLoading(true); // show loading indicator
       const q = query(
@@ -54,20 +56,89 @@ const Saved = ({ tripId }) => {
 
       // Add the place data to the "saved" subcollection under specific user
     } catch (error) {
-      Alert.alert("Error getting places:", error.message);
+      Alert.alert("Error getting saved places:", error.message);
     } finally {
       setIsLoading(false); // set loading state to false after form submission
     }
   };
 
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     getSavedPlaces();
+  //   }, [deleteLoading]) // Function only called once
+  // );
+
   useFocusEffect(
     useCallback(() => {
-      getPlaces();
-    }, []) // Function only called once
+      if (!deleteLoading) {
+        getSavedPlaces();
+      }
+    }, [deleteLoading])
   );
 
   const renderPlaceCard = ({ item }) => {
-    return <SavedPlaceCard key={item.placeId} placeItem={item} />;
+    return (
+      <SavedPlaceCard
+        key={item.placeId}
+        placeItem={item}
+        onDelete={() => confirmDelete(item)}
+      />
+    );
+  };
+
+  const confirmDelete = (item) => {
+    Alert.alert(
+      "Confirm Deletion",
+      "Are you sure you want to delete this place?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "OK",
+          onPress: () => handleDeletePlace(item.placeId),
+        },
+      ]
+    );
+  };
+
+  const handleDeletePlace = async (placeId) => {
+    try {
+      setDeleteLoading(true);
+      const q = query(
+        collection(FIREBASE_DB, "users"),
+        where("userId", "==", user.uid)
+      );
+
+      const querySnapshot = await getDocs(q);
+      const userRef = doc(FIREBASE_DB, "users", querySnapshot.docs[0].id);
+
+      const q2 = query(
+        collection(userRef, "trips"),
+        where("tripId", "==", tripId)
+      );
+      const querySnapshot2 = await getDocs(q2);
+      const tripRef = doc(userRef, "trips", querySnapshot2.docs[0].id);
+
+      const q3 = query(
+        collection(tripRef, "saved"),
+        where("placeId", "==", placeId)
+      );
+      const querySnapshot3 = await getDocs(q3);
+      const placeRef = doc(tripRef, "saved", querySnapshot3.docs[0].id);
+
+      await deleteDoc(placeRef);
+
+      // // Update the state to reflect the changes after deletion
+      // setSavedPlaces((prevSavedPlaces) =>
+      //   prevSavedPlaces.filter((place) => place.placeId !== placeId)
+      // );
+    } catch (error) {
+      Alert.alert("Error deleting place:", error.message);
+    } finally {
+      setDeleteLoading(false);
+    }
   };
 
   return (
@@ -75,7 +146,9 @@ const Saved = ({ tripId }) => {
       <View>
         {isLoading && <ActivityIndicator size="large" />}
         {savedPlaces.length === 0 && !isLoading && (
-          <Text>No saved places. Go to Find Section to Add Places.</Text>
+          <Text>
+            You have no saved places. Go to the Find Section to add places.
+          </Text>
         )}
         {!isLoading && savedPlaces.length > 0 && (
           <FlatList

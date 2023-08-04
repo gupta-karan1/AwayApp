@@ -16,7 +16,8 @@ const useDestinationFeed = () => {
 
       //   const q = query(destRef); // use without limit for production
 
-      const q = query(destRef, limit(2)); // limit for testing purposes only - remove for production
+      // const q = query(destRef, limit(2)); // limit for testing purposes only - remove for production
+      const q = query(destRef); // limit for testing purposes only - remove for production
 
       const querySnapshot = await getDocs(q); // The getDocs function is used to fetch the documents from the collection based on the query created earlier.
 

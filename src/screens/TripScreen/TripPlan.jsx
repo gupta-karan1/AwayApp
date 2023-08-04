@@ -60,6 +60,8 @@ const TripPlan = () => {
         invitees={invitees}
         startDate={startDate}
         endDate={endDate}
+        tripType={tripType}
+        userId={userId}
       />
     </SafeAreaView>
   );
@@ -79,7 +81,6 @@ const styles = StyleSheet.create({
     backgroundColor: "lightgrey",
   },
   textContainer: {
-    // rgba for Opacity 0.6
     backgroundColor: "rgba(30, 144, 255, 0.6)",
     width: "100%",
     padding: 10,

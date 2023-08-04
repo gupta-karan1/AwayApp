@@ -9,7 +9,9 @@ import {
   Image,
   Alert,
   ActivityIndicator,
+  ScrollView,
 } from "react-native";
+import { Picker } from "@react-native-picker/picker";
 import { TextInput, Button } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Platform } from "react-native";
@@ -24,22 +26,26 @@ import {
   query,
   where,
   getDocs,
+  collectionGroup,
 } from "firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
 import uuid from "react-native-uuid";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import moment from "moment";
+import useDestinationFeed from "../../../hooks/useDestinationFeed";
 
 // Component to render the Trip Form
 const CreateTripForm = () => {
   // State variables to manage form data
   const [tripTitle, setTripTitle] = useState("");
-  const [tripLocation, setTripLocation] = useState("");
+  const [tripLocation, setTripLocation] = useState();
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [tripType, setTripType] = useState("solo");
   const [invitees, setInvitees] = useState([]);
   const [coverImage, setCoverImage] = useState(null);
+
+  // const [destinations, setDestinations] = useState([]);
 
   // State variables to manage date picker modal
   const [showStartDateModal, setShowStartDateModal] = useState(false);
@@ -55,6 +61,8 @@ const CreateTripForm = () => {
 
   // Access user object from AuthContext to get user id
   const { user } = useContext(AuthContext);
+
+  const { destinationData } = useDestinationFeed();
 
   // Fucntion to pick an image from image library
   const pickImage = async () => {
@@ -189,14 +197,16 @@ const CreateTripForm = () => {
       Alert.alert("Trip details saved successfully!");
 
       // Navigate to Trip Plan Screen with trip details as parameters
-      navigation.navigate("TripPlan", {
-        tripTitle: tripTitle,
-        startDate: moment(startDate).format("DD MMM YYYY"),
-        endDate: moment(endDate).format("DD MMM YYYY"),
-        coverImage: coverImage,
-        tripLocation: tripLocation,
-        invitees: invitees,
-      });
+      // navigation.navigate("TripPlan", {
+      //   tripTitle: tripTitle,
+      //   startDate: moment(startDate).format("DD MMM YYYY"),
+      //   endDate: moment(endDate).format("DD MMM YYYY"),
+      //   coverImage: coverImage,
+      //   tripLocation: tripLocation,
+      //   invitees: invitees,
+      // });
+
+      navigation.navigate("Trips"); // navigate to trips screen after submitting form
     } catch (error) {
       console.error("Error saving trip details:", error);
     } finally {
@@ -213,159 +223,201 @@ const CreateTripForm = () => {
     }
   };
 
+  // useEffect =
+  //   (() => {
+  //     fetchDestinations();
+  //   },
+  //   []);
+
+  // const fetchDestinations = async () => {
+  //   try {
+  //     const destinationRef = query(
+  //       collectionGroup(FIREBASE_DB, "destinations")
+  //     );
+
+  //     const q = query(destinationRef);
+  //     const querySnapshot = await getDocs(q);
+
+  //     const results = [];
+  //     querySnapshot.forEach((doc) => {
+  //       results.push(doc.data());
+  //     });
+  //     setDestinations(results);
+  //     console.log(destinations);
+  //   } catch (error) {
+  //     Alert.alert("Error", error.message);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
+
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior="height"
-      keyboardVerticalOffset={5}
-    >
-      <View style={styles.inputContainer}>
-        <TextInput
-          label="Trip Title"
-          value={tripTitle}
-          onChangeText={(text) => setTripTitle(text)}
-          style={styles.input}
-          placeholder="Trip Title"
-        />
-        <TextInput
-          label="Location"
-          value={tripLocation}
-          onChangeText={(text) => setTripLocation(text)}
-          style={styles.input}
-          placeholder="Location"
-        />
-        <View style={styles.dateContainer}>
-          {/* Start date picker for Android */}
-          {Platform.OS === "android" && (
-            <Pressable onPress={showStartDatePicker}>
-              <Text>Start Date: </Text>
-              <Text style={styles.input}>
-                {moment(startDate).format("DD MMM YYYY")}
-              </Text>
-            </Pressable>
-          )}
+    <ScrollView>
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior="height"
+        keyboardVerticalOffset={10}
+      >
+        <View style={styles.inputContainer}>
+          <Text style={styles.titleText}>Trip Title:</Text>
+          <TextInput
+            label="Trip Title"
+            value={tripTitle}
+            onChangeText={(text) => setTripTitle(text)}
+            style={styles.input}
+            placeholder="Trip Title"
+          />
 
-          {showStartDateModal && (
-            <DateTimePicker
-              testID="dateTimePicker"
-              value={startDate}
-              mode={"date"}
-              onChange={onStartChange}
-              minimumDate={startDate}
-              // display={"compact"}
-            />
-          )}
+          <Text style={styles.titleText}>Trip Location:</Text>
+          <Picker
+            style={styles.picker}
+            selectedValue={tripLocation}
+            onValueChange={(itemValue, itemIndex) => setTripLocation(itemValue)}
+          >
+            {/* Render list of destinations in Picker */}
+            {destinationData.map((destination) => (
+              <Picker.Item
+                key={destination.destinationId}
+                label={destination.destinationName} // Assuming each destination document in Firebase has a "name" field
+                value={destination.destinationName}
+              />
+            ))}
+          </Picker>
+          <View style={styles.dateContainer}>
+            {/* Start date picker for Android */}
+            {Platform.OS === "android" && (
+              <Pressable onPress={showStartDatePicker}>
+                <Text>Start Date: </Text>
+                <Text style={styles.input}>
+                  {moment(startDate).format("DD MMM YYYY")}
+                </Text>
+              </Pressable>
+            )}
 
-          {/* Start date picker for iOS */}
-          {Platform.OS === "ios" && (
-            <View>
-              <Text>Start Date</Text>
+            {showStartDateModal && (
               <DateTimePicker
                 testID="dateTimePicker"
                 value={startDate}
                 mode={"date"}
                 onChange={onStartChange}
                 minimumDate={startDate}
+                // display={"compact"}
               />
-            </View>
-          )}
+            )}
 
-          {/* End date picker for Android */}
-          {Platform.OS === "android" && (
-            <Pressable onPress={showEndDatePicker}>
-              <Text>End Date: </Text>
-              <Text style={styles.input}>
-                {moment(endDate).format("DD MMM YYYY")}
-              </Text>
-            </Pressable>
-          )}
+            {/* Start date picker for iOS */}
+            {Platform.OS === "ios" && (
+              <View>
+                <Text>Start Date</Text>
+                <DateTimePicker
+                  testID="dateTimePicker"
+                  value={startDate}
+                  mode={"date"}
+                  onChange={onStartChange}
+                  minimumDate={startDate}
+                />
+              </View>
+            )}
 
-          {/* End Date picker for iOS */}
-          {Platform.OS === "ios" && (
-            <View>
-              <Text>End Date</Text>
+            {/* End date picker for Android */}
+            {Platform.OS === "android" && (
+              <Pressable onPress={showEndDatePicker}>
+                <Text>End Date: </Text>
+                <Text style={styles.input}>
+                  {moment(endDate).format("DD MMM YYYY")}
+                </Text>
+              </Pressable>
+            )}
+
+            {/* End Date picker for iOS */}
+            {Platform.OS === "ios" && (
+              <View>
+                <Text>End Date</Text>
+                <DateTimePicker
+                  testID="dateTimePicker"
+                  value={endDate}
+                  mode={"date"}
+                  onChange={onEndChange}
+                  minimumDate={startDate}
+                />
+              </View>
+            )}
+
+            {showEndDateModal && (
               <DateTimePicker
                 testID="dateTimePicker"
                 value={endDate}
                 mode={"date"}
-                onChange={onEndChange}
                 minimumDate={startDate}
+                onChange={onEndChange}
               />
+            )}
+          </View>
+          {/* Radio buttons for trip type selection */}
+          <Text style={styles.titleText}>Trip Type:</Text>
+          <View style={styles.radioButtonContainer}>
+            <TouchableOpacity
+              style={[
+                styles.radioButton,
+                tripType === "solo" ? styles.radioButtonActive : null,
+              ]}
+              onPress={() => handleTripTypeChange("solo")}
+            >
+              <Text style={styles.radioButtonText}>Solo Trip</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.radioButton,
+                tripType === "group" ? styles.radioButtonActive : null,
+              ]}
+              onPress={() => handleTripTypeChange("group")}
+            >
+              <Text style={styles.radioButtonText}>Group Trip</Text>
+            </TouchableOpacity>
+          </View>
+
+          {isLoading ? (
+            <ActivityIndicator />
+          ) : (
+            <View>
+              {/* Cover Image Upload */}
+              <Button title="Upload Cover Image" onPress={pickImage} />
+              {/* Placeholder for Image */}
+              {!coverImage && (
+                <View style={styles.image}>
+                  <Text>Your Cover Image will Appear Here</Text>
+                </View>
+              )}
+              {coverImage && (
+                <Image source={{ uri: coverImage }} style={styles.image} />
+              )}
             </View>
           )}
 
-          {showEndDateModal && (
-            <DateTimePicker
-              testID="dateTimePicker"
-              value={endDate}
-              mode={"date"}
-              minimumDate={startDate}
-              onChange={onEndChange}
+          {loading ? (
+            <ActivityIndicator size="large" color="#0000ff" />
+          ) : (
+            <Button
+              title="Save Trip"
+              onPress={handleSubmit}
+              style={styles.button}
             />
           )}
         </View>
-        {/* Radio buttons for trip type selection */}
-        <View style={styles.radioButtonContainer}>
-          <TouchableOpacity
-            style={[
-              styles.radioButton,
-              tripType === "solo" ? styles.radioButtonActive : null,
-            ]}
-            onPress={() => handleTripTypeChange("solo")}
-          >
-            <Text style={styles.radioButtonText}>Solo Trip</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              styles.radioButton,
-              tripType === "group" ? styles.radioButtonActive : null,
-            ]}
-            onPress={() => handleTripTypeChange("group")}
-          >
-            <Text style={styles.radioButtonText}>Group Trip</Text>
-          </TouchableOpacity>
-        </View>
-
-        {isLoading ? (
-          <ActivityIndicator />
-        ) : (
-          <View>
-            {/* Cover Image Upload */}
-            <Button title="Upload Cover Image" onPress={pickImage} />
-            {/* Placeholder for Image */}
-            {!coverImage && (
-              <View style={styles.image}>
-                <Text>Your Cover Image will Appear Here</Text>
-              </View>
-            )}
-            {coverImage && (
-              <Image source={{ uri: coverImage }} style={styles.image} />
-            )}
-          </View>
-        )}
-
-        {loading ? (
-          <ActivityIndicator size="large" color="#0000ff" />
-        ) : (
-          <Button
-            title="Save Trip"
-            onPress={handleSubmit}
-            style={styles.button}
-          />
-        )}
-      </View>
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
+    justifyContent: "flex-start",
     alignItems: "center",
   },
   inputContainer: {
-    width: "80%",
+    width: "85%",
+    paddingTop: 25,
   },
   input: {
     backgroundColor: "white",
@@ -373,22 +425,28 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 10,
     marginTop: 5,
-    marginBottom: 15,
+    marginBottom: 30,
   },
   dateContainer: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginBottom: 15,
+    // marginBottom: 5,
   },
   radioButtonContainer: {
     flexDirection: "row",
     justifyContent: "space-around",
     marginBottom: 16,
+    marginTop: 5,
   },
 
   button: {
     marginTop: 16,
+  },
+  picker: {
+    marginBottom: 30,
+    backgroundColor: "#fff",
+    borderRadius: 10,
   },
 
   radioButton: {

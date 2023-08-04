@@ -5,12 +5,14 @@ import {
   SectionList,
   Modal,
   Button,
+  Pressable,
   Alert,
   TouchableOpacity,
   Image,
   ActivityIndicator,
 } from "react-native";
-import React, { useEffect, useContext } from "react";
+import React, { useContext, useCallback } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 import moment from "moment";
 import { useState } from "react";
 import { FIREBASE_DB } from "../../../firebaseConfig";
@@ -27,8 +29,8 @@ import {
 import { AuthContext } from "../../../hooks/AuthContext";
 import { FlatList, ScrollView } from "react-native-gesture-handler";
 import SavedPlaceCard from "../../components/TripsComp/SavedPlaceCard";
-// import Saved from "./Saved";
 import { Ionicons } from "@expo/vector-icons";
+import GlobalStyles from "../../GlobalStyles";
 
 const Itinerary = ({ startDate, endDate, tripId }) => {
   // State variables for modal visibility and selected place
@@ -39,6 +41,8 @@ const Itinerary = ({ startDate, endDate, tripId }) => {
   const [savedPlaces, setSavedPlaces] = useState([]); // State to store saved places
   const [isLoading, setIsLoading] = useState(false); // State to show loading indicator
   const [itineraryData, setItineraryData] = useState({}); // state variable to store itinerary data
+  const [loading, setLoading] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
   const startDateObj = moment(startDate, "DD-MMM-YYYY").toDate();
   const endDateObj = moment(endDate, "DD-MMM-YYYY").toDate();
@@ -94,6 +98,31 @@ const Itinerary = ({ startDate, endDate, tripId }) => {
       const saved = querySnapshot3.docs.map((doc) => doc.data());
 
       setSavedPlaces(saved);
+    } catch (error) {
+      Alert.alert("Error getting places:", error.message);
+    } finally {
+      setIsLoading(false); // set loading state to false after form submission
+    }
+  };
+
+  const getItineraryData = async () => {
+    try {
+      setLoading(true);
+      const q = query(
+        collection(FIREBASE_DB, "users"),
+        where("userId", "==", user.uid)
+      );
+
+      const querySnapshot = await getDocs(q); // get user documents from user collection based on user id
+      const userRef = doc(FIREBASE_DB, "users", querySnapshot.docs[0].id); //Create a reference to this user's document
+
+      // create a trip reference to the trip document
+      const q2 = query(
+        collection(userRef, "trips"),
+        where("tripId", "==", tripId)
+      );
+      const querySnapshot2 = await getDocs(q2);
+      const tripRef = doc(userRef, "trips", querySnapshot2.docs[0].id);
 
       const itineraryData = {}; // Create an object to store the itinerary data for each date
 
@@ -115,7 +144,7 @@ const Itinerary = ({ startDate, endDate, tripId }) => {
     } catch (error) {
       Alert.alert("Error getting places:", error.message);
     } finally {
-      setIsLoading(false); // set loading state to false after form submission
+      setLoading(false);
     }
   };
 
@@ -138,8 +167,18 @@ const Itinerary = ({ startDate, endDate, tripId }) => {
           <View style={styles.placeCard}>
             <Image source={{ uri: place.placeImage }} style={styles.image} />
             <View style={styles.textContainer}>
-              <Text style={styles.checklistText}>{place.placeTitle}</Text>
-              <Text style={styles.checklistText}>{place.placeCategory}</Text>
+              <Text
+                style={[styles.checklistText, GlobalStyles.labelMediumMedium]}
+                numberOfLines={1}
+              >
+                {place.placeCategory}
+              </Text>
+              <Text
+                style={[styles.checklistText, GlobalStyles.bodyMediumBold]}
+                numberOfLines={3}
+              >
+                {place.placeTitle}
+              </Text>
             </View>
           </View>
         </View>
@@ -241,14 +280,79 @@ const Itinerary = ({ startDate, endDate, tripId }) => {
     }
   };
 
-  useEffect(() => {
-    getSavedPlaces();
-  }, [modalVisible]);
+  useFocusEffect(
+    useCallback(() => {
+      if (!modalVisible) {
+        getSavedPlaces();
+      }
+      if (!deleteLoading) {
+        getItineraryData();
+      }
+    }, [modalVisible, deleteLoading]) // Function only called once
+  );
+
+  const confirmDelete = (item, section) => {
+    Alert.alert(
+      "Confirm Deletion",
+      "Are you sure you want to delete this place?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "OK",
+          onPress: () => handleDeletePlaceItem(item.placeId, section.title),
+        },
+      ]
+    );
+  };
+
+  const handleDeletePlaceItem = async (placeId, date) => {
+    try {
+      setDeleteLoading(true);
+      if (!tripReference) {
+        Alert.alert("Trip reference not available.");
+        return;
+      }
+
+      // Create a reference to the specific date within the itinerary
+      const q4 = query(
+        collection(tripReference, "itinerary"),
+        where("date", "==", date)
+      );
+      const querySnapshot4 = await getDocs(q4);
+      const itineraryForDate = querySnapshot4.docs.map((doc) => doc.data());
+
+      if (itineraryForDate.length > 0) {
+        // If the itinerary data exists for the specific date
+        const existingData = itineraryForDate[0];
+        const updatedPlaces = existingData.places.filter(
+          (place) => place.placeId !== placeId
+        );
+
+        // Update the places array with the filtered array
+        const updatedData = {
+          ...existingData,
+          places: updatedPlaces,
+        };
+
+        // Set the updated itinerary data back to the document
+        await setDoc(querySnapshot4.docs[0].ref, updatedData);
+
+        Alert.alert("Success", "Place removed from the itinerary!");
+      }
+    } catch (error) {
+      Alert.alert("Error deleting place:", error.message);
+    } finally {
+      setDeleteLoading(false);
+    }
+  };
 
   return (
-    <View style={styles.container}>
-      {isLoading && <ActivityIndicator size={"large"} />}
-      {!isLoading && (
+    <View>
+      {loading && <ActivityIndicator size={"large"} />}
+      {!loading && (
         <SectionList
           contentContainerStyle={styles.contentContainer}
           scrollEnabled={true}
@@ -257,18 +361,31 @@ const Itinerary = ({ startDate, endDate, tripId }) => {
             data: itineraryData[formatDateString(date)] || [], // Use the itinerary data for each date
           }))}
           keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item }) => (
+          renderItem={({ item, section }) => (
             <View style={styles.item}>
               <FlatList
+                // contentContainerStyle={{
+                //   marginBottom: 60,
+                // }}
                 data={item["places"] || []}
-                renderItem={({ item }) => <SavedPlaceCard placeItem={item} />}
+                renderItem={({ item }) => (
+                  <SavedPlaceCard
+                    placeItem={item}
+                    // onDelete={() =>
+                    //   handleDeletePlaceItem(item.placeId, section.title)
+                    // }
+                    onDelete={() => confirmDelete(item, section)}
+                  />
+                )}
                 keyExtractor={(item) => item.placeId}
               />
             </View>
           )}
           renderSectionHeader={({ section: { title } }) => (
             <View style={styles.headerContainer}>
-              <Text style={styles.dateTitle}>{title}</Text>
+              <Text style={[styles.dateTitle, GlobalStyles.titleLargeRegular]}>
+                {title}
+              </Text>
 
               <TouchableOpacity
                 style={styles.button}
@@ -297,7 +414,7 @@ const Itinerary = ({ startDate, endDate, tripId }) => {
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
               <View style={styles.modalHeader}>
-                <Text style={styles.modalText}>Select a Saved Place</Text>
+                <Text style={styles.modalText}>Add to: {selectedDate}</Text>
                 <Ionicons
                   name="ios-close"
                   size={30}
@@ -309,8 +426,8 @@ const Itinerary = ({ startDate, endDate, tripId }) => {
                 {isLoading && <ActivityIndicator size={"large"} />}
                 {savedPlaces.length === 0 && !isLoading && (
                   <Text>
-                    No saved places found. Please add places to Saved from the
-                    Find Section.
+                    You have no saved places. Go to the Find section to add
+                    places.
                   </Text>
                 )}
 
@@ -324,12 +441,13 @@ const Itinerary = ({ startDate, endDate, tripId }) => {
                       onToggleSelection={toggleSelection}
                     />
                   ))}
-
-                <Button
-                  style={styles.submit}
+                <Pressable
+                  style={styles.submitButton}
                   title="Submit"
                   onPress={handleAddPlaceToItinerary}
-                />
+                >
+                  <Text>Submit</Text>
+                </Pressable>
               </ScrollView>
             </View>
           </View>
@@ -345,7 +463,7 @@ const styles = StyleSheet.create({
   contentContainer: {
     paddingBottom: 100,
     paddingHorizontal: 15,
-    paddingTop: 15,
+    // paddingTop: 15,
   },
   checklistItem: {
     flexDirection: "row",
@@ -380,7 +498,7 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
   dateTitle: {
-    fontSize: 20,
+    // fontSize: 20,
     padding: 10,
     paddingLeft: 0,
     width: "60%",
@@ -392,12 +510,21 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     width: "100%",
     alignItems: "center",
+    marginTop: 20,
   },
   button: {
     backgroundColor: "lightblue",
     paddingVertical: 10,
     paddingHorizontal: 10,
     borderRadius: 5,
+  },
+  submitButton: {
+    backgroundColor: "lightblue",
+    paddingVertical: 15,
+    paddingHorizontal: 15,
+    borderRadius: 50,
+    alignItems: "center",
+    marginTop: 30,
   },
   placeCard: {
     flexDirection: "row",
@@ -420,6 +547,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     alignItems: "center",
     backgroundColor: "rgba(0,0,0,0.6)",
+    width: "100%",
   },
   modalView: {
     backgroundColor: "#fff",
@@ -437,12 +565,10 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
+    overflow: "hidden",
   },
   modalText: {
     fontSize: 20,
-  },
-  submit: {
-    marginBottom: 10,
   },
   modalHeader: {
     flexDirection: "row",

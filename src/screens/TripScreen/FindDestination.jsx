@@ -23,6 +23,8 @@ const FindDestination = ({ tripLocation }) => {
   const [searchTripLocation, setSearchTripLocation] = useState(
     tripLocation || "Paris"
   );
+
+  const [searchResults, setSearchResults] = useState([]);
   // pathId for article data based on tripLocation. Lowercase to match database.
   const [pathId, setPathId] = useState(
     `destinations/${searchTripLocation.toLowerCase()}/articles`
@@ -46,15 +48,10 @@ const FindDestination = ({ tripLocation }) => {
       const q = query(destinationRef);
       // getDocs to asynchronously fetch documents that match the query
       const querySnapshot = await getDocs(q);
-
-      //   const data = querySnapshot.docs[0].data();
-
       // Loop through query results for each document and set destinationData state variable
       querySnapshot.forEach((doc) => {
         setDestinationData(doc.data());
       });
-      // console.log(destinationData);
-
       // Handle errors
     } catch (error) {
       console.log("Error:" + error);
@@ -65,14 +62,45 @@ const FindDestination = ({ tripLocation }) => {
     }
   };
 
-  // Function to handle search input
-  const handleSearch = (event) => {
-    const text = event.nativeEvent.text;
-    setSearchTripLocation(text);
-    setPathId(`destinations/${text.toLowerCase()}/articles`);
+  // Function to fetch destinations based on search query
+  const fetchDestinations = async (queryText) => {
+    try {
+      const firstLetterCapitalized = queryText.charAt(0).toUpperCase();
+      const capitalizedLocation = firstLetterCapitalized + queryText.slice(1);
 
-    // console.log(text);
+      const destinationRef = query(
+        collectionGroup(FIREBASE_DB, "destinations"),
+        where("destinationName", ">=", capitalizedLocation), // Use startAt for "startsWith" query
+        where("destinationName", "<", capitalizedLocation + "\uf8ff") // Use endAt for "endsWith" query
+      );
+
+      const q = query(destinationRef);
+      const querySnapshot = await getDocs(q);
+
+      const results = [];
+      querySnapshot.forEach((doc) => {
+        results.push(doc.data());
+      });
+      setSearchResults(results);
+    } catch (error) {
+      console.log("Error:" + error);
+      Alert.alert("Error", error.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
+
+  const handleSearchChange = (text) => {
+    // setSearchTripLocation(text);
+    // setPathId(`destinations/${text.toLowerCase()}/articles`);
+    if (text) {
+      // Fetch destinations only when there is some text in the search field
+      fetchDestinations(text);
+    } else {
+      setSearchResults([]); // Clear search results when search field is empty
+    }
+  };
+
   const { loading, articleData } = useArticleData(pathId);
 
   // useEffect to call getDestinationData whenever searchTripLocation changes
@@ -118,54 +146,84 @@ const FindDestination = ({ tripLocation }) => {
               <TextInput
                 style={styles.input}
                 placeholder="Search Destination"
-                onSubmitEditing={handleSearch}
+                onChangeText={handleSearchChange} // Add onChangeText handler
               />
+              <View style={styles.searchResultContainer}>
+                {searchResults.map((result) => (
+                  <TouchableOpacity
+                    key={result.destinationName}
+                    onPress={() => {
+                      setDestinationData(result);
+                      setSearchTripLocation(result.destinationName);
+                      setPathId(
+                        `destinations/${result.destinationName.toLowerCase()}/articles`
+                      );
+                      setSearchResults([]);
+                    }}
+                  >
+                    <Text style={styles.searchResult}>
+                      {result.destinationName}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
               {isLoading ? (
                 <ActivityIndicator />
               ) : (
                 <View>
-                  <Text
-                    style={[GlobalStyles.bodySmallRegular, styles.subtitleText]}
-                  >
-                    {destinationData.country}
-                  </Text>
-                  <Text
-                    style={[GlobalStyles.titleLargeRegular, styles.titleText]}
-                  >
-                    {destinationData.destinationName}
-                  </Text>
-                  {showFullText ? (
-                    <View>
-                      <Text
-                        style={[GlobalStyles.bodySmallRegular, styles.bodyText]}
-                      >
-                        {destinationData.description}
-                      </Text>
-                      <TouchableOpacity onPress={toggleFullText}>
+                  <View>
+                    <Text
+                      style={[
+                        GlobalStyles.bodySmallRegular,
+                        styles.subtitleText,
+                      ]}
+                    >
+                      {destinationData.country}
+                    </Text>
+                    <Text
+                      style={[GlobalStyles.titleLargeRegular, styles.titleText]}
+                    >
+                      {destinationData.destinationName}
+                    </Text>
+                    {showFullText ? (
+                      <View>
                         <Text
-                          style={[styles.para, GlobalStyles.bodySmallRegular]}
+                          style={[
+                            GlobalStyles.bodySmallRegular,
+                            styles.bodyText,
+                          ]}
                         >
-                          Read Less
+                          {destinationData.description}
                         </Text>
-                      </TouchableOpacity>
-                    </View>
-                  ) : (
-                    <View>
-                      <Text
-                        style={[GlobalStyles.bodySmallRegular, styles.bodyText]}
-                      >
-                        {destinationData.description?.slice(0, 50)}
-                        {"... "}
-                      </Text>
-                      <TouchableOpacity onPress={toggleFullText}>
+                        <TouchableOpacity onPress={toggleFullText}>
+                          <Text
+                            style={[styles.para, GlobalStyles.bodySmallRegular]}
+                          >
+                            Read Less
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                    ) : (
+                      <View>
                         <Text
-                          style={[GlobalStyles.bodySmallRegular, styles.para]}
+                          style={[
+                            GlobalStyles.bodySmallRegular,
+                            styles.bodyText,
+                          ]}
                         >
-                          Read More
+                          {destinationData.description?.slice(0, 50)}
+                          {"... "}
                         </Text>
-                      </TouchableOpacity>
-                    </View>
-                  )}
+                        <TouchableOpacity onPress={toggleFullText}>
+                          <Text
+                            style={[GlobalStyles.bodySmallRegular, styles.para]}
+                          >
+                            Read More
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                    )}
+                  </View>
                 </View>
               )}
             </View>
@@ -208,8 +266,19 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     paddingHorizontal: 15,
     paddingVertical: 10,
-    borderRadius: 10,
+    borderRadius: 50,
     marginTop: 15,
+    marginBottom: 8,
+  },
+  searchResult: {
+    backgroundColor: "white",
+    paddingHorizontal: 15,
+    paddingVertical: 15,
+    // marginTop: 5,
+    // borderRadius: 10,
+  },
+  searchResultContainer: {
+    borderRadius: 10,
   },
 });
 
