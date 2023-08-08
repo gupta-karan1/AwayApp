@@ -23,6 +23,7 @@ function TripTopNav({
   startDate,
   endDate,
   tripType,
+  userId,
 }) {
   // console.log("tripId " + tripId);
   return (
@@ -42,6 +43,7 @@ function TripTopNav({
             invitees: invitees,
             startDate: startDate,
             endDate: endDate,
+            userId: userId,
           }}
           options={{
             tabBarLabel: "Plan",
@@ -55,6 +57,7 @@ function TripTopNav({
             initialParams={{
               tripId: tripId,
               invitees: invitees,
+              userId: userId,
             }}
           />
         )}
@@ -63,7 +66,11 @@ function TripTopNav({
           name="FindStack"
           component={FindStack}
           // tripLocation prop as initial parameter
-          initialParams={{ tripLocation: tripLocation, tripId: tripId }}
+          initialParams={{
+            tripLocation: tripLocation,
+            tripId: tripId,
+            userId: userId,
+          }}
           options={{
             tabBarLabel: "Find",
             lazy: true,
@@ -77,7 +84,7 @@ function TripTopNav({
 // stack navigator for Find screen and its components like FindDestination and FindArticle and FindPlace
 function FindStack() {
   const route = useRoute();
-  const { tripLocation, tripId } = route.params;
+  const { tripLocation, tripId, userId } = route.params;
   // console.log("tripLocation " + tripLocation);
   // console.log("tripId " + tripId);
   return (
@@ -116,7 +123,7 @@ function FindStack() {
           // headerTitle: "Place",
           // headerTitleAlign: "center",
         }}
-        initialParams={{ tripId: tripId }}
+        initialParams={{ tripId: tripId, userId: userId }}
       />
     </Stack.Navigator>
   );

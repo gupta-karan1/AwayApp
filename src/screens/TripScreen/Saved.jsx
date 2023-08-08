@@ -17,20 +17,20 @@ import SavedPlaceCard from "../../components/TripsComp/SavedPlaceCard";
 import { useFocusEffect } from "@react-navigation/native";
 import { useCallback } from "react";
 
-const Saved = ({ tripId }) => {
+const Saved = ({ tripId, userId }) => {
   const [savedPlaces, setSavedPlaces] = useState([]); // State to store saved places
   const [isLoading, setIsLoading] = useState(false); // State to show loading indicator
   const [deleteLoading, setDeleteLoading] = useState(false);
 
   // Access user object from AuthContext to get user id
-  const { user } = useContext(AuthContext);
+  // const { user } = useContext(AuthContext);
 
   const getSavedPlaces = async () => {
     try {
       setIsLoading(true); // show loading indicator
       const q = query(
         collection(FIREBASE_DB, "users"),
-        where("userId", "==", user.uid)
+        where("userId", "==", userId)
       );
 
       const querySnapshot = await getDocs(q); // get user documents from user collection based on user id
@@ -108,7 +108,7 @@ const Saved = ({ tripId }) => {
       setDeleteLoading(true);
       const q = query(
         collection(FIREBASE_DB, "users"),
-        where("userId", "==", user.uid)
+        where("userId", "==", userId)
       );
 
       const querySnapshot = await getDocs(q);
@@ -129,11 +129,6 @@ const Saved = ({ tripId }) => {
       const placeRef = doc(tripRef, "saved", querySnapshot3.docs[0].id);
 
       await deleteDoc(placeRef);
-
-      // // Update the state to reflect the changes after deletion
-      // setSavedPlaces((prevSavedPlaces) =>
-      //   prevSavedPlaces.filter((place) => place.placeId !== placeId)
-      // );
     } catch (error) {
       Alert.alert("Error deleting place:", error.message);
     } finally {

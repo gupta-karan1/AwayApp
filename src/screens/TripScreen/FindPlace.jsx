@@ -32,7 +32,7 @@ import { AntDesign } from "@expo/vector-icons";
 // PlaceScreen component for the find section within a trip
 const FindPlace = ({ route }) => {
   // Get the pathId from the route params
-  const { pathId, tripId } = route.params;
+  const { pathId, tripId, userId } = route.params;
 
   const navigation = useNavigation();
 
@@ -66,7 +66,7 @@ const FindPlace = ({ route }) => {
     try {
       const q = query(
         collection(FIREBASE_DB, "users"),
-        where("userId", "==", user.uid)
+        where("userId", "==", userId)
       );
 
       const querySnapshot = await getDocs(q); // get user documents from user collection based on user id
@@ -337,4 +337,4 @@ const styles = StyleSheet.create({
   },
 });
 
-// SUMMARY: Place Screen component fteches data from Firebase using the usePlaceScreen custom hook, which takes the pathId parameter from the route. It displays the place image, category, title, description, address, contact, and hours. The Read More/Less functionality is implemented using the showFullText state variable and toggleFullText function. The formatPlaceHours function formats the place hours string for display.
+// SUMMARY: Place Screen component fetches data from Firebase using the usePlaceScreen custom hook, which takes the pathId parameter from the route. It displays the place image, category, title, description, address, contact, and hours. The Read More/Less functionality is implemented using the showFullText state variable and toggleFullText function. The formatPlaceHours function formats the place hours string for display.

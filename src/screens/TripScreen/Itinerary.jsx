@@ -32,7 +32,7 @@ import SavedPlaceCard from "../../components/TripsComp/SavedPlaceCard";
 import { Ionicons } from "@expo/vector-icons";
 import GlobalStyles from "../../GlobalStyles";
 
-const Itinerary = ({ startDate, endDate, tripId }) => {
+const Itinerary = ({ startDate, endDate, tripId, userId, invitees }) => {
   // State variables for modal visibility and selected place
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedDate, setSelectedDate] = useState("");
@@ -67,13 +67,13 @@ const Itinerary = ({ startDate, endDate, tripId }) => {
 
   //   get saved places from firebase:
   // Access user object from AuthContext to get user id
-  const { user } = useContext(AuthContext);
+  // const { user } = useContext(AuthContext);
   const getSavedPlaces = async () => {
     try {
       setIsLoading(true); // show loading indicator
       const q = query(
         collection(FIREBASE_DB, "users"),
-        where("userId", "==", user.uid)
+        where("userId", "==", userId)
       );
 
       const querySnapshot = await getDocs(q); // get user documents from user collection based on user id
@@ -110,7 +110,7 @@ const Itinerary = ({ startDate, endDate, tripId }) => {
       setLoading(true);
       const q = query(
         collection(FIREBASE_DB, "users"),
-        where("userId", "==", user.uid)
+        where("userId", "==", userId)
       );
 
       const querySnapshot = await getDocs(q); // get user documents from user collection based on user id

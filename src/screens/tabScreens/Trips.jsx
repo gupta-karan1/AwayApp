@@ -5,15 +5,15 @@ import {
   Text,
   Alert,
   ActivityIndicator,
-  FlatList,
+  ScrollView,
 } from "react-native";
 import { useState, useContext, useCallback } from "react";
 import { useNavigation } from "@react-navigation/native";
-
 import { AuthContext } from "../../../hooks/AuthContext";
 import {
   getDocs,
   collection,
+  collectionGroup,
   query,
   where,
   doc,
@@ -22,6 +22,7 @@ import {
 import { FIREBASE_DB } from "../../../firebaseConfig";
 import TripCard from "../../components/TripsComp/TripCard";
 import { useFocusEffect } from "@react-navigation/native";
+import GlobalStyles from "../../GlobalStyles";
 
 const Trips = () => {
   // Navigation object from useNavigation hook
@@ -30,7 +31,8 @@ const Trips = () => {
   // State variables
   const [tripData, setTripData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [userId, setUserId] = useState("");
+  const [invitedTrips, setInvitedTrips] = useState([]);
+  const [tabView, setTabView] = useState("all");
 
   // Get the user object from the AuthContext
   const { user } = useContext(AuthContext);
@@ -45,7 +47,6 @@ const Trips = () => {
       );
       const querySnapshot1 = await getDocs(q);
       const userRef = doc(FIREBASE_DB, "users", querySnapshot1.docs[0].id); // Create a reference to the user's document
-      setUserId(userRef.id);
 
       const tripQuery = query(
         collection(userRef, "trips"),
@@ -55,11 +56,29 @@ const Trips = () => {
       const querySnapshot2 = await getDocs(tripQuery);
       // Extract and set trip data from the query snapshot
       const data = querySnapshot2.docs.map((doc) => doc.data());
+
       setTripData(data);
-      // console.log(data);
+
+      const userData = querySnapshot1.docs.map((doc) => doc.data());
+      const { userId, username, email } = userData[0];
+
+      // make a collectionGroup query to get all trips where the user is an invitee
+      if (userId && username && email) {
+        const q2 = query(
+          collectionGroup(FIREBASE_DB, "trips"),
+          where("invitees", "array-contains", {
+            userId: userId,
+            username: username,
+            email: email,
+          })
+        );
+        const querySnapshot = await getDocs(q2);
+
+        const data2 = querySnapshot.docs.map((doc) => doc.data());
+        setInvitedTrips(data2);
+      }
     } catch (error) {
-      console.error(error);
-      Alert.alert("Error saving trip details:", error);
+      Alert.alert("Error saving trip details:", error.message);
     } finally {
       setLoading(false);
     }
@@ -69,7 +88,7 @@ const Trips = () => {
   useFocusEffect(
     useCallback(() => {
       getUserTripData();
-    }, []) // Function only called once
+    }, []) // Function to call once
   );
 
   // Function to navigate to the TripForm screen
@@ -77,35 +96,88 @@ const Trips = () => {
     navigation.navigate("CreateTripForm");
   };
 
-  // Function to render the trip card
-  const renderTripCard = useCallback(({ item }) => {
+  const MyTrips = () => {
     return (
-      <TripCard
-        key={item.tripId}
-        tripItem={item}
-        path={`users/${userId}/trips`} // Path to logged in user's trips collection
-      />
+      <ScrollView
+        style={styles.tripContainer}
+        showsVerticalScrollIndicator={false}
+      >
+        <Text style={GlobalStyles.titleLargeRegular}>My Trips</Text>
+        {tripData.length > 0 &&
+          tripData.map((trip) => {
+            return <TripCard key={trip.tripId} tripItem={trip} />;
+          })}
+      </ScrollView>
     );
-  });
+  };
+
+  const InvitedTrips = () => {
+    return (
+      <View style={styles.tripContainer}>
+        <Text style={GlobalStyles.titleLargeRegular}>Invited Trips</Text>
+        {invitedTrips.length > 0 &&
+          invitedTrips.map((trip) => {
+            return <TripCard key={trip.tripId} tripItem={trip} />;
+          })}
+      </View>
+    );
+  };
+
+  const AllTrips = () => {
+    return (
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={styles.tripContainer}>
+          <Text style={GlobalStyles.titleLargeRegular}>My Trips</Text>
+          {tripData.length > 0 &&
+            tripData.map((trip) => {
+              return <TripCard key={trip.tripId} tripItem={trip} />;
+            })}
+        </View>
+        <View style={styles.tripContainer}>
+          <Text style={GlobalStyles.titleLargeRegular}>Invited Trips</Text>
+          {invitedTrips.length > 0 &&
+            invitedTrips.map((trip) => {
+              return <TripCard key={trip.tripId} tripItem={trip} />;
+            })}
+        </View>
+      </ScrollView>
+    );
+  };
+
+  const handleTabView = (tab) => {
+    setTabView(tab);
+  };
 
   return (
     <View style={styles.container}>
+      <View style={styles.buttonContainer}>
+        <Pressable
+          onPress={() => handleTabView("all")}
+          style={[styles.button, tabView === "all" && styles.selected]}
+        >
+          <Text>All</Text>
+        </Pressable>
+        <Pressable
+          onPress={() => handleTabView("personal")}
+          style={[styles.button, tabView === "personal" && styles.selected]}
+        >
+          <Text>My Trips</Text>
+        </Pressable>
+        <Pressable
+          onPress={() => handleTabView("invited")}
+          style={[styles.button, tabView === "invited" && styles.selected]}
+        >
+          <Text>Invited</Text>
+        </Pressable>
+      </View>
       {loading ? (
         <ActivityIndicator size={"large"} />
       ) : (
-        <FlatList
-          data={tripData}
-          renderItem={renderTripCard}
-          keyExtractor={(item) => item.tripId}
-          ItemSeparatorComponent={() => <View style={{ width: 15 }}></View>} // Add space between trip cards
-          removeClippedSubviews={true} // removes off screen items
-          initialNumToRender={2} // initial number of items to render
-          maxToRenderPerBatch={2} // max number of items to render per batch
-          updateCellsBatchingPeriod={100} // time in ms between each batch render
-          windowSize={2} // number of items to render outside of the visible window
-          showsVerticalScrollIndicator={false} // hide scroll bar
-          contentContainerStyle={{ paddingHorizontal: 15 }} //horizonatal padding to container
-        />
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {tabView === "all" && <AllTrips />}
+          {tabView === "personal" && <MyTrips />}
+          {tabView === "invited" && <InvitedTrips />}
+        </ScrollView>
       )}
       {/* FAB to add a new trip */}
       <Pressable style={styles.fabButton} onPress={handleAddTrip}>
@@ -120,6 +192,12 @@ export default Trips;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingHorizontal: 15,
+    // paddingTop: 15,
+  },
+  tripContainer: {
+    marginBottom: 15,
+    marginTop: 15,
   },
   fabButton: {
     position: "absolute",
@@ -133,6 +211,26 @@ const styles = StyleSheet.create({
   fabText: {
     fontSize: 15,
     color: "white",
+  },
+  buttonContainer: {
+    flexDirection: "row", // To make the buttons appear side by side
+    padding: 10,
+    paddingLeft: 0,
+    justifyContent: "flex-start",
+    alignItems: "center",
+  },
+  button: {
+    alignItems: "flex-start",
+    justifyContent: "center",
+    paddingVertical: 12,
+    paddingHorizontal: 25,
+    borderRadius: 50,
+    backgroundColor: "#fff",
+    marginRight: 10,
+    elevation: 2,
+  },
+  selected: {
+    backgroundColor: "lightblue",
   },
 });
 

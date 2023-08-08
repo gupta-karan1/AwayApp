@@ -25,7 +25,7 @@ const TripsStackGroup = () => {
         name="Trips"
         component={Trips}
         options={{
-          headerTitle: "My Trips",
+          headerTitle: "Trips",
         }}
       />
       <TripsStack.Screen
