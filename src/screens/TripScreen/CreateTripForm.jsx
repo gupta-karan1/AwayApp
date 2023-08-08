@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   View,
   StyleSheet,
@@ -28,11 +28,13 @@ import {
   getDocs,
   collectionGroup,
 } from "firebase/firestore";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import uuid from "react-native-uuid";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import moment from "moment";
 import useDestinationFeed from "../../../hooks/useDestinationFeed";
+import { PickerIOS } from "@react-native-picker/picker";
+import { Ionicons } from "@expo/vector-icons";
 
 // Component to render the Trip Form
 const CreateTripForm = () => {
@@ -44,6 +46,10 @@ const CreateTripForm = () => {
   const [tripType, setTripType] = useState("solo");
   const [invitees, setInvitees] = useState([]);
   const [coverImage, setCoverImage] = useState(null);
+  const [users, setUsers] = useState([]);
+  const [selectedUser, setSelectedUser] = useState("");
+  const [showInviteesPicker, setShowInviteesPicker] = useState(false);
+  // const [selectedInvitees, setSelectedInvitees] = useState([]);
 
   // const [destinations, setDestinations] = useState([]);
 
@@ -220,44 +226,53 @@ const CreateTripForm = () => {
     setTripType(value);
     if (value === "solo") {
       setInvitees([]); // Reset invitees array when trip type is changed to solo
+    } else {
+      // getUsers();
+      setShowInviteesPicker(true); // Show invitees picker when trip type is changed to group
     }
   };
 
-  // useEffect =
-  //   (() => {
-  //     fetchDestinations();
-  //   },
-  //   []);
+  const getUsers = async () => {
+    try {
+      const userId = user.uid;
+      const q = query(collection(FIREBASE_DB, "users"));
+      const querySnapshot = await getDocs(q);
+      const users = [];
+      querySnapshot.forEach((doc) => {
+        const userData = doc.data();
+        // Only add users to the array if their ID is not the same as the logged-in user's ID
+        if (userData.userId !== userId) {
+          users.push(userData);
+        }
+      });
+      setUsers(users);
+      // console.log(users);
+    } catch (error) {
+      // console.error(error);
+      Alert.alert("Error fetching users:", error);
+    }
+  };
 
-  // const fetchDestinations = async () => {
-  //   try {
-  //     const destinationRef = query(
-  //       collectionGroup(FIREBASE_DB, "destinations")
-  //     );
+  // Function to remove an invitee from the invitees array
+  const removeInvitee = (inviteeId) => {
+    setInvitees((prevInvitees) =>
+      prevInvitees.filter((invitee) => invitee.userId !== inviteeId)
+    );
+    setSelectedUser("");
+  };
 
-  //     const q = query(destinationRef);
-  //     const querySnapshot = await getDocs(q);
-
-  //     const results = [];
-  //     querySnapshot.forEach((doc) => {
-  //       results.push(doc.data());
-  //     });
-  //     setDestinations(results);
-  //     console.log(destinations);
-  //   } catch (error) {
-  //     Alert.alert("Error", error.message);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
+  // run the get Users function only when the showInviteesPicker state variable is true and the trip type is group
+  useFocusEffect(
+    useCallback(() => {
+      if (showInviteesPicker == true && tripType === "group") {
+        getUsers();
+      }
+    }, [showInviteesPicker, tripType])
+  );
 
   return (
     <ScrollView>
-      <KeyboardAvoidingView
-        style={styles.container}
-        behavior="height"
-        keyboardVerticalOffset={10}
-      >
+      <KeyboardAvoidingView style={styles.container}>
         <View style={styles.inputContainer}>
           <Text style={styles.titleText}>Trip Title:</Text>
           <TextInput
@@ -267,22 +282,26 @@ const CreateTripForm = () => {
             style={styles.input}
             placeholder="Trip Title"
           />
-
-          <Text style={styles.titleText}>Trip Location:</Text>
-          <Picker
-            style={styles.picker}
-            selectedValue={tripLocation}
-            onValueChange={(itemValue, itemIndex) => setTripLocation(itemValue)}
-          >
-            {/* Render list of destinations in Picker */}
-            {destinationData.map((destination) => (
-              <Picker.Item
-                key={destination.destinationId}
-                label={destination.destinationName} // Assuming each destination document in Firebase has a "name" field
-                value={destination.destinationName}
-              />
-            ))}
-          </Picker>
+          <View>
+            <Text style={styles.titleText}>Trip Location:</Text>
+            <Picker
+              // mode="dropdown"
+              style={styles.picker}
+              selectedValue={tripLocation}
+              onValueChange={(itemValue, itemIndex) =>
+                setTripLocation(itemValue)
+              }
+            >
+              {/* Render list of destinations in Picker */}
+              {destinationData.map((destination) => (
+                <Picker.Item
+                  key={destination.destinationId}
+                  label={destination.destinationName} // Assuming each destination document in Firebase has a "name" field
+                  value={destination.destinationName}
+                />
+              ))}
+            </Picker>
+          </View>
           <View style={styles.dateContainer}>
             {/* Start date picker for Android */}
             {Platform.OS === "android" && (
@@ -375,7 +394,55 @@ const CreateTripForm = () => {
               <Text style={styles.radioButtonText}>Group Trip</Text>
             </TouchableOpacity>
           </View>
-
+          {showInviteesPicker && tripType === "group" && (
+            <View>
+              <Text style={styles.titleText}>Select Invitees:</Text>
+              <Picker
+                style={styles.picker}
+                selectedValue={selectedUser}
+                onValueChange={(itemValue, itemIndex) => {
+                  setSelectedUser(itemValue);
+                  // console.log("Selected User:", itemValue);
+                  // Add the selected user to the selectedInvitees array
+                  if (
+                    itemValue &&
+                    !invitees.some(
+                      (invitee) => invitee.userId === itemValue.userId
+                    )
+                  ) {
+                    setInvitees([...invitees, itemValue]);
+                  }
+                }}
+              >
+                <Picker.Item label="Select an invitee" value="" />
+                {users.map((user) => (
+                  <Picker.Item
+                    key={user.userId}
+                    label={`${user.username} (${user.email})`}
+                    // label={`${user.username}`}
+                    value={user}
+                  />
+                ))}
+              </Picker>
+              <View style={styles.invitees}>
+                {invitees.map((invitee) => (
+                  <View style={styles.inviteeText} key={invitee.userId}>
+                    <Text>{invitee.username}</Text>
+                    <TouchableOpacity
+                      onPress={() => removeInvitee(invitee.userId)}
+                    >
+                      <Ionicons
+                        name="ios-close"
+                        size={24}
+                        color="black"
+                        style={styles.icon}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                ))}
+              </View>
+            </View>
+          )}
           {isLoading ? (
             <ActivityIndicator />
           ) : (
@@ -393,7 +460,6 @@ const CreateTripForm = () => {
               )}
             </View>
           )}
-
           {loading ? (
             <ActivityIndicator size="large" color="#0000ff" />
           ) : (
@@ -414,6 +480,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-start",
     alignItems: "center",
+    paddingBottom: 30,
   },
   inputContainer: {
     width: "85%",
@@ -439,7 +506,6 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     marginTop: 5,
   },
-
   button: {
     marginTop: 16,
   },
@@ -473,6 +539,25 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     alignItems: "center",
     justifyContent: "center",
+  },
+  invitees: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 10,
+    marginBottom: 30,
+    marginTop: -20,
+  },
+  inviteeText: {
+    flexDirection: "row",
+    backgroundColor: "lightblue",
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 10,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  icon: {
+    paddingLeft: 5,
   },
 });
 
