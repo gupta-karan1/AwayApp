@@ -15,6 +15,7 @@ import FindPlaceCard from "../../components/TripsComp/FindPlaceCard";
 import { ImageBackground } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import { Animated } from "react-native";
 
 // ArticleScreen component with route params to display article with places within the find section
 const FindArticle = ({ route }) => {
@@ -56,8 +57,11 @@ const FindArticle = ({ route }) => {
 
   const Navigation = useNavigation();
 
+  const buttonPosition = new Animated.ValueXY({ x: 10, y: 10 });
+  const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+
   return (
-    <View>
+    <View style={styles.container}>
       {loading ? (
         <ActivityIndicator size="large" />
       ) : (
@@ -72,6 +76,10 @@ const FindArticle = ({ route }) => {
           showsVerticalScrollIndicator={false} // hide scroll bar
           contentContainerStyle={{ paddingHorizontal: 15 }} // add padding to left and right
           // List header component to display the article details
+          onScroll={Animated.event(
+            [{ nativeEvent: { contentOffset: { y: buttonPosition.y } } }],
+            { useNativeDriver: false }
+          )}
           ListHeaderComponent={
             <View>
               {/* <Image source={{ uri: articleImg }} style={styles.image} /> */}
@@ -80,12 +88,24 @@ const FindArticle = ({ route }) => {
                 style={styles.image}
                 imageStyle={{ borderRadius: 10 }}
               >
-                <Pressable
+                {/* <Pressable
                   onPress={() => Navigation.goBack()}
                   style={styles.backButton}
                 >
                   <AntDesign name="arrowleft" size={24} color="black" />
-                </Pressable>
+                </Pressable> */}
+
+                {/* <AnimatedPressable
+                  onPress={() => Navigation.goBack()}
+                  style={[
+                    styles.backButton,
+                    {
+                      transform: [{ translateY: buttonPosition.y }],
+                    },
+                  ]}
+                >
+                  <AntDesign name="arrowleft" size={24} color="black" />
+                </AnimatedPressable> */}
               </ImageBackground>
               <View style={styles.subtitleText}>
                 <Text style={GlobalStyles.bodySmallRegular}>
@@ -153,6 +173,17 @@ const FindArticle = ({ route }) => {
           }
         />
       )}
+      <AnimatedPressable
+        onPress={() => Navigation.goBack()}
+        style={[
+          styles.backButton,
+          {
+            transform: [{ translateY: buttonPosition.y }],
+          },
+        ]}
+      >
+        <AntDesign name="arrowleft" size={24} color="black" />
+      </AnimatedPressable>
     </View>
   );
 };
@@ -160,6 +191,9 @@ const FindArticle = ({ route }) => {
 export default FindArticle;
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   image: {
     height: 250,
     marginTop: 20,
@@ -195,6 +229,7 @@ const styles = StyleSheet.create({
     padding: 5,
     borderRadius: 50,
     backgroundColor: "rgba(255, 255, 255, 0.7)",
+    // zIndex: 1, // Add zIndex property
   },
 });
 

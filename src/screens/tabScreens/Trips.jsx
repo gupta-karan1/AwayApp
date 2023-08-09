@@ -100,7 +100,6 @@ const Trips = () => {
     return (
       <ScrollView
         style={styles.tripContainer}
-        showsVerticalScrollIndicator={false}
       >
         <Text style={GlobalStyles.titleLargeRegular}>My Trips</Text>
         {tripData.length > 0 &&

@@ -95,20 +95,23 @@ const FindPlace = ({ route }) => {
       await addDoc(collection(tripRef, "saved"), placeData);
 
       Alert.alert(
-        "Place Saved",
-        "Place saved successfully to Plan!",
+        "Place Successfully Saved",
+        "Continue exploring or head to the Itinerary to start planning your trip",
         [
           {
-            text: "Cancel",
+            text: "Continue",
             onPress: () => {},
             style: "cancel",
-          },
-          {
-            text: "View Saved Places",
+            text: "Itinerary",
             onPress: () => {
               //navigate to the saved places screen
               navigation.navigate("Plan");
             },
+          },
+          {
+            text: "Continue",
+            onPress: () => {},
+            style: "cancel",
           },
         ],
         {
