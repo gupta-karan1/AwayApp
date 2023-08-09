@@ -169,12 +169,12 @@ const FindPlace = ({ route }) => {
             source={{ uri: singlePlaceData.placeImage }}
             imageStyle={{ borderRadius: 10 }}
           >
-            <Pressable
+            {/* <Pressable
               onPress={() => Navigation.goBack()}
               style={styles.backButton}
             >
               <AntDesign name="arrowleft" size={24} color="black" />
-            </Pressable>
+            </Pressable> */}
           </ImageBackground>
 
           <Text style={[GlobalStyles.bodySmallRegular, styles.subtitleText]}>

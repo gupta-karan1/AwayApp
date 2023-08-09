@@ -15,7 +15,7 @@ import FindPlaceCard from "../../components/TripsComp/FindPlaceCard";
 import { ImageBackground } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { Animated } from "react-native";
+// import { Animated } from "react-native";
 
 // ArticleScreen component with route params to display article with places within the find section
 const FindArticle = ({ route }) => {
@@ -57,8 +57,8 @@ const FindArticle = ({ route }) => {
 
   const Navigation = useNavigation();
 
-  const buttonPosition = new Animated.ValueXY({ x: 10, y: 10 });
-  const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+  // const buttonPosition = new Animated.ValueXY({ x: 10, y: 10 });
+  // const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
   return (
     <View style={styles.container}>
@@ -76,10 +76,10 @@ const FindArticle = ({ route }) => {
           showsVerticalScrollIndicator={false} // hide scroll bar
           contentContainerStyle={{ paddingHorizontal: 15 }} // add padding to left and right
           // List header component to display the article details
-          onScroll={Animated.event(
-            [{ nativeEvent: { contentOffset: { y: buttonPosition.y } } }],
-            { useNativeDriver: false }
-          )}
+          // onScroll={Animated.event(
+          //   [{ nativeEvent: { contentOffset: { y: buttonPosition.y } } }],
+          //   { useNativeDriver: false }
+          // )}
           ListHeaderComponent={
             <View>
               {/* <Image source={{ uri: articleImg }} style={styles.image} /> */}
@@ -173,7 +173,7 @@ const FindArticle = ({ route }) => {
           }
         />
       )}
-      <AnimatedPressable
+      {/* <AnimatedPressable
         onPress={() => Navigation.goBack()}
         style={[
           styles.backButton,
@@ -183,7 +183,7 @@ const FindArticle = ({ route }) => {
         ]}
       >
         <AntDesign name="arrowleft" size={24} color="black" />
-      </AnimatedPressable>
+      </AnimatedPressable> */}
     </View>
   );
 };

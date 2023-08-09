@@ -85,12 +85,15 @@ function TripTopNav({
 function FindStack() {
   const route = useRoute();
   const { tripLocation, tripId, userId } = route.params;
-  // console.log("tripLocation " + tripLocation);
-  // console.log("tripId " + tripId);
   return (
     <Stack.Navigator
       screenOptions={{
         animation: "slide_from_right",
+        headerStyle: {
+          backgroundColor: "#F9F9F9",
+          height: 80,
+        },
+        headerMode: "screen",
       }}
     >
       <Stack.Screen
@@ -98,11 +101,12 @@ function FindStack() {
         component={Find}
         initialParams={{ tripLocation }}
         options={{
-          headerShown: false,
-          // headerSearchBarOptions: {
-          //   headerTitle: "Find",
-          //   headerTitleAlign: "center",
-          // },
+          // headerBackVisible: "false",
+          headerTitle: "Destination",
+          headerTitleAlign: "center",
+          // headerLeft: undefined,
+          // headerLeft: () => null,
+          headerLeft: () => <View></View>,
         }}
       />
       <Stack.Screen name="FindDestination" component={FindDestination} />
@@ -110,18 +114,16 @@ function FindStack() {
         name="FindArticle"
         component={FindArticle}
         options={{
-          headerShown: false,
-          // headerTitle: "Article",
-          // headerTitleAlign: "center",
+          headerTitle: "Article",
+          headerTitleAlign: "center",
         }}
       />
       <Stack.Screen
         name="FindPlace"
         component={FindPlace}
         options={{
-          headerShown: false,
-          // headerTitle: "Place",
-          // headerTitleAlign: "center",
+          headerTitle: "Place",
+          headerTitleAlign: "center",
         }}
         initialParams={{ tripId: tripId, userId: userId }}
       />
