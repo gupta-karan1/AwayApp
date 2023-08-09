@@ -5,6 +5,7 @@ import {
   TextInput,
   Button,
   ActivityIndicator,
+  Alert,
 } from "react-native";
 import React, { useState } from "react";
 import { useAuth } from "../../../hooks/useAuth";
@@ -38,7 +39,7 @@ const Register = () => {
       await addDoc(usersCollectionRef, userData);
 
       // User registration and 'users' collection creation successful
-      console.log("User registered and 'users' collection created!");
+      Alert.alert("New user registered successfully!");
     } catch (error) {
       // error alert
       alert("Registration failed: ", error.message);
@@ -59,6 +60,7 @@ const Register = () => {
           value={email}
           onChangeText={(text) => setEmail(text)}
           style={styles.input}
+          autoCapitalize="none"
           inputMode="email"
         />
         <TextInput

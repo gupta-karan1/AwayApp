@@ -3,11 +3,16 @@ import ExploreStackGroup from "./ExploreStackGroup";
 import TripsStackGroup from "./TripsStackGroup";
 import ProfileStackGroup from "./ProfileStackGroup";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { AuthContext } from "../../hooks/AuthContext"; // Import the AuthContext
+import LoginStackGroup from "./LoginStackGroup";
+import { useContext } from "react";
 
 // This component is used to create the bottom tab navigation for the application.
 const Tab = createBottomTabNavigator(); // The createBottomTabNavigator function is used to create the bottom tab navigation.
 
 const Tabs = () => {
+  const { isUserLoggedIn } = useContext(AuthContext); // The isUserLoggedIn state variable is retrieved from the AuthContext using the useContext hook.
+
   return (
     <Tab.Navigator
       screenOptions={{
@@ -17,6 +22,7 @@ const Tabs = () => {
         tabBarAllowFontScaling: true, // allow font scaling for tab bar
         headerShown: false, // hide header
         freezeOnBlur: true, // freeze tab bar when screen is not focused
+        // lazy: true, // lazy load tab screens
       }}
     >
       <Tab.Screen
@@ -36,7 +42,7 @@ const Tabs = () => {
       />
       <Tab.Screen
         name={"TripsStackGroup"}
-        component={TripsStackGroup}
+        component={isUserLoggedIn ? TripsStackGroup : LoginStackGroup}
         options={{
           tabBarIcon: ({ focused }) => (
             <Feather
@@ -52,7 +58,7 @@ const Tabs = () => {
 
       <Tab.Screen
         name={"ProfileStackGroup"}
-        component={ProfileStackGroup}
+        component={isUserLoggedIn ? ProfileStackGroup : LoginStackGroup}
         options={{
           tabBarIcon: ({ focused }) => (
             <Feather
