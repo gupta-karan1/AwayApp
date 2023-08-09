@@ -12,6 +12,7 @@ const Tab = createBottomTabNavigator(); // The createBottomTabNavigator function
 
 const Tabs = () => {
   const { isUserLoggedIn } = useContext(AuthContext); // The isUserLoggedIn state variable is retrieved from the AuthContext using the useContext hook.
+
   return (
     <Tab.Navigator
       screenOptions={{
