@@ -55,6 +55,11 @@ const DestinationScreen = ({ route }) => {
           renderItem={renderArticleCard}
           keyExtractor={(item) => item.articleId}
           numColumns={2} // display items in 2 columns
+          removeClippedSubviews={true}
+          initialNumToRender={2}
+          maxToRenderPerBatch={2}
+          updateCellsBatchingPeriod={50}
+          windowSize={2}
           columnWrapperStyle={{
             justifyContent: "space-between",
           }}

@@ -27,7 +27,6 @@ import {
 } from "firebase/firestore";
 import { FIREBASE_DB } from "../../../firebaseConfig";
 import { useNavigation } from "@react-navigation/native";
-import { AntDesign } from "@expo/vector-icons";
 
 // PlaceScreen component for the find section within a trip
 const FindPlace = ({ route }) => {
@@ -130,19 +129,19 @@ const FindPlace = ({ route }) => {
       setIsLoading(true); // show loading indicator
       // Prepare the place data object with the form inputs etc
       const placeData = {
-        placeTitle: singlePlaceData.placeTitle,
-        placeCategory: singlePlaceData.placeCategory,
-        placeDescription: singlePlaceData.placeDescription,
-        placeAddress: singlePlaceData.placeAddress,
-        placeContact: singlePlaceData.placeContact,
-        placeHours: singlePlaceData.placeHours,
-        placeImage: singlePlaceData.placeImage,
-        placeGoogleMapLink: singlePlaceData.placeGoogleMapLink,
-        placeLongitude: singlePlaceData.placeLongitude,
-        placeLatitude: singlePlaceData.placeLatitude,
+        placeTitle: singlePlaceData.placeTitle || "",
+        placeCategory: singlePlaceData.placeCategory || "",
+        placeDescription: singlePlaceData.placeDescription || "",
+        placeAddress: singlePlaceData.placeAddress || "",
+        placeContact: singlePlaceData.placeContact || "",
+        placeHours: singlePlaceData.placeHours || "",
+        placeImage: singlePlaceData.placeImage || "",
+        placeGoogleMapLink: singlePlaceData.placeGoogleMapLink || "",
+        placeLongitude: singlePlaceData.placeLongitude || "",
+        placeLatitude: singlePlaceData.placeLatitude || "",
         placeSaved: true,
         placeId: singlePlaceData.placeId,
-        placeWebsite: singlePlaceData.placeWebsite,
+        placeWebsite: singlePlaceData.placeWebsite || "",
         userId: user.uid,
         createdAt: new Date(),
       };
@@ -169,12 +168,15 @@ const FindPlace = ({ route }) => {
             source={{ uri: singlePlaceData.placeImage }}
             imageStyle={{ borderRadius: 10 }}
           >
-            {/* <Pressable
-              onPress={() => Navigation.goBack()}
-              style={styles.backButton}
-            >
-              <AntDesign name="arrowleft" size={24} color="black" />
-            </Pressable> */}
+            <Pressable onPress={savePlace} style={styles.saveIcon}>
+              {/* {isSaved ? (
+                // <Ionicons name="bookmark" size={24} color="black" />
+                <FontAwesome name="bookmark" size={24} color="black" />
+              ) : (
+                // <Feather name="bookmark" size={24} color="black" />
+              )} */}
+              <FontAwesome name="bookmark-o" size={24} color="black" />
+            </Pressable>
           </ImageBackground>
 
           <Text style={[GlobalStyles.bodySmallRegular, styles.subtitleText]}>
@@ -288,6 +290,7 @@ export default FindPlace;
 const styles = StyleSheet.create({
   container: {
     padding: 15,
+    paddingTop: 0,
   },
   image: {
     width: "100%",
@@ -329,12 +332,14 @@ const styles = StyleSheet.create({
   button: {
     marginVertical: 10,
   },
-  backButton: {
+  saveIcon: {
     position: "absolute",
     top: 10,
-    left: 10,
-    padding: 5,
-    borderRadius: 50,
+    right: 10,
+    // height: 100,
+    // width: 100,
+    padding: 15,
+    borderRadius: 100,
     backgroundColor: "rgba(255, 255, 255, 0.8)",
     elevation: 2,
   },

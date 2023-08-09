@@ -11,7 +11,7 @@ const Find = () => {
   const { tripLocation } = route.params;
 
   return (
-    <View showsVerticalScrollIndicator={false} style={styles.container}>
+    <View>
       {/* FindDestination component, passing pathId and tripLocation as props */}
 
       <FindDestination tripLocation={tripLocation} />

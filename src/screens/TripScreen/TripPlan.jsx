@@ -42,7 +42,6 @@ const TripPlan = () => {
           onPress={() => Navigation.navigate("Trips")}
           style={styles.backButton}
         >
-          {/* <Ionicons name="arrow-back" size={24} color="black" /> */}
           <AntDesign name="arrowleft" size={24} color="black" />
         </Pressable>
         <View style={styles.textContainer}>

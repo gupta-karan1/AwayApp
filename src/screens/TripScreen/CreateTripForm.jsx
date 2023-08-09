@@ -49,9 +49,6 @@ const CreateTripForm = () => {
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState("");
   const [showInviteesPicker, setShowInviteesPicker] = useState(false);
-  // const [selectedInvitees, setSelectedInvitees] = useState([]);
-
-  // const [destinations, setDestinations] = useState([]);
 
   // State variables to manage date picker modal
   const [showStartDateModal, setShowStartDateModal] = useState(false);
@@ -246,9 +243,7 @@ const CreateTripForm = () => {
         }
       });
       setUsers(users);
-      // console.log(users);
     } catch (error) {
-      // console.error(error);
       Alert.alert("Error fetching users:", error);
     }
   };
@@ -288,9 +283,16 @@ const CreateTripForm = () => {
               // mode="dropdown"
               style={styles.picker}
               selectedValue={tripLocation}
-              onValueChange={(itemValue, itemIndex) =>
-                setTripLocation(itemValue)
-              }
+              onValueChange={(itemValue, itemIndex) => {
+                setTripLocation(itemValue);
+                // set the cover image to the destination.imageUrl when the destination is selected
+                // filter through the destinationData array to find the destination with the same destinationId as the selected destination
+                setCoverImage(
+                  destinationData.filter(
+                    (destination) => destination.destinationName === itemValue
+                  )[0].imageUrl
+                );
+              }}
             >
               {/* Render list of destinations in Picker */}
               {destinationData.map((destination) => (
@@ -320,7 +322,6 @@ const CreateTripForm = () => {
                 mode={"date"}
                 onChange={onStartChange}
                 minimumDate={startDate}
-                // display={"compact"}
               />
             )}
 
@@ -402,7 +403,6 @@ const CreateTripForm = () => {
                 selectedValue={selectedUser}
                 onValueChange={(itemValue, itemIndex) => {
                   setSelectedUser(itemValue);
-                  // console.log("Selected User:", itemValue);
                   // Add the selected user to the selectedInvitees array
                   if (
                     itemValue &&
@@ -419,7 +419,6 @@ const CreateTripForm = () => {
                   <Picker.Item
                     key={user.userId}
                     label={`${user.username} (${user.email})`}
-                    // label={`${user.username}`}
                     value={user}
                   />
                 ))}
@@ -449,12 +448,15 @@ const CreateTripForm = () => {
             <View>
               {/* Cover Image Upload */}
               <Button title="Upload Cover Image" onPress={pickImage} />
-              {/* Placeholder for Image */}
+              {/* Placeholder for Image
               {!coverImage && (
                 <View style={styles.image}>
                   <Text>Your Cover Image will Appear Here</Text>
                 </View>
               )}
+              {coverImage && (
+                <Image source={{ uri: coverImage }} style={styles.image} />
+              )} */}
               {coverImage && (
                 <Image source={{ uri: coverImage }} style={styles.image} />
               )}

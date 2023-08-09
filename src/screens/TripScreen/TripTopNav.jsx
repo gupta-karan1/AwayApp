@@ -2,7 +2,7 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import Plan from "./Plan";
 import Chat from "./Chat";
 import Find from "./Find";
-import { View } from "react-native";
+import { StatusBar, View } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import Saved from "./Saved";
 import FindDestination from "./FindDestination";
@@ -27,57 +27,57 @@ function TripTopNav({
 }) {
   // console.log("tripId " + tripId);
   return (
-    <View style={{ flex: 1 }}>
-      {/* Create Material Top Tab Navigator with 3 screens */}
-      <Tab.Navigator
-        screenOptions={{
-          // tabBarScrollEnabled: true,
-          swipeEnabled: false,
+    <Tab.Navigator
+      screenOptions={{
+        // tabBarScrollEnabled: true,
+        swipeEnabled: false,
+      }}
+    >
+      <Tab.Screen
+        name="Plan"
+        component={Plan}
+        initialParams={{
+          tripId: tripId,
+          invitees: invitees,
+          startDate: startDate,
+          endDate: endDate,
+          userId: userId,
         }}
-      >
+        options={{
+          tabBarLabel: "Plan",
+          // lazy: true,
+        }}
+      />
+      {tripType === "group" && (
         <Tab.Screen
-          name="Plan"
-          component={Plan}
+          name="Chat"
+          component={Chat}
           initialParams={{
             tripId: tripId,
             invitees: invitees,
-            startDate: startDate,
-            endDate: endDate,
             userId: userId,
           }}
-          options={{
-            tabBarLabel: "Plan",
-            lazy: true,
-          }}
         />
-        {tripType === "group" && (
-          <Tab.Screen
-            name="Chat"
-            component={Chat}
-            initialParams={{
-              tripId: tripId,
-              invitees: invitees,
-              userId: userId,
-            }}
-          />
-        )}
+      )}
 
-        <Tab.Screen
-          name="FindStack"
-          component={FindStack}
-          // tripLocation prop as initial parameter
-          initialParams={{
-            tripLocation: tripLocation,
-            tripId: tripId,
-            userId: userId,
-          }}
-          options={{
-            tabBarLabel: "Find",
-            lazy: true,
-          }}
-        />
-      </Tab.Navigator>
-    </View>
+      <Tab.Screen
+        name="FindStack"
+        component={FindStack}
+        // tripLocation prop as initial parameter
+        initialParams={{
+          tripLocation: tripLocation,
+          tripId: tripId,
+          userId: userId,
+        }}
+        options={{
+          tabBarLabel: "Find",
+          // lazy: true,
+          tabBarStyle: {
+            marginBottom: -StatusBar.currentHeight || 0,
+          },
+        }}
+      />
+    </Tab.Navigator>
   );
 }
 
@@ -91,9 +91,13 @@ function FindStack() {
         animation: "slide_from_right",
         headerStyle: {
           backgroundColor: "#F9F9F9",
-          height: 80,
         },
-        headerMode: "screen",
+        headerShadowVisible: false,
+        headerTitleAlign: "center",
+        headerBackTitleVisible: false,
+        // headerStyle: {
+        //   fontSize: 15, // Adjust the font size according to your preference
+        // },
       }}
     >
       <Stack.Screen
@@ -101,11 +105,7 @@ function FindStack() {
         component={Find}
         initialParams={{ tripLocation }}
         options={{
-          // headerBackVisible: "false",
           headerTitle: "Destination",
-          headerTitleAlign: "center",
-          // headerLeft: undefined,
-          // headerLeft: () => null,
           headerLeft: () => <View></View>,
         }}
       />
@@ -115,7 +115,6 @@ function FindStack() {
         component={FindArticle}
         options={{
           headerTitle: "Article",
-          headerTitleAlign: "center",
         }}
       />
       <Stack.Screen
@@ -123,7 +122,6 @@ function FindStack() {
         component={FindPlace}
         options={{
           headerTitle: "Place",
-          headerTitleAlign: "center",
         }}
         initialParams={{ tripId: tripId, userId: userId }}
       />

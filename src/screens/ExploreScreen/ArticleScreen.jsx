@@ -60,6 +60,11 @@ const ArticleScreen = ({ route }) => {
           renderItem={renderPlaceCard}
           keyExtractor={(item) => item.placeId}
           numColumns={2} // display items in 2 columns
+          removeClippedSubviews={true}
+          initialNumToRender={2}
+          maxToRenderPerBatch={2}
+          updateCellsBatchingPeriod={50}
+          windowSize={2}
           columnWrapperStyle={{
             justifyContent: "space-between", // add space between columns
           }}

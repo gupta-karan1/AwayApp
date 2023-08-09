@@ -91,8 +91,6 @@ const FindDestination = ({ tripLocation }) => {
   };
 
   const handleSearchChange = (text) => {
-    // setSearchTripLocation(text);
-    // setPathId(`destinations/${text.toLowerCase()}/articles`);
     if (text) {
       // Fetch destinations only when there is some text in the search field
       fetchDestinations(text);
@@ -137,6 +135,11 @@ const FindDestination = ({ tripLocation }) => {
           renderItem={renderArticleCard}
           keyExtractor={(item) => item.articleId} // extract unique key for each item
           numColumns={2} // display items in 2 columns
+          removeClippedSubviews={true}
+          initialNumToRender={2}
+          maxToRenderPerBatch={2}
+          updateCellsBatchingPeriod={100}
+          windowSize={2}
           columnWrapperStyle={{
             justifyContent: "space-between", //items spaced evenly
           }}
@@ -239,12 +242,12 @@ const FindDestination = ({ tripLocation }) => {
 export default FindDestination;
 
 const styles = StyleSheet.create({
-  image: {
-    height: 250,
-    // width: 365,
-    marginTop: 20,
-    borderRadius: 5,
-  },
+  // image: {
+  //   height: 250,
+  //   // width: 365,
+  //   marginTop: 20,
+  //   borderRadius: 5,
+  // },
   subtitleText: {
     marginTop: 30,
     marginBottom: 10,
