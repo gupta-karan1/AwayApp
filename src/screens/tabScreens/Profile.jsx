@@ -1,21 +1,14 @@
-import { StyleSheet, View, Button } from "react-native";
+import { StyleSheet, View, Button, Alert } from "react-native";
 import { signOut } from "firebase/auth";
 import { FIREBASE_AUTH } from "../../../firebaseConfig";
 import { useNavigation } from "@react-navigation/native";
 
 export default function Profile() {
-  // Navigation object from useNavigation hook
-  const navigation = useNavigation();
-
   // Function to handle user logout
   const handleLogout = () => {
     signOut(FIREBASE_AUTH)
       .then(() => {
-        // console.log("Sign-out successful.");
-        // Sign out successful alert
-        alert("Sign-out successful.");
-        // Navigate to the Login screen
-        navigation.navigate("Login");
+        Alert.alert("Sign-out successful.");
       })
       .catch((error) => {
         console.log(error);

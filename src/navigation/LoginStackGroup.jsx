@@ -1,9 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Login from "../screens/Auth/Login";
 import Register from "../screens/Auth/Register";
-import ExploreStackGroup from "./ExploreStackGroup";
-import TripsStackGroup from "./TripsStackGroup";
-import ProfileStackGroup from "./ProfileStackGroup";
 
 const LoginStack = createNativeStackNavigator(); // The createNativeStackNavigator function is used to create a stack navigator for the login screens.
 

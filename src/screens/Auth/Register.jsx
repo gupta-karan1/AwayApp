@@ -5,11 +5,13 @@ import {
   TextInput,
   Button,
   ActivityIndicator,
+  Alert,
 } from "react-native";
 import React, { useState } from "react";
 import { useAuth } from "../../../hooks/useAuth";
 import { collection, addDoc } from "firebase/firestore";
 import { FIREBASE_DB } from "../../../firebaseConfig";
+// import { useNavigation } from "@react-navigation/native";
 
 const Register = () => {
   // State variables to store user input
@@ -19,6 +21,9 @@ const Register = () => {
 
   // Custom hook to register user
   const { register, loading } = useAuth();
+
+  // // Navigation object from useNavigation hook
+  // const Navigation = useNavigation();
 
   // Function to handle registration
   const handleRegister = async () => {
@@ -38,7 +43,9 @@ const Register = () => {
       await addDoc(usersCollectionRef, userData);
 
       // User registration and 'users' collection creation successful
-      console.log("User registered and 'users' collection created!");
+      // console.log("User registered and 'users' collection created!");
+      Alert.alert("New user registered successfully!");
+      // Navigation.navigate("Login");
     } catch (error) {
       // error alert
       alert("Registration failed: ", error.message);
@@ -59,6 +66,7 @@ const Register = () => {
           value={email}
           onChangeText={(text) => setEmail(text)}
           style={styles.input}
+          autoCapitalize="none"
           inputMode="email"
         />
         <TextInput
