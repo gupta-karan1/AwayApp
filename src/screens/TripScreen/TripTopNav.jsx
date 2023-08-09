@@ -4,12 +4,10 @@ import Chat from "./Chat";
 import Find from "./Find";
 import { StatusBar, View } from "react-native";
 import { useRoute } from "@react-navigation/native";
-import Saved from "./Saved";
 import FindDestination from "./FindDestination";
 import FindArticle from "./FindArticle";
 import FindPlace from "./FindPlace";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Itinerary from "./Itinerary";
 
 // Create Material Top Tab Navigator instance for Trip Screen
 const Tab = createMaterialTopTabNavigator();
@@ -45,7 +43,7 @@ function TripTopNav({
         }}
         options={{
           tabBarLabel: "Plan",
-          // lazy: true,
+          lazy: true,
         }}
       />
       {tripType === "group" && (
@@ -71,7 +69,7 @@ function TripTopNav({
         }}
         options={{
           tabBarLabel: "Find",
-          // lazy: true,
+          lazy: true,
           tabBarStyle: {
             marginBottom: -StatusBar.currentHeight || 0,
           },

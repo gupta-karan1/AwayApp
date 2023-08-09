@@ -26,6 +26,7 @@ const useCategoryFeed = (articleCategory) => {
       );
       // limit is used to limit the number of documents fetched from the collection. This is useful for testing purposes, but it should be removed for production.
       const q = query(articlesRef, limit(2)); // limit for testing purposes only - remove for production
+      // const q = query(articlesRef); // limit for testing purposes only - remove for production
 
       // const q = query(articlesRef); // use without limit for production
       const querySnapshot = await getDocs(q); // The getDocs function is used to fetch the documents from the collection based on the query created earlier.

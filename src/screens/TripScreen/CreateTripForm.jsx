@@ -26,14 +26,12 @@ import {
   query,
   where,
   getDocs,
-  collectionGroup,
 } from "firebase/firestore";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import uuid from "react-native-uuid";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import moment from "moment";
 import useDestinationFeed from "../../../hooks/useDestinationFeed";
-import { PickerIOS } from "@react-native-picker/picker";
 import { Ionicons } from "@expo/vector-icons";
 
 // Component to render the Trip Form
@@ -82,10 +80,11 @@ const CreateTripForm = () => {
 
     // Launch image picker
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      // mediaTypes: ImagePicker.MediaTypeOptions.All,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [4, 3],
-      quality: 1, // 0 is lowest and 1 is highest quality
+      // quality: 1, // 0 is lowest and 1 is highest quality
     });
 
     // Check if image is selected
@@ -100,7 +99,14 @@ const CreateTripForm = () => {
       delete result["cancelled"];
     } else {
       // If no image selected set coverImage to null
-      setCoverImage(null);
+      // setCoverImage(null);
+      // if no cover image is selected, set the cover image to the destination.imageUrl
+      setCoverImage(
+        destinationData.filter(
+          (destination) => destination.destinationName === tripLocation
+        )[0].imageUrl
+      );
+
       setInterval(() => {
         setIsLoading(false);
       }, 1000);

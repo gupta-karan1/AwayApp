@@ -4,14 +4,13 @@ import {
   View,
   SectionList,
   Modal,
-  Button,
   Pressable,
   Alert,
   TouchableOpacity,
   Image,
   ActivityIndicator,
 } from "react-native";
-import React, { useContext, useCallback } from "react";
+import { useCallback } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import moment from "moment";
 import { useState } from "react";
@@ -26,7 +25,6 @@ import {
   addDoc,
   setDoc,
 } from "firebase/firestore";
-import { AuthContext } from "../../../hooks/AuthContext";
 import { FlatList, ScrollView } from "react-native-gesture-handler";
 import SavedPlaceCard from "../../components/TripsComp/SavedPlaceCard";
 import { Ionicons } from "@expo/vector-icons";
@@ -66,8 +64,7 @@ const Itinerary = ({ startDate, endDate, tripId, userId, invitees }) => {
   };
 
   //   get saved places from firebase:
-  // Access user object from AuthContext to get user id
-  // const { user } = useContext(AuthContext);
+
   const getSavedPlaces = async () => {
     try {
       setIsLoading(true); // show loading indicator
@@ -266,7 +263,7 @@ const Itinerary = ({ startDate, endDate, tripId, userId, invitees }) => {
           places: selectedPlaces, // Convert selectedPlace to an array
         };
         await addDoc(itineraryRef, itineraryData);
-        console.log(itineraryData);
+        // console.log(itineraryData);
 
         Alert.alert("Success", "Place added to the itinerary successfully!");
       }
@@ -364,16 +361,10 @@ const Itinerary = ({ startDate, endDate, tripId, userId, invitees }) => {
           renderItem={({ item, section }) => (
             <View style={styles.item}>
               <FlatList
-                // contentContainerStyle={{
-                //   marginBottom: 60,
-                // }}
                 data={item["places"] || []}
                 renderItem={({ item }) => (
                   <SavedPlaceCard
                     placeItem={item}
-                    // onDelete={() =>
-                    //   handleDeletePlaceItem(item.placeId, section.title)
-                    // }
                     onDelete={() => confirmDelete(item, section)}
                   />
                 )}
