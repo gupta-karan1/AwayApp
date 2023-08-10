@@ -94,14 +94,14 @@ const FindPlace = ({ route }) => {
       await addDoc(collection(tripRef, "saved"), placeData);
 
       Alert.alert(
-        "Place Successfully Saved",
-        "Continue exploring or head to the Itinerary to start planning your trip",
+        "Saved to Plan Section",
+        "Plan your trip or continue exploring!",
         [
           {
             text: "Continue",
             onPress: () => {},
             style: "cancel",
-            text: "Itinerary",
+            text: "Plan",
             onPress: () => {
               //navigate to the saved places screen
               navigation.navigate("Plan");
@@ -155,7 +155,6 @@ const FindPlace = ({ route }) => {
     }
   };
 
-  const Navigation = useNavigation();
   return (
     <View style={styles.container}>
       {loading ? (
@@ -168,20 +167,30 @@ const FindPlace = ({ route }) => {
             source={{ uri: singlePlaceData.placeImage }}
             imageStyle={{ borderRadius: 10 }}
           >
-            <Pressable onPress={savePlace} style={styles.saveIcon}>
+            {/* <Pressable onPress={savePlace} style={styles.saveIcon}>
               {/* {isSaved ? (
                 // <Ionicons name="bookmark" size={24} color="black" />
                 <FontAwesome name="bookmark" size={24} color="black" />
               ) : (
                 // <Feather name="bookmark" size={24} color="black" />
               )} */}
-              <FontAwesome name="bookmark-o" size={24} color="black" />
-            </Pressable>
+            {/* <FontAwesome name="bookmark-o" size={24} color="black" />
+            </Pressable> */}
           </ImageBackground>
-
-          <Text style={[GlobalStyles.bodySmallRegular, styles.subtitleText]}>
-            {singlePlaceData.placeCategory}
-          </Text>
+          <View style={styles.textContainer}>
+            <Text style={[GlobalStyles.bodySmallRegular, styles.subtitleText]}>
+              {singlePlaceData.placeCategory}
+            </Text>
+            <View>
+              {isLoading ? (
+                <ActivityIndicator size="large" />
+              ) : (
+                <Pressable style={styles.saveButton} onPress={savePlace}>
+                  <Text>Save Place</Text>
+                </Pressable>
+              )}
+            </View>
+          </View>
           <Text style={[GlobalStyles.titleLargeRegular, styles.titleText]}>
             {singlePlaceData.placeTitle}
           </Text>
@@ -271,14 +280,14 @@ const FindPlace = ({ route }) => {
               </Text>
             </View>
           )}
-          <View style={styles.button}>
+          {/* <View style={styles.button}>
             {/* Save Place button not functional yet */}
-            {isLoading ? (
-              <ActivityIndicator size="large" />
-            ) : (
-              <Button title="Save Place" type="submit" onPress={savePlace} />
-            )}
-          </View>
+          {/* //   {isLoading ? ( */}
+          {/* //     <ActivityIndicator size="large" />
+          //   ) : (
+          //     <Button title="Save Place" type="submit" onPress={savePlace} />
+          //   )}
+          // </View> */}
         </ScrollView>
       )}
     </View>
@@ -332,16 +341,29 @@ const styles = StyleSheet.create({
   button: {
     marginVertical: 10,
   },
-  saveIcon: {
-    position: "absolute",
-    top: 10,
-    right: 10,
-    // height: 100,
-    // width: 100,
-    padding: 15,
-    borderRadius: 100,
-    backgroundColor: "rgba(255, 255, 255, 0.8)",
-    elevation: 2,
+  // saveIcon: {
+  //   position: "absolute",
+  //   top: 10,
+  //   right: 10,
+  //   // height: 100,
+  //   // width: 100,
+  //   padding: 15,
+  //   borderRadius: 100,
+  //   backgroundColor: "rgba(255, 255, 255, 0.8)",
+  //   elevation: 2,
+  // },
+  saveButton: {
+    backgroundColor: "lightblue",
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    borderRadius: 5,
+  },
+  textContainer: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 20,
+    alignItems: "flex-end",
   },
 });
 

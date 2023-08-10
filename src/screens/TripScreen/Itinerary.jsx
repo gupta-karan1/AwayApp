@@ -29,6 +29,7 @@ import { FlatList, ScrollView } from "react-native-gesture-handler";
 import SavedPlaceCard from "../../components/TripsComp/SavedPlaceCard";
 import { Ionicons } from "@expo/vector-icons";
 import GlobalStyles from "../../GlobalStyles";
+import { useNavigation } from "@react-navigation/native";
 
 const Itinerary = ({ startDate, endDate, tripId, userId, invitees }) => {
   // State variables for modal visibility and selected place
@@ -345,10 +346,24 @@ const Itinerary = ({ startDate, endDate, tripId, userId, invitees }) => {
       setDeleteLoading(false);
     }
   };
+  const Navigation = useNavigation();
 
   return (
     <View>
       {loading && <ActivityIndicator size={"large"} />}
+      {!loading && savedPlaces.length === 0 && (
+        <Pressable
+          style={styles.instructionText}
+          onPress={() =>
+            Navigation.navigate("FindStack", {
+              screen: "Find",
+            })
+          }
+        >
+          <Text>You don't have any saved places yet.</Text>
+          <Text>Add a place from the Find Section.</Text>
+        </Pressable>
+      )}
       {!loading && (
         <SectionList
           contentContainerStyle={styles.contentContainer}
@@ -568,5 +583,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 10,
     marginHorizontal: 10,
+  },
+  instructionText: {
+    padding: 10,
+    alignItems: "center",
+    backgroundColor: "lightgrey",
+    margin: 10,
+    borderRadius: 10,
   },
 });

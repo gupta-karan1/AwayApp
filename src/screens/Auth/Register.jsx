@@ -6,6 +6,7 @@ import {
   Button,
   ActivityIndicator,
   Alert,
+  Text,
 } from "react-native";
 import React, { useState } from "react";
 import { useAuth } from "../../../hooks/useAuth";
@@ -49,12 +50,14 @@ const Register = () => {
   return (
     <KeyboardAvoidingView style={styles.container} keyboardVerticalOffset={40}>
       <View style={styles.inputContainer}>
+        <Text style={styles.label}>Username:</Text>
         <TextInput
           placeholder="Name"
           value={userName}
           onChangeText={(text) => setUserName(text)}
           style={styles.input}
         />
+        <Text style={styles.label}>Email:</Text>
         <TextInput
           placeholder="Email"
           value={email}
@@ -63,6 +66,7 @@ const Register = () => {
           autoCapitalize="none"
           inputMode="email"
         />
+        <Text style={styles.label}>Password:</Text>
         <TextInput
           placeholder="Password"
           value={password}
@@ -102,7 +106,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 10,
     borderRadius: 10,
-    marginTop: 5,
+    marginBottom: 20,
   },
   buttonContainer: {
     width: "100%",
@@ -115,6 +119,9 @@ const styles = StyleSheet.create({
     width: "100%",
     padding: 15,
     borderRadius: 10,
+  },
+  label: {
+    marginBottom: 5,
   },
 });
 

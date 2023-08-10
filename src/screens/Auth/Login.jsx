@@ -4,7 +4,9 @@ import {
   KeyboardAvoidingView,
   TextInput,
   Button,
+  Text,
   ActivityIndicator,
+  Pressable,
 } from "react-native";
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
@@ -37,6 +39,7 @@ const Login = () => {
   return (
     <KeyboardAvoidingView style={styles.container} keyboardVerticalOffset={5}>
       <View style={styles.inputContainer}>
+        <Text style={styles.label}>Email:</Text>
         <TextInput
           placeholder="Email"
           value={email}
@@ -45,6 +48,7 @@ const Login = () => {
           inputMode="email"
           autoCapitalize="none"
         />
+        <Text style={styles.label}>Password:</Text>
         <TextInput
           placeholder="Password"
           value={password}
@@ -60,13 +64,10 @@ const Login = () => {
           <Button title="Login" onPress={handleLogin} />
         </View>
       )}
-      <View style={styles.button}>
-        <Button
-          title="Register"
-          // Navigate to the Register screen
-          onPress={() => navigation.navigate("Register")}
-        />
-      </View>
+
+      <Pressable onPress={() => navigation.navigate("Register")}>
+        <Text style={styles.register}>Don't have an account? Register!</Text>
+      </Pressable>
     </KeyboardAvoidingView>
   );
 };
@@ -87,7 +88,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 10,
     borderRadius: 10,
-    marginTop: 5,
+    marginBottom: 20,
   },
   buttonContainer: {
     width: "60%",
@@ -99,6 +100,15 @@ const styles = StyleSheet.create({
     width: "80%",
     padding: 15,
     borderRadius: 30,
+  },
+  label: {
+    marginTop: 5,
+    marginBottom: 5,
+  },
+  register: {
+    color: "#0782F9",
+    marginTop: 20,
+    fontSize: 16,
   },
 });
 

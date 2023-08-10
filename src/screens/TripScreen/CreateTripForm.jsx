@@ -33,6 +33,7 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import moment from "moment";
 import useDestinationFeed from "../../../hooks/useDestinationFeed";
 import { Ionicons } from "@expo/vector-icons";
+import { PickerIOS } from "@react-native-picker/picker";
 
 // Component to render the Trip Form
 const CreateTripForm = () => {
@@ -404,8 +405,10 @@ const CreateTripForm = () => {
           {showInviteesPicker && tripType === "group" && (
             <View>
               <Text style={styles.titleText}>Select Invitees:</Text>
-              <Picker
+
+              <PickerIOS
                 style={styles.picker}
+                // mode="dropdown"
                 selectedValue={selectedUser}
                 onValueChange={(itemValue, itemIndex) => {
                   setSelectedUser(itemValue);
@@ -420,7 +423,7 @@ const CreateTripForm = () => {
                   }
                 }}
               >
-                <Picker.Item label="Select an invitee" value="" />
+                <PickerIOS.Item label="Select an invitee" value="" />
                 {users.map((user) => (
                   <Picker.Item
                     key={user.userId}
@@ -428,7 +431,8 @@ const CreateTripForm = () => {
                     value={user}
                   />
                 ))}
-              </Picker>
+              </PickerIOS>
+
               <View style={styles.invitees}>
                 {invitees.map((invitee) => (
                   <View style={styles.inviteeText} key={invitee.userId}>
