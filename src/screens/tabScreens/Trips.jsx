@@ -98,13 +98,15 @@ const Trips = () => {
 
   const MyTrips = () => {
     return (
-      <ScrollView
-        style={styles.tripContainer}
-      >
-        <Text style={GlobalStyles.titleLargeRegular}>My Trips</Text>
+      <ScrollView style={styles.tripContainer}>
         {tripData.length > 0 &&
           tripData.map((trip) => {
-            return <TripCard key={trip.tripId} tripItem={trip} />;
+            return (
+              <View>
+                <Text style={GlobalStyles.titleLargeRegular}>My Trips</Text>
+                <TripCard key={trip.tripId} tripItem={trip} />
+              </View>
+            );
           })}
       </ScrollView>
     );
@@ -113,10 +115,16 @@ const Trips = () => {
   const InvitedTrips = () => {
     return (
       <View style={styles.tripContainer}>
-        <Text style={GlobalStyles.titleLargeRegular}>Invited Trips</Text>
         {invitedTrips.length > 0 &&
           invitedTrips.map((trip) => {
-            return <TripCard key={trip.tripId} tripItem={trip} />;
+            return (
+              <View>
+                <Text style={GlobalStyles.titleLargeRegular}>
+                  Invited Trips
+                </Text>
+                <TripCard key={trip.tripId} tripItem={trip} />
+              </View>
+            );
           })}
       </View>
     );
@@ -125,20 +133,8 @@ const Trips = () => {
   const AllTrips = () => {
     return (
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.tripContainer}>
-          <Text style={GlobalStyles.titleLargeRegular}>My Trips</Text>
-          {tripData.length > 0 &&
-            tripData.map((trip) => {
-              return <TripCard key={trip.tripId} tripItem={trip} />;
-            })}
-        </View>
-        <View style={styles.tripContainer}>
-          <Text style={GlobalStyles.titleLargeRegular}>Invited Trips</Text>
-          {invitedTrips.length > 0 &&
-            invitedTrips.map((trip) => {
-              return <TripCard key={trip.tripId} tripItem={trip} />;
-            })}
-        </View>
+        <MyTrips />
+        <InvitedTrips />
       </ScrollView>
     );
   };
@@ -169,9 +165,15 @@ const Trips = () => {
           <Text>Invited</Text>
         </Pressable>
       </View>
-      {loading ? (
-        <ActivityIndicator size={"large"} />
-      ) : (
+      {loading && <ActivityIndicator size="large" />}
+      {!loading && tripData.length === 0 && invitedTrips.length === 0 && (
+        <Pressable style={styles.emptyContainer} onPress={handleAddTrip}>
+          <Text style={{ textAlign: "center" }}>
+            You don't have any trips yet. Start planning your first trip now!
+          </Text>
+        </Pressable>
+      )}
+      {!loading && tripData && invitedTrips && (
         <ScrollView showsVerticalScrollIndicator={false}>
           {tabView === "all" && <AllTrips />}
           {tabView === "personal" && <MyTrips />}
@@ -180,7 +182,7 @@ const Trips = () => {
       )}
       {/* FAB to add a new trip */}
       <Pressable style={styles.fabButton} onPress={handleAddTrip}>
-        <Text style={styles.fabText}>+ Add Trip</Text>
+        <Text style={styles.fabText}>Create Trip</Text>
       </Pressable>
     </View>
   );
@@ -230,6 +232,12 @@ const styles = StyleSheet.create({
   },
   selected: {
     backgroundColor: "lightblue",
+  },
+  emptyContainer: {
+    backgroundColor: "lightgrey",
+    padding: 20,
+    borderRadius: 10,
+    elevation: 2,
   },
 });
 

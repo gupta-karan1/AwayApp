@@ -24,7 +24,7 @@ const FindDestination = ({ tripLocation }) => {
     tripLocation || "Paris"
   );
 
-  const [searchResults, setSearchResults] = useState([]);
+  // const [searchResults, setSearchResults] = useState([]);
   // pathId for article data based on tripLocation. Lowercase to match database.
   const [pathId, setPathId] = useState(
     `destinations/${searchTripLocation.toLowerCase()}/articles`
@@ -63,41 +63,41 @@ const FindDestination = ({ tripLocation }) => {
   };
 
   // Function to fetch destinations based on search query
-  const fetchDestinations = async (queryText) => {
-    try {
-      const firstLetterCapitalized = queryText.charAt(0).toUpperCase();
-      const capitalizedLocation = firstLetterCapitalized + queryText.slice(1);
+  // const fetchDestinations = async (queryText) => {
+  //   try {
+  //     const firstLetterCapitalized = queryText.charAt(0).toUpperCase();
+  //     const capitalizedLocation = firstLetterCapitalized + queryText.slice(1);
 
-      const destinationRef = query(
-        collectionGroup(FIREBASE_DB, "destinations"),
-        where("destinationName", ">=", capitalizedLocation), // Use startAt for "startsWith" query
-        where("destinationName", "<", capitalizedLocation + "\uf8ff") // Use endAt for "endsWith" query
-      );
+  //     const destinationRef = query(
+  //       collectionGroup(FIREBASE_DB, "destinations"),
+  //       where("destinationName", ">=", capitalizedLocation), // Use startAt for "startsWith" query
+  //       where("destinationName", "<", capitalizedLocation + "\uf8ff") // Use endAt for "endsWith" query
+  //     );
 
-      const q = query(destinationRef);
-      const querySnapshot = await getDocs(q);
+  //     const q = query(destinationRef);
+  //     const querySnapshot = await getDocs(q);
 
-      const results = [];
-      querySnapshot.forEach((doc) => {
-        results.push(doc.data());
-      });
-      setSearchResults(results);
-    } catch (error) {
-      console.log("Error:" + error);
-      Alert.alert("Error", error.message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  //     const results = [];
+  //     querySnapshot.forEach((doc) => {
+  //       results.push(doc.data());
+  //     });
+  //     setSearchResults(results);
+  //   } catch (error) {
+  //     console.log("Error:" + error);
+  //     Alert.alert("Error", error.message);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
 
-  const handleSearchChange = (text) => {
-    if (text) {
-      // Fetch destinations only when there is some text in the search field
-      fetchDestinations(text);
-    } else {
-      setSearchResults([]); // Clear search results when search field is empty
-    }
-  };
+  // const handleSearchChange = (text) => {
+  //   if (text) {
+  //     // Fetch destinations only when there is some text in the search field
+  //     fetchDestinations(text);
+  //   } else {
+  //     setSearchResults([]); // Clear search results when search field is empty
+  //   }
+  // };
 
   const { loading, articleData } = useArticleData(pathId);
 
@@ -146,13 +146,13 @@ const FindDestination = ({ tripLocation }) => {
           contentContainerStyle={{ paddingHorizontal: 15 }} // add padding to left and right
           ListHeaderComponent={
             <View>
-              <TextInput
+              {/* <TextInput
                 style={styles.input}
                 placeholder="Search Destination"
                 onChangeText={handleSearchChange} // Add onChangeText handler
-              />
-              <View style={styles.searchResultContainer}>
-                {searchResults.map((result) => (
+              /> */}
+              {/* <View style={styles.searchResultContainer}> */}
+              {/* {searchResults.map((result) => (
                   <TouchableOpacity
                     key={result.destinationName}
                     onPress={() => {
@@ -168,8 +168,8 @@ const FindDestination = ({ tripLocation }) => {
                       {result.destinationName}
                     </Text>
                   </TouchableOpacity>
-                ))}
-              </View>
+                ))} */}
+              {/* </View> */}
               {isLoading ? (
                 <ActivityIndicator />
               ) : (

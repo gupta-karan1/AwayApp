@@ -387,6 +387,7 @@ const Itinerary = ({ startDate, endDate, tripId, userId, invitees }) => {
               />
             </View>
           )}
+          stickySectionHeadersEnabled={true}
           renderSectionHeader={({ section: { title } }) => (
             <View style={styles.headerContainer}>
               <Text style={[styles.dateTitle, GlobalStyles.titleLargeRegular]}>
@@ -516,7 +517,8 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     width: "100%",
     alignItems: "center",
-    marginTop: 20,
+    backgroundColor: "#F6F6F6",
+    padding: 10,
   },
   button: {
     backgroundColor: "lightblue",
