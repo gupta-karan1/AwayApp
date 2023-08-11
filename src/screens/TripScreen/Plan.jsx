@@ -9,7 +9,7 @@ import { useState } from "react";
 const Plan = () => {
   const route = useRoute();
   const { tripId, startDate, endDate, userId, invitees } = route.params;
-  // console.log(tripId);
+
   const [selectedItem, setSelectedItem] = useState("Itinerary"); // Default selected item is "Plan"
 
   // Function to navigate to the Plan (Itinerary) screen

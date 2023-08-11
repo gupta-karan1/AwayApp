@@ -78,7 +78,7 @@ const Trips = () => {
         setInvitedTrips(data2);
       }
     } catch (error) {
-      Alert.alert("Error saving trip details:", error.message);
+      Alert.alert("Error getting trip details:", error.message);
     } finally {
       setLoading(false);
     }

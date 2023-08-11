@@ -23,7 +23,6 @@ function TripTopNav({
   tripType,
   userId,
 }) {
-  // console.log("tripId " + tripId);
   return (
     <Tab.Navigator
       screenOptions={{

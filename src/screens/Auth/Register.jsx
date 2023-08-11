@@ -20,13 +20,17 @@ const Register = () => {
   const [userName, setUserName] = useState("");
 
   // Custom hook to register user
-  const { register, loading } = useAuth();
+  const { register, loading, addDisplayName } = useAuth();
 
   // Function to handle registration
   const handleRegister = async () => {
     try {
-      // Reguster function to create a new user with the provided email and password
+      // Register function to create a new user with the provided email and password
       const userCredential = await register(email, password);
+      await addDisplayName(userCredential.user, userName);
+
+      // Set the user's display name to the username
+      // userCredential.user.displayName = userName;
 
       // Create a new document in the 'users' collection in Firestore
       const userData = {
@@ -34,6 +38,8 @@ const Register = () => {
         email: email,
         username: userName,
       };
+
+      // create a new users collection in the database
 
       // Add the new document to the 'users' collection
       const usersCollectionRef = collection(FIREBASE_DB, "users");
@@ -43,6 +49,7 @@ const Register = () => {
       Alert.alert("New user registered successfully!");
     } catch (error) {
       // error alert
+      console.log(error);
       alert("Registration failed: ", error.message);
     }
   };
