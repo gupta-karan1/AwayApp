@@ -448,6 +448,8 @@ const Itinerary = ({ startDate, endDate, tripId, userId, invitees }) => {
                       onToggleSelection={toggleSelection}
                     />
                   ))}
+              </ScrollView>
+              <View style={styles.modalFooter}>
                 <Pressable
                   style={styles.submitButton}
                   title="Submit"
@@ -455,7 +457,7 @@ const Itinerary = ({ startDate, endDate, tripId, userId, invitees }) => {
                 >
                   <Text>Submit</Text>
                 </Pressable>
-              </ScrollView>
+              </View>
             </View>
           </View>
         </Modal>
@@ -526,14 +528,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderRadius: 5,
   },
-  submitButton: {
-    backgroundColor: "lightblue",
-    paddingVertical: 15,
-    paddingHorizontal: 15,
-    borderRadius: 50,
-    alignItems: "center",
-    marginTop: 30,
-  },
   placeCard: {
     flexDirection: "row",
     alignItems: "center",
@@ -592,5 +586,16 @@ const styles = StyleSheet.create({
     backgroundColor: "lightgrey",
     margin: 10,
     borderRadius: 10,
+  },
+  submitButton: {
+    backgroundColor: "lightblue",
+    paddingVertical: 15,
+    paddingHorizontal: 15,
+    borderRadius: 50,
+    alignItems: "center",
+    marginTop: 15,
+  },
+  modalFooter: {
+    width: "100%",
   },
 });

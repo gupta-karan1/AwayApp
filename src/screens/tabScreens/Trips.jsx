@@ -99,15 +99,14 @@ const Trips = () => {
   const MyTrips = () => {
     return (
       <ScrollView style={styles.tripContainer}>
-        {tripData.length > 0 &&
-          tripData.map((trip) => {
-            return (
-              <View>
-                <Text style={GlobalStyles.titleLargeRegular}>My Trips</Text>
-                <TripCard key={trip.tripId} tripItem={trip} />
-              </View>
-            );
-          })}
+        {tripData.length > 0 && (
+          <View>
+            <Text style={GlobalStyles.titleLargeRegular}>My Trips</Text>
+            {tripData.map((trip) => (
+              <TripCard key={trip.tripId} tripItem={trip} />
+            ))}
+          </View>
+        )}
       </ScrollView>
     );
   };
@@ -115,17 +114,14 @@ const Trips = () => {
   const InvitedTrips = () => {
     return (
       <View style={styles.tripContainer}>
-        {invitedTrips.length > 0 &&
-          invitedTrips.map((trip) => {
-            return (
-              <View>
-                <Text style={GlobalStyles.titleLargeRegular}>
-                  Invited Trips
-                </Text>
-                <TripCard key={trip.tripId} tripItem={trip} />
-              </View>
-            );
-          })}
+        {invitedTrips.length > 0 && (
+          <View>
+            <Text style={GlobalStyles.titleLargeRegular}>Invited Trips</Text>
+            {invitedTrips.map((trip) => (
+              <TripCard key={trip.tripId} tripItem={trip} />
+            ))}
+          </View>
+        )}
       </View>
     );
   };
