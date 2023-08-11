@@ -115,7 +115,7 @@ const Chat = () => {
 
   return (
     <GiftedChat
-      // isTyping={true}
+      isTyping={true}
       showAvatarForEveryMessage={true}
       showUserAvatar={true}
       messages={messages}
