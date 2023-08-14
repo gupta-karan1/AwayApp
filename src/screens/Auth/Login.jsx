@@ -55,6 +55,7 @@ const Login = () => {
           onChangeText={(text) => setPassword(text)}
           style={styles.input}
           secureTextEntry
+          autoCapitalize="none"
         />
       </View>
       {loading ? (

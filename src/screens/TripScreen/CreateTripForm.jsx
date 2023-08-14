@@ -408,8 +408,6 @@ const CreateTripForm = () => {
 
               <Picker
                 style={styles.picker}
-                // mode="dropdown"
-
                 selectedValue={selectedUser}
                 onValueChange={(itemValue, itemIndex) => {
                   setSelectedUser(itemValue);

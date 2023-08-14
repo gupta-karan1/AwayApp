@@ -470,9 +470,8 @@ export default Itinerary;
 
 const styles = StyleSheet.create({
   contentContainer: {
-    paddingBottom: 100,
+    paddingBottom: 250,
     paddingHorizontal: 15,
-    // paddingTop: 15,
   },
   checklistItem: {
     flexDirection: "row",

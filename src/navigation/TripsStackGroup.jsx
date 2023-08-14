@@ -37,11 +37,6 @@ const TripsStackGroup = () => {
         options={{
           headerShown: false,
           headerTitle: "Trip Plan",
-          // headerLeft: () => (
-          //   <Pressable onPress={() => Navigation.navigate("Trips")}>
-          //     <Ionicons name="arrow-back" size={24} color="black" />
-          //   </Pressable>
-          // ),
         }}
       />
     </TripsStack.Navigator>

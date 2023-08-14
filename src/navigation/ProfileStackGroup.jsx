@@ -1,11 +1,24 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Profile from "../screens/tabScreens/Profile";
-
+import { MaterialIcons } from "@expo/vector-icons";
+import { signOut } from "firebase/auth";
+import { FIREBASE_AUTH } from "../../firebaseConfig";
+import { Pressable, Alert } from "react-native";
+import CreateTravelBoard from "../screens/ProfileScreen/CreateTravelBoard";
 // create stack navigator for profile screen group to allow for navigation between profile, login, and register screens
 const ProfileStack = createNativeStackNavigator(); // create stack navigator
 
 // create profile stack group
 const ProfileStackGroup = () => {
+  //function to handle user logout
+  const handleLogout = async () => {
+    try {
+      await signOut(FIREBASE_AUTH);
+      Alert.alert("Sign-out successful.");
+    } catch (error) {
+      Alert.alert("Sign-out failed.");
+    }
+  };
   return (
     <ProfileStack.Navigator
       initialRouteName="Profile"
@@ -13,7 +26,25 @@ const ProfileStackGroup = () => {
         headerTitleAlign: "center",
       }}
     >
-      <ProfileStack.Screen name="Profile" component={Profile} />
+      <ProfileStack.Screen
+        name="Profile"
+        component={Profile}
+        options={{
+          headerRight: () => (
+            <Pressable onPress={handleLogout}>
+              <MaterialIcons name="logout" size={24} color="black" />
+            </Pressable>
+          ),
+        }}
+      />
+      <ProfileStack.Screen
+        name="CreateTravelBoard"
+        component={CreateTravelBoard}
+        options={{
+          headerTitle: "Create New Travel Board",
+          animation: "slide_from_bottom",
+        }}
+      />
     </ProfileStack.Navigator>
   );
 };
