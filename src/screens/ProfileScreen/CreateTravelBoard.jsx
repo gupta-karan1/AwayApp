@@ -3,7 +3,6 @@ import {
   Text,
   View,
   KeyboardAvoidingView,
-  ScrollView,
   TextInput,
   Image,
   ActivityIndicator,
@@ -12,7 +11,7 @@ import {
   Alert,
 } from "react-native";
 import React, { useState } from "react";
-import { EvilIcons } from "@expo/vector-icons";
+// import { EvilIcons } from "@expo/vector-icons";
 import { UNSPLASH_ACCESS_KEY } from "@env";
 import { useNavigation } from "@react-navigation/native";
 import { useRoute } from "@react-navigation/native";
@@ -86,6 +85,7 @@ const CreateTravelBoard = () => {
         title: boardTitle,
         description: boardDescription,
         image: boardImage,
+        createdAt: new Date(),
       };
 
       await saveBoardDetails(userId, boardData);
@@ -102,7 +102,7 @@ const CreateTravelBoard = () => {
   return (
     <KeyboardAvoidingView style={styles.container}>
       <View style={styles.inputContainer}>
-        <Text style={styles.titleText}>Travel Board Title:</Text>
+        <Text style={styles.titleText}>Title:</Text>
         <TextInput
           label="Travel Board Title"
           value={boardTitle}
@@ -120,11 +120,13 @@ const CreateTravelBoard = () => {
           multiline={true}
           numberOfLines={3}
           maxLength={250}
+          maxHeight={110} // Stop submit button from going of screen
+          returnKeyType="done" // To hide keyboard when done typing
         />
-        <Text style={styles.titleText}>Search Image on Unsplash:</Text>
+        <Text style={styles.titleText}>Cover Image (Unsplash):</Text>
         {/* <View style={styles.searchContainer}> */}
         <TextInput
-          label="Search for an image"
+          label="Search for a cover image"
           value={searchImage}
           onChangeText={(text) => setSearchImage(text)}
           onSubmitEditing={fetchImages}
@@ -208,7 +210,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 10,
     marginTop: 5,
-    marginBottom: 30,
+    marginBottom: 15,
   },
   descriptionInput: {
     textAlignVertical: "top",
@@ -228,11 +230,13 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   selectedImage: {
-    marginHorizontal: "auto",
+    alignSelf: "center",
+    // marginHorizontal: "auto",
     height: 180,
     width: 250,
     objectFit: "cover",
     borderRadius: 10,
+    marginBottom: 10,
   },
   //   searchContainer: {
   //     alignItems: "center",

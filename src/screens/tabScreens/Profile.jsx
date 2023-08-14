@@ -5,14 +5,29 @@ import {
   Text,
   Image,
   Pressable,
+  Alert,
+  FlatList,
 } from "react-native";
 import { AuthContext } from "../../../hooks/AuthContext";
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import GlobalStyles from "../../GlobalStyles";
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import { FIREBASE_DB } from "../../../firebaseConfig";
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  doc,
+  orderBy,
+} from "firebase/firestore";
+import { ActivityIndicator } from "react-native";
 
 export default function Profile() {
+  const [travelBoards, setTravelBoards] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
   const { user } = useContext(AuthContext);
   const Navigation = useNavigation();
 
@@ -21,6 +36,39 @@ export default function Profile() {
       userId: user.uid,
     });
   };
+
+  useEffect(() => {
+    getTravelBoards();
+  }, []);
+
+  const getTravelBoards = async () => {
+    try {
+      setIsLoading(true); // show loading indicator
+      const q = query(
+        collection(FIREBASE_DB, "users"),
+        where("userId", "==", user.uid)
+      );
+
+      const querySnapshot = await getDocs(q); // get user documents from user collection based on user id
+      const userRef = doc(FIREBASE_DB, "users", querySnapshot.docs[0].id); //Create a reference to this user's document
+
+      const q2 = query(
+        collection(userRef, "boards"), // get boards collection from user
+        orderBy("createdAt", "desc") // order by createdAt in descending order
+      );
+
+      const querySnapshot2 = await getDocs(q2); // get all documents from boards collection
+      const boards = querySnapshot2.docs.map((doc) => doc.data()); // map through the documents and return data
+      // console.log("boards:", boards);
+      setTravelBoards(boards); // set travel boards state
+    } catch (error) {
+      Alert.alert("Error fetching travel boards:", error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // console.log("travelBoards:", travelBoards);
 
   return (
     <View style={styles.container}>
@@ -43,6 +91,42 @@ export default function Profile() {
         }
         style={styles.profileImg}
       />
+      {isLoading && <ActivityIndicator size="large" />}
+      {travelBoards.length === 0 && !isLoading && (
+        <Text>
+          You don't have any travel boards yet. Create your first travelboard
+          for inspiration!
+        </Text>
+      )}
+      {!isLoading && travelBoards.length > 0 && (
+        <FlatList
+          data={travelBoards}
+          keyExtractor={(item) => item.travelBoardId}
+          numColumns={2} // display items in 2 columns
+          removeClippedSubviews={true}
+          initialNumToRender={2}
+          maxToRenderPerBatch={2}
+          updateCellsBatchingPeriod={100}
+          windowSize={2}
+          columnWrapperStyle={{
+            justifyContent: "space-between", // add space between columns
+          }}
+          showsVerticalScrollIndicator={false} // hide scroll bar
+          contentContainerStyle={{ padding: 15 }} // add padding to left and right
+          renderItem={({ item }) => (
+            <Pressable
+              style={styles.travelBoard}
+              // onPress={() => handleTravelBoardPress(item.travelBoardId)}
+            >
+              <Image
+                source={{ uri: item.image }}
+                style={styles.travelBoardImg}
+              />
+              <Text style={styles.travelBoardTitle}>{item.title}</Text>
+            </Pressable>
+          )}
+        />
+      )}
       {/* FAB to add a new travel board */}
       <Pressable style={styles.fabButton} onPress={handleCreateTravelBoard}>
         <AntDesign name="plus" size={18} color="white" />
@@ -92,6 +176,11 @@ const styles = StyleSheet.create({
   fabText: {
     fontSize: 15,
     color: "white",
+  },
+  travelBoardImg: {
+    height: 100,
+    width: 160,
+    borderRadius: 10,
   },
 });
 
