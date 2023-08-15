@@ -579,13 +579,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginHorizontal: 10,
   },
-  instructionText: {
-    padding: 10,
-    alignItems: "center",
-    backgroundColor: "lightgrey",
-    margin: 10,
-    borderRadius: 10,
-  },
   submitButton: {
     backgroundColor: "lightblue",
     paddingVertical: 15,
@@ -596,5 +589,12 @@ const styles = StyleSheet.create({
   },
   modalFooter: {
     width: "100%",
+  },
+  instructionText: {
+    padding: 10,
+    alignItems: "center",
+    backgroundColor: "lightgrey",
+    margin: 10,
+    borderRadius: 10,
   },
 });

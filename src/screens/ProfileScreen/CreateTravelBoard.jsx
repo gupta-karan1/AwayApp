@@ -25,6 +25,7 @@ import {
   getDocs,
 } from "firebase/firestore";
 import { FlatList } from "react-native-gesture-handler";
+import uuid from "react-native-uuid";
 
 const CreateTravelBoard = () => {
   const [boardTitle, setBoardTitle] = useState("");
@@ -86,6 +87,7 @@ const CreateTravelBoard = () => {
         description: boardDescription,
         image: boardImage,
         createdAt: new Date(),
+        boardId: uuid.v4(),
       };
 
       await saveBoardDetails(userId, boardData);
@@ -203,6 +205,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     width: "85%",
     paddingTop: 25,
+    marginBottom: 30,
   },
   input: {
     backgroundColor: "white",

@@ -5,6 +5,7 @@ import { signOut } from "firebase/auth";
 import { FIREBASE_AUTH } from "../../firebaseConfig";
 import { Pressable, Alert } from "react-native";
 import CreateTravelBoard from "../screens/ProfileScreen/CreateTravelBoard";
+import BoardScreen from "../screens/ProfileScreen/BoardScreen";
 // create stack navigator for profile screen group to allow for navigation between profile, login, and register screens
 const ProfileStack = createNativeStackNavigator(); // create stack navigator
 
@@ -43,6 +44,14 @@ const ProfileStackGroup = () => {
         options={{
           headerTitle: "Create New Travel Board",
           animation: "slide_from_bottom",
+        }}
+      />
+      <ProfileStack.Screen
+        name="BoardScreen"
+        component={BoardScreen}
+        options={{
+          headerTitle: "Travel Board",
+          animation: "slide_from_right",
         }}
       />
     </ProfileStack.Navigator>

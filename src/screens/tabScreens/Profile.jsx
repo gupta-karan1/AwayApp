@@ -9,7 +9,7 @@ import {
   FlatList,
 } from "react-native";
 import { AuthContext } from "../../../hooks/AuthContext";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useCallback } from "react";
 import GlobalStyles from "../../GlobalStyles";
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
@@ -23,6 +23,7 @@ import {
   orderBy,
 } from "firebase/firestore";
 import { ActivityIndicator } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
 
 export default function Profile() {
   const [travelBoards, setTravelBoards] = useState([]);
@@ -37,9 +38,12 @@ export default function Profile() {
     });
   };
 
-  useEffect(() => {
-    getTravelBoards();
-  }, []);
+  // Fetch user's trip data when the screen mounted
+  useFocusEffect(
+    useCallback(() => {
+      getTravelBoards();
+    }, []) // Function to call once
+  );
 
   const getTravelBoards = async () => {
     try {
@@ -70,6 +74,16 @@ export default function Profile() {
 
   // console.log("travelBoards:", travelBoards);
 
+  const handleTravelBoardPress = (item) => {
+    Navigation.navigate("BoardScreen", {
+      title: item.title,
+      description: item.description,
+      image: item.image,
+      boardId: item.boardId,
+      userId: user.uid,
+    });
+  };
+
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -93,15 +107,21 @@ export default function Profile() {
       />
       {isLoading && <ActivityIndicator size="large" />}
       {travelBoards.length === 0 && !isLoading && (
-        <Text>
-          You don't have any travel boards yet. Create your first travelboard
-          for inspiration!
-        </Text>
+        <Pressable
+          onPress={() =>
+            Navigation.navigate("CreateTravelBoard", {
+              userId: user.uid,
+            })
+          }
+          style={styles.promptText}
+        >
+          <Text>Create your first Travel Board for inspiration!</Text>
+        </Pressable>
       )}
       {!isLoading && travelBoards.length > 0 && (
         <FlatList
           data={travelBoards}
-          keyExtractor={(item) => item.travelBoardId}
+          keyExtractor={(item) => item.boardId}
           numColumns={2} // display items in 2 columns
           removeClippedSubviews={true}
           initialNumToRender={2}
@@ -109,29 +129,44 @@ export default function Profile() {
           updateCellsBatchingPeriod={100}
           windowSize={2}
           columnWrapperStyle={{
+            alignItems: "center",
             justifyContent: "space-between", // add space between columns
           }}
           showsVerticalScrollIndicator={false} // hide scroll bar
           contentContainerStyle={{ padding: 15 }} // add padding to left and right
+          ListHeaderComponent={
+            <View style={styles.headerContainer}>
+              <Text style={GlobalStyles.bodyMediumBold}>My Travel Boards</Text>
+              <Pressable
+                onPress={handleCreateTravelBoard}
+                style={styles.fabButton}
+              >
+                <AntDesign name="plus" size={18} color="black" />
+                <Text style={styles.fabText}> Travel Board</Text>
+              </Pressable>
+            </View>
+          }
           renderItem={({ item }) => (
             <Pressable
               style={styles.travelBoard}
-              // onPress={() => handleTravelBoardPress(item.travelBoardId)}
+              key={item.boardId}
+              onPress={() => handleTravelBoardPress(item)}
             >
               <Image
-                source={{ uri: item.image }}
+                source={
+                  item.image
+                    ? { uri: item.image }
+                    : require("../../../assets/image-placeholder.png")
+                }
                 style={styles.travelBoardImg}
               />
-              <Text style={styles.travelBoardTitle}>{item.title}</Text>
+              <Text style={GlobalStyles.bodySmallRegular} numberOfLines={2}>
+                {item.title}
+              </Text>
             </Pressable>
           )}
         />
       )}
-      {/* FAB to add a new travel board */}
-      <Pressable style={styles.fabButton} onPress={handleCreateTravelBoard}>
-        <AntDesign name="plus" size={18} color="white" />
-        <Text style={styles.fabText}> Travel Board</Text>
-      </Pressable>
     </View>
   );
 }
@@ -162,26 +197,43 @@ const styles = StyleSheet.create({
     left: 20,
     objectFit: "cover",
   },
+  headerContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingBottom: 20,
+  },
   fabButton: {
     flexDirection: "row",
     alignItems: "center",
-    position: "absolute",
-    bottom: 20,
-    right: 20,
-    padding: 15,
+    // position: "absolute",
+    padding: 10,
     borderRadius: 10,
-    backgroundColor: "#0D47A1",
-    elevation: 4,
+    backgroundColor: "lightblue",
+    // elevation: 2,
   },
   fabText: {
     fontSize: 15,
-    color: "white",
+    color: "black",
+  },
+  travelBoard: {
+    width: "48%",
+    marginBottom: 15,
   },
   travelBoardImg: {
     height: 100,
-    width: 160,
+    width: "100%",
     borderRadius: 10,
     backgroundColor: "lightgrey",
+  },
+  promptText: {
+    textAlign: "center",
+    paddingHorizontal: 10,
+    paddingVertical: 20,
+    alignItems: "center",
+    backgroundColor: "lightgrey",
+    margin: 10,
+    borderRadius: 10,
   },
 });
 
