@@ -14,7 +14,7 @@ import {
 import { useState } from "react";
 import GlobalStyles from "../../GlobalStyles";
 import { FontAwesome } from "@expo/vector-icons";
-import usePlaceScreen from "../../../hooks/usePlaceScreen";
+// import usePlaceScreen from "../../../hooks/usePlaceScreen";
 import { Ionicons } from "@expo/vector-icons";
 import { FIREBASE_DB } from "../../../firebaseConfig";
 import {
@@ -31,7 +31,7 @@ import { AuthContext } from "../../../hooks/AuthContext";
 import { useFocusEffect } from "@react-navigation/native";
 
 // PlaceScreen component
-const PlaceScreen = ({ route }) => {
+const ProfilePlace = ({ route }) => {
   // Get the pathId from the route params
   // const { pathId } = route.params;
 
@@ -404,7 +404,7 @@ const PlaceScreen = ({ route }) => {
   );
 };
 
-export default PlaceScreen;
+export default ProfilePlace;
 
 const styles = StyleSheet.create({
   container: {

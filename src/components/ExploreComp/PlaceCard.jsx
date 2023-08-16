@@ -21,6 +21,7 @@ const PlaceCard = ({ placeItem, path }) => {
     placeSaved,
     placeTitle,
     placeWebsite,
+    placeId,
   } = placeItem;
 
   return (
@@ -41,6 +42,7 @@ const PlaceCard = ({ placeItem, path }) => {
           placeSaved,
           placeTitle,
           placeWebsite,
+          placeId,
         })
       }
     >

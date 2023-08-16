@@ -21,13 +21,16 @@ import {
   getDocs,
   doc,
   orderBy,
+  deleteDoc,
 } from "firebase/firestore";
 import { ActivityIndicator } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function Profile() {
   const [travelBoards, setTravelBoards] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
   const { user } = useContext(AuthContext);
   const Navigation = useNavigation();
@@ -41,9 +44,28 @@ export default function Profile() {
   // Fetch user's trip data when the screen mounted
   useFocusEffect(
     useCallback(() => {
-      getTravelBoards();
-    }, []) // Function to call once
+      if (!deleteLoading) {
+        getTravelBoards();
+      }
+    }, [deleteLoading])
   );
+
+  const confirmDelete = (boardId) => {
+    Alert.alert(
+      "Confirm Deletion",
+      "Are you sure you want to delete this place?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "OK",
+          onPress: () => deleteSingleBoard(boardId),
+        },
+      ]
+    );
+  };
 
   const getTravelBoards = async () => {
     try {
@@ -69,6 +91,34 @@ export default function Profile() {
       Alert.alert("Error fetching travel boards:", error.message);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const deleteSingleBoard = async (boardId) => {
+    try {
+      setDeleteLoading(true);
+      const q = query(
+        collection(FIREBASE_DB, "users"),
+        where("userId", "==", user.uid)
+      );
+      const querySnapshot = await getDocs(q);
+      const userRef = doc(FIREBASE_DB, "users", querySnapshot.docs[0].id);
+
+      const q2 = query(
+        collection(userRef, "boards"),
+        where("boardId", "==", boardId)
+      );
+
+      const querySnapshot2 = await getDocs(q2);
+      const boardRef = doc(userRef, "boards", querySnapshot2.docs[0].id);
+
+      await deleteDoc(boardRef);
+
+      Alert.alert("Board deleted successfully");
+    } catch (error) {
+      Alert.alert("Error deleting board:", error.message);
+    } finally {
+      setDeleteLoading(false);
     }
   };
 
@@ -107,16 +157,28 @@ export default function Profile() {
       />
       {isLoading && <ActivityIndicator size="large" />}
       {travelBoards.length === 0 && !isLoading && (
-        <Pressable
-          onPress={() =>
-            Navigation.navigate("CreateTravelBoard", {
-              userId: user.uid,
-            })
-          }
-          style={styles.promptText}
-        >
-          <Text>Create your first Travel Board for inspiration!</Text>
-        </Pressable>
+        <View>
+          <View style={styles.headerContainer}>
+            <Text style={GlobalStyles.bodyMediumBold}>My Travel Boards</Text>
+            <Pressable
+              onPress={handleCreateTravelBoard}
+              style={styles.fabButton}
+            >
+              <AntDesign name="plus" size={18} color="black" />
+              <Text style={styles.fabText}> Travel Board</Text>
+            </Pressable>
+          </View>
+          <Pressable
+            onPress={() =>
+              Navigation.navigate("CreateTravelBoard", {
+                userId: user.uid,
+              })
+            }
+            style={styles.promptText}
+          >
+            <Text>Create your first Travel Board for inspiration!</Text>
+          </Pressable>
+        </View>
       )}
       {!isLoading && travelBoards.length > 0 && (
         <FlatList
@@ -133,7 +195,7 @@ export default function Profile() {
             justifyContent: "space-between", // add space between columns
           }}
           showsVerticalScrollIndicator={false} // hide scroll bar
-          contentContainerStyle={{ padding: 15 }} // add padding to left and right
+          contentContainerStyle={{ paddingHorizontal: 15, paddingBottom: 60 }} // add padding to left and right
           ListHeaderComponent={
             <View style={styles.headerContainer}>
               <Text style={GlobalStyles.bodyMediumBold}>My Travel Boards</Text>
@@ -160,9 +222,19 @@ export default function Profile() {
                 }
                 style={styles.travelBoardImg}
               />
-              <Text style={GlobalStyles.bodySmallRegular} numberOfLines={2}>
-                {item.title}
-              </Text>
+              <View style={styles.cardFooter}>
+                <Text style={GlobalStyles.bodySmallRegular} numberOfLines={2}>
+                  {item.title}
+                </Text>
+                <View style={styles.iconBox}>
+                  <Ionicons
+                    onPress={() => confirmDelete(item.boardId)}
+                    name="md-trash-outline"
+                    size={22}
+                    color="black"
+                  />
+                </View>
+              </View>
             </Pressable>
           )}
         />
@@ -201,7 +273,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingBottom: 20,
+    padding: 15,
   },
   fabButton: {
     flexDirection: "row",
@@ -234,6 +306,16 @@ const styles = StyleSheet.create({
     backgroundColor: "lightgrey",
     margin: 10,
     borderRadius: 10,
+  },
+  iconBox: {
+    paddingRight: 4,
+  },
+  cardFooter: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: 5,
   },
 });
 

@@ -7,6 +7,7 @@ import {
   ActivityIndicator,
   Image,
   TouchableOpacity,
+  Pressable,
 } from "react-native";
 import React, { useState, useCallback } from "react";
 import { useFocusEffect, useRoute } from "@react-navigation/native";
@@ -17,10 +18,12 @@ import {
   where,
   getDocs,
   doc,
-  orderBy,
+  deleteDoc,
 } from "firebase/firestore";
-import PlaceCard from "../../components/ExploreComp/PlaceCard";
+
 import GlobalStyles from "../../GlobalStyles";
+import ProfilePlaceCard from "../../components/ProfileComp/ProfilePlaceCard";
+import { useNavigation } from "@react-navigation/native";
 
 const BoardScreen = () => {
   const route = useRoute();
@@ -28,6 +31,7 @@ const BoardScreen = () => {
   const [loading, setLoading] = useState(false);
   const [placeData, setPlaceData] = useState([]);
   const [showFullText, setShowFullText] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
   const getBoardPlaces = async () => {
     try {
@@ -53,7 +57,7 @@ const BoardScreen = () => {
       );
       const querySnapshot3 = await getDocs(q3);
       const places = querySnapshot3.docs.map((doc) => {
-        return { ...doc.data(), placeId: doc.id };
+        return { ...doc.data() };
       });
       setPlaceData(places);
     } catch (error) {
@@ -65,18 +69,19 @@ const BoardScreen = () => {
 
   useFocusEffect(
     useCallback(() => {
-      getBoardPlaces();
-      console.log(placeData);
-    }, [])
+      if (!deleteLoading) {
+        getBoardPlaces();
+      }
+    }, [deleteLoading])
   );
 
   // PlaceCard component to render each place item
   const renderPlaceCard = useCallback(({ item }) => {
     return (
-      <PlaceCard
+      <ProfilePlaceCard
         key={item.placeId}
         placeItem={item}
-        // path={`${pathId}/${item.placeId}`} // path prop to navigate to the place screen using placeId
+        onDelete={() => confirmDelete(item)}
       />
     );
   }, []); // add an empty array as the second argument to useCallback to avoid re-rendering the component
@@ -86,11 +91,65 @@ const BoardScreen = () => {
     setShowFullText(!showFullText);
   };
 
+  const confirmDelete = (item) => {
+    Alert.alert(
+      "Confirm Deletion",
+      "Are you sure you want to delete this place?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "OK",
+          onPress: () => handleDeletePlace(item.placeId),
+        },
+      ]
+    );
+  };
+
+  const handleDeletePlace = async (placeId) => {
+    try {
+      setDeleteLoading(true);
+      const q = query(
+        collection(FIREBASE_DB, "users"),
+        where("userId", "==", userId)
+      );
+
+      const querySnapshot = await getDocs(q);
+      const userRef = doc(FIREBASE_DB, "users", querySnapshot.docs[0].id);
+
+      const q2 = query(
+        collection(userRef, "boards"),
+        where("boardId", "==", boardId)
+      );
+      const querySnapshot2 = await getDocs(q2);
+      const boardRef = doc(userRef, "boards", querySnapshot2.docs[0].id);
+
+      const q3 = query(
+        collection(boardRef, "places"),
+        where("placeId", "==", placeId)
+        // orderBy("createdAt", "desc")
+      );
+
+      const querySnapshot3 = await getDocs(q3);
+      const placeRef = doc(boardRef, "places", querySnapshot3.docs[0].id);
+
+      await deleteDoc(placeRef);
+
+      Alert.alert("Place deleted successfully");
+    } catch (error) {
+      Alert.alert("Error deleting place:", error.message);
+    } finally {
+      setDeleteLoading(false);
+    }
+  };
+  const Navigation = useNavigation();
+
   return (
     <View>
-      {loading ? (
-        <ActivityIndicator size="large" />
-      ) : (
+      {loading && <ActivityIndicator size="large" />}
+      {!loading && (
         <FlatList
           data={placeData}
           renderItem={renderPlaceCard}
@@ -148,6 +207,17 @@ const BoardScreen = () => {
           }
         />
       )}
+
+      {placeData.length === 0 && !loading && (
+        <Pressable
+          onPress={() => Navigation.navigate("ExploreStackGroup")}
+          style={styles.promptText}
+        >
+          <Text>
+            Go to the Explore page to save a place to your travel board!
+          </Text>
+        </Pressable>
+      )}
     </View>
   );
 };
@@ -165,6 +235,7 @@ const styles = StyleSheet.create({
   titleText: {
     marginBottom: 10,
     fontSize: 25,
+    marginTop: 10,
   },
   bodyText: {
     overflow: "hidden",
@@ -175,5 +246,14 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 30,
     textDecorationLine: "underline",
+  },
+  promptText: {
+    textAlign: "center",
+    paddingHorizontal: 10,
+    paddingVertical: 20,
+    alignItems: "center",
+    backgroundColor: "lightgrey",
+    margin: 10,
+    borderRadius: 10,
   },
 });

@@ -62,12 +62,6 @@ const Saved = ({ tripId, userId }) => {
     }
   };
 
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     getSavedPlaces();
-  //   }, [deleteLoading]) // Function only called once
-  // );
-
   useFocusEffect(
     useCallback(() => {
       if (!deleteLoading) {
