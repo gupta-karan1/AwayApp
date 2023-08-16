@@ -36,7 +36,6 @@ const Tabs = () => {
               color={focused ? "tomato" : "gray"}
             />
           ),
-
           tabBarLabel: "Explore",
         }}
       />

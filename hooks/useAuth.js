@@ -73,7 +73,13 @@ export const useAuth = () => {
     });
   };
 
-  return { login, register, loading, addDisplayName };
+  const addPhotoURL = async (user, photoURL) => {
+    await updateProfile(user, {
+      photoURL: photoURL,
+    });
+  };
+
+  return { login, register, loading, addDisplayName, addPhotoURL };
 };
 
 // SUMMARY: Overall, this custom hook encapsulates the login and registration functionality using Firebase Authentication. It is designed to be used in React components, allowing them to implement user authentication easily and consistently.

@@ -168,8 +168,16 @@ const BoardScreen = () => {
           // List header component to display the article details
           ListHeaderComponent={
             <View>
-              <Image
+              {/* <Image
                 source={image ? { uri: image } : null}
+                style={styles.image}
+              /> */}
+              <Image
+                source={
+                  image
+                    ? { uri: image }
+                    : require("../../../assets/image-placeholder.png")
+                }
                 style={styles.image}
               />
               <Text style={[GlobalStyles.titleLargeRegular, styles.titleText]}>
@@ -193,7 +201,7 @@ const BoardScreen = () => {
                   <Text
                     style={[GlobalStyles.bodySmallRegular, styles.bodyText]}
                   >
-                    {description.slice(0, 100)}
+                    {description.slice(0, 50)}
                     {"... "}
                   </Text>
                   <TouchableOpacity onPress={toggleFullText}>

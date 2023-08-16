@@ -10,7 +10,7 @@ import {
   Button,
   Alert,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 // import { EvilIcons } from "@expo/vector-icons";
 import { UNSPLASH_ACCESS_KEY } from "@env";
 import { useNavigation } from "@react-navigation/native";
@@ -26,6 +26,7 @@ import {
 } from "firebase/firestore";
 import { FlatList } from "react-native-gesture-handler";
 import uuid from "react-native-uuid";
+import { AuthContext } from "../../../hooks/AuthContext";
 
 const CreateTravelBoard = () => {
   const [boardTitle, setBoardTitle] = useState("");
@@ -36,6 +37,12 @@ const CreateTravelBoard = () => {
   const [searchResultsLoading, setSearchResultsLoading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [userId, setUserId] = useState();
+
+  const { user } = useContext(AuthContext);
+  useEffect(() => {
+    setUserId(user.uid);
+  }, []);
 
   const fetchImages = async () => {
     try {
@@ -60,8 +67,8 @@ const CreateTravelBoard = () => {
   };
 
   const Navigation = useNavigation();
-  const route = useRoute();
-  const { userId } = route.params;
+  // const route = useRoute();
+  // const { userId } = route.params;
 
   const saveBoardDetails = async (userId, boardData) => {
     try {

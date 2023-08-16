@@ -7,15 +7,16 @@ import { Pressable, Alert } from "react-native";
 import CreateTravelBoard from "../screens/ProfileScreen/CreateTravelBoard";
 import BoardScreen from "../screens/ProfileScreen/BoardScreen";
 import ProfilePlace from "../screens/ProfileScreen/ProfilePlace";
+
 // create stack navigator for profile screen group to allow for navigation between profile, login, and register screens
 const ProfileStack = createNativeStackNavigator(); // create stack navigator
 
 // create profile stack group
 const ProfileStackGroup = () => {
-  //function to handle user logout
   const handleLogout = async () => {
     try {
       await signOut(FIREBASE_AUTH);
+
       Alert.alert("Sign-out successful.");
     } catch (error) {
       Alert.alert("Sign-out failed.");

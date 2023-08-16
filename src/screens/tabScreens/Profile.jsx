@@ -36,16 +36,23 @@ export default function Profile() {
   const Navigation = useNavigation();
 
   const handleCreateTravelBoard = () => {
-    Navigation.navigate("CreateTravelBoard", {
-      userId: user.uid,
-    });
+    Navigation.navigate("CreateTravelBoard");
   };
 
   // Fetch user's trip data when the screen mounted
+
   useFocusEffect(
     useCallback(() => {
       if (!deleteLoading) {
-        getTravelBoards();
+        const delay = 5000; // 5000 milliseconds (5 seconds)
+
+        const timerId = setTimeout(() => {
+          getTravelBoards();
+        }, delay);
+
+        return () => {
+          clearTimeout(timerId); // Clear the timeout if the effect is cleaned up
+        };
       }
     }, [deleteLoading])
   );
@@ -122,8 +129,6 @@ export default function Profile() {
     }
   };
 
-  // console.log("travelBoards:", travelBoards);
-
   const handleTravelBoardPress = (item) => {
     Navigation.navigate("BoardScreen", {
       title: item.title,
@@ -142,19 +147,24 @@ export default function Profile() {
       ></ImageBackground>
       <View style={styles.textContainer}>
         <Text style={GlobalStyles.titleLargeRegular}>
-          {user.displayName ? user.displayName : `User Name`}
+          {user ? user.displayName : null}
         </Text>
-        <Text style={GlobalStyles.labelMediumMedium}>{user.email}</Text>
+        <Text style={GlobalStyles.labelMediumMedium}>
+          {user ? user.email : null}
+        </Text>
       </View>
 
-      <Image
-        source={
-          user.photoURL
-            ? { uri: user.photoURL }
-            : require("../../../assets/profileDefault.png")
-        }
-        style={styles.profileImg}
-      />
+      {user && (
+        <Image
+          source={
+            user.photoURL
+              ? { uri: user.photoURL }
+              : require("../../../assets/profileDefault.png")
+          }
+          style={styles.profileImg}
+        />
+      )}
+
       {isLoading && <ActivityIndicator size="large" />}
       {travelBoards.length === 0 && !isLoading && (
         <View>

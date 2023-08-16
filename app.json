@@ -31,7 +31,8 @@
       [
         "expo-image-picker",
         {
-          "photoPermission": "The app needs access to your camera roll so you can put pictures of your items on the app."
+          "photoPermission": "The app needs access to your camera roll so you can put pictures of your items on the app.",
+          "cameraPermission": "The app needs access to your camera so you can take pictures of your items to put on the app."
         }
       ]
     ]

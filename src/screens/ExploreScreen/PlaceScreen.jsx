@@ -5,7 +5,6 @@ import {
   Image,
   ActivityIndicator,
   ScrollView,
-  Button,
   TouchableOpacity,
   Pressable,
   Modal,
@@ -14,7 +13,6 @@ import {
 import { useState } from "react";
 import GlobalStyles from "../../GlobalStyles";
 import { FontAwesome } from "@expo/vector-icons";
-import usePlaceScreen from "../../../hooks/usePlaceScreen";
 import { Ionicons } from "@expo/vector-icons";
 import { FIREBASE_DB } from "../../../firebaseConfig";
 import {
@@ -26,15 +24,13 @@ import {
   orderBy,
   addDoc,
 } from "firebase/firestore";
-import { useContext, useCallback } from "react";
+import { useContext, useCallback, useEffect } from "react";
 import { AuthContext } from "../../../hooks/AuthContext";
 import { useFocusEffect } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 
 // PlaceScreen component
 const PlaceScreen = ({ route }) => {
-  // Get the pathId from the route params
-  // const { pathId } = route.params;
-
   // Custom hook to fetch the single place data based on the pathId
   // const { loading, singlePlaceData } = usePlaceScreen(pathId);
   const {
@@ -61,6 +57,7 @@ const PlaceScreen = ({ route }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [travelBoards, setTravelBoards] = useState([]);
   const [selectedBoards, setSelectedBoards] = useState([]);
+  // const [myTrips, setMyTrips] = useState([]);
 
   // Function to toggle the full text
   const toggleFullText = () => {
@@ -109,10 +106,39 @@ const PlaceScreen = ({ route }) => {
     }
   };
 
+  // const getMyTrips = async () => {
+  //   try {
+  //     setIsLoading(true); // show loading indicator
+  //     const q = query(
+  //       collection(FIREBASE_DB, "users"),
+  //       where("userId", "==", user.uid)
+  //     );
+
+  //     const querySnapshot = await getDocs(q); // get user documents from user collection based on user id
+  //     const userRef = doc(FIREBASE_DB, "users", querySnapshot.docs[0].id); //Create a reference to this user's document
+
+  //     const q2 = query(
+  //       collection(userRef, "trips"),
+  //       orderBy("createdAt", "desc")
+  //     ); // Create a query to get all travelBoards for this user
+
+  //     const querySnapshot2 = await getDocs(q2); // Get the travelBoards documents
+
+  //     const myTrips = querySnapshot2.docs.map((doc) => doc.data()); // Get the data from each document
+
+  //     setMyTrips(myTrips); // Set the travelBoards state variable
+  //   } catch (error) {
+  //     Alert.alert("Error fetching trips:", error.message);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
+
   useFocusEffect(
     useCallback(() => {
       if (modalVisible) {
         getTravelBoards();
+        // getMyTrips();
       }
     }, [modalVisible]) // Function only called once
   );
@@ -158,17 +184,11 @@ const PlaceScreen = ({ route }) => {
     );
   };
 
-  // console.log(selectedBoards[0].boardId);
-
   // create handleSubmitBoard which will save the particular place within a places array to the selected board
 
   const handleSubmitBoard = async () => {
     try {
       setIsLoading(true);
-      // const boardData = {
-      //   ...selectedBoards[0],
-      //   places: [...selectedBoards[0].places, singlePlaceData],
-      // };
 
       const q = query(
         collection(FIREBASE_DB, "users"),
@@ -228,6 +248,8 @@ const PlaceScreen = ({ route }) => {
     }
   };
 
+  const Navigation = useNavigation();
+
   return (
     <View style={styles.container}>
       {/* {loading ? (
@@ -246,7 +268,11 @@ const PlaceScreen = ({ route }) => {
               <Pressable
                 style={styles.saveButton}
                 onPress={() => {
-                  setModalVisible(true);
+                  if (!user) {
+                    Navigation.navigate("ProfileStackGroup");
+                  } else {
+                    setModalVisible(true);
+                  }
                 }}
               >
                 <Text>Save Place</Text>
@@ -365,14 +391,28 @@ const PlaceScreen = ({ route }) => {
                 onPress={() => setModalVisible(false)}
               />
             </View>
-            <ScrollView showsVerticalScrollIndicator={false}>
-              {isLoading && <ActivityIndicator size={"large"} />}
-              <Text>My Travel Boards</Text>
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              style={styles.innerContainer}
+            >
+              <Text style={GlobalStyles.titleLargeRegular}>
+                My Travel Boards
+              </Text>
               {travelBoards.length === 0 && !isLoading && (
-                <Text>
-                  You have no travel boards places. Go to the Profile section to
-                  create one places.
-                </Text>
+                <View>
+                  <Text style={styles.promptMsg}>
+                    You have no Travel Boards yet. Create one in the Profile.
+                  </Text>
+                  <Pressable
+                    style={styles.promptText}
+                    onPress={() => {
+                      Navigation.navigate("ProfileStackGroup");
+                      setModalVisible(false);
+                    }}
+                  >
+                    <Text>Go to Profile</Text>
+                  </Pressable>
+                </View>
               )}
 
               {!isLoading &&
@@ -385,6 +425,46 @@ const PlaceScreen = ({ route }) => {
                     onToggleSelection={toggleSelection}
                   />
                 ))}
+              {!isLoading && travelBoards.length > 0 && (
+                <Pressable
+                  style={styles.secondaryAction}
+                  onPress={() => {
+                    Navigation.navigate("ProfileStackGroup", {
+                      // screen: "CreateTravelBoard",
+                    });
+                    setModalVisible(false);
+                  }}
+                >
+                  <Text>Create New Board</Text>
+                </Pressable>
+              )}
+
+              {isLoading && <ActivityIndicator size={"large"} />}
+              <Text style={styles.promptMsg}>
+                You can also save places to a trip.
+              </Text>
+              {/* {myTrips.length === 0 && !isLoading && ( */}
+              <Pressable
+                style={styles.promptText}
+                onPress={() => {
+                  Navigation.navigate("TripsStackGroup");
+                  setModalVisible(false);
+                }}
+              >
+                <Text>Go to Trips</Text>
+              </Pressable>
+              {/* )} */}
+
+              {/* {!isLoading &&
+                myTrips.length > 0 &&
+                myTrips.map((trip) => (
+                  <ChecklistItem
+                    key={trip.tripId}
+                    trip={trip}
+                    isSelected={selectedBoards.includes(trip)}
+                    onToggleSelection={toggleSelection}
+                  />
+                ))} */}
             </ScrollView>
             <View style={styles.modalFooter}>
               <Pressable
@@ -394,7 +474,7 @@ const PlaceScreen = ({ route }) => {
                   handleSubmitBoard();
                 }}
               >
-                <Text>Submit</Text>
+                <Text>Save</Text>
               </Pressable>
             </View>
           </View>
@@ -423,6 +503,12 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     fontSize: 25,
   },
+  headingText: {
+    marginTop: 10,
+  },
+  innerContainer: {
+    width: "100%",
+  },
   bodyText: {
     overflow: "hidden",
     maxWidth: 340,
@@ -447,9 +533,6 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     textDecorationLine: "underline",
   },
-  // button: {
-  //   marginVertical: 10,
-  // },
   saveButton: {
     backgroundColor: "lightblue",
     paddingVertical: 10,
@@ -496,7 +579,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     width: "100%",
     alignItems: "center",
-    marginBottom: 10,
+    marginBottom: 20,
     marginHorizontal: 10,
   },
   submitButton: {
@@ -554,6 +637,33 @@ const styles = StyleSheet.create({
     marginBottom: 2,
     paddingLeft: 10,
     paddingTop: 8,
+  },
+  promptText: {
+    textAlign: "center",
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    alignItems: "center",
+    borderColor: "lightgrey",
+    borderWidth: 1,
+    marginHorizontal: 90,
+    marginVertical: 30,
+    borderRadius: 100,
+    marginTop: 10,
+  },
+  promptMsg: {
+    marginTop: 50,
+    textAlign: "center",
+  },
+  secondaryAction: {
+    textAlign: "center",
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    alignItems: "center",
+    borderColor: "lightgrey",
+    borderWidth: 1,
+    marginHorizontal: 90,
+    marginVertical: 10,
+    borderRadius: 100,
   },
 });
 
