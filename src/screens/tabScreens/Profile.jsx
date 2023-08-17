@@ -44,7 +44,7 @@ export default function Profile() {
   useFocusEffect(
     useCallback(() => {
       if (!deleteLoading) {
-        const delay = 5000; // 5000 milliseconds (5 seconds)
+        const delay = 1000; // 5000 milliseconds (5 seconds)
 
         const timerId = setTimeout(() => {
           getTravelBoards();
@@ -303,7 +303,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   travelBoardImg: {
-    height: 100,
+    height: 130,
     width: "100%",
     borderRadius: 10,
     backgroundColor: "lightgrey",

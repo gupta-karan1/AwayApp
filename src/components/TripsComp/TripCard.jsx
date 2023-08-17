@@ -8,9 +8,10 @@ import {
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import moment from "moment";
+import { Ionicons } from "@expo/vector-icons";
 
 // component that displays a trip card on the trips screen based on the tripItem and path props passed to it. It will be different for different users.
-const TripCard = ({ tripItem, path }) => {
+const TripCard = ({ tripItem, path, onDelete }) => {
   // The object destructuring syntax is used to extract the data from the tripItem object.
   const {
     tripTitle,
@@ -49,10 +50,19 @@ const TripCard = ({ tripItem, path }) => {
     >
       <ImageBackground source={{ uri: coverImage }} style={styles.image}>
         <View style={styles.textContainer}>
-          <Text style={styles.title}>{tripTitle}</Text>
-          <Text style={styles.subtitle}>
-            {startDateTime} - {endDateTime}
-          </Text>
+          <View style={styles.label}>
+            <Text style={styles.title}>{tripTitle}</Text>
+            <Text style={styles.subtitle}>
+              {startDateTime} - {endDateTime}
+            </Text>
+          </View>
+          <Ionicons
+            onPress={onDelete}
+            name="md-trash-outline"
+            size={24}
+            color="white"
+            style={styles.icon}
+          />
         </View>
       </ImageBackground>
     </Pressable>
@@ -83,6 +93,13 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(30, 144, 255, 0.6)",
     width: "100%",
     padding: 10,
+
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  icon: {
+    padding: 15,
   },
 });
 

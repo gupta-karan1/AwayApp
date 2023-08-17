@@ -128,7 +128,7 @@ const CreateTravelBoard = () => {
           placeholder="Description"
           multiline={true}
           numberOfLines={3}
-          maxLength={250}
+          // maxLength={250}
           maxHeight={110} // Stop submit button from going of screen
           returnKeyType="done" // To hide keyboard when done typing
         />
@@ -140,6 +140,7 @@ const CreateTravelBoard = () => {
           onChangeText={(text) => setSearchImage(text)}
           onSubmitEditing={fetchImages}
           style={[styles.input, styles.inputStyle]}
+          reg
           placeholder="Search for an image"
         />
         {/* <EvilIcons name="search" size={20} color="black" />

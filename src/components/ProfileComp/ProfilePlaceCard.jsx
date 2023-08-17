@@ -52,7 +52,7 @@ const ProfilePlaceCard = ({ placeItem, path, onDelete }) => {
       <View style={styles.cardFooter}>
         <View style={styles.cardText}>
           <Text style={GlobalStyles.labelMediumMedium}>{placeCategory}</Text>
-          <Text style={GlobalStyles.bodyMediumBold} numberOfLines={1}>
+          <Text style={GlobalStyles.bodyMediumBold} numberOfLines={2}>
             {placeTitle}
           </Text>
         </View>
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
   image: {
     height: 130,
     borderRadius: 10,
-    marginBottom: 5,
+    // marginBottom: 5,
     backgroundColor: "lightgrey",
   },
   iconBox: {
@@ -94,6 +94,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    marginTop: 5,
+  },
+  cardText: {
+    wordWrap: "wrap",
   },
 });
 

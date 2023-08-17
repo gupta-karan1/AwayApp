@@ -18,6 +18,7 @@ import {
   where,
   doc,
   orderBy,
+  deleteDoc,
 } from "firebase/firestore";
 import { FIREBASE_DB } from "../../../firebaseConfig";
 import TripCard from "../../components/TripsComp/TripCard";
@@ -84,6 +85,50 @@ const Trips = () => {
     }
   };
 
+  const deleteSingleTrip = async (tripId) => {
+    try {
+      const q = query(
+        collection(FIREBASE_DB, "users"),
+        where("userId", "==", user.uid) // Query to find the user document based on the userId
+      );
+      const querySnapshot1 = await getDocs(q);
+      const userRef = doc(FIREBASE_DB, "users", querySnapshot1.docs[0].id); // Create a reference to the user's document
+
+      const q2 = query(
+        collection(userRef, "trips"),
+        where("tripId", "==", tripId)
+      );
+
+      const querySnapshot2 = await getDocs(q2);
+
+      const tripRef = doc(userRef, "trips", querySnapshot2.docs[0].id);
+
+      await deleteDoc(tripRef);
+      Alert.alert("Trip deleted successfully!");
+    } catch (error) {
+      Alert.alert("Error deleting trip:", error.message);
+    } finally {
+      getUserTripData();
+    }
+  };
+
+  const confirmDelete = (item) => {
+    Alert.alert(
+      "Confirm Deletion",
+      "Are you sure you want to delete this trip?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "OK",
+          onPress: () => deleteSingleTrip(item.tripId),
+        },
+      ]
+    );
+  };
+
   // Fetch user's trip data when the screen mounted
   useFocusEffect(
     useCallback(() => {
@@ -103,7 +148,11 @@ const Trips = () => {
           <View>
             <Text style={GlobalStyles.titleLargeRegular}>My Trips</Text>
             {tripData.map((trip) => (
-              <TripCard key={trip.tripId} tripItem={trip} />
+              <TripCard
+                key={trip.tripId}
+                tripItem={trip}
+                onDelete={() => confirmDelete(trip)}
+              />
             ))}
           </View>
         )}
@@ -118,7 +167,11 @@ const Trips = () => {
           <View>
             <Text style={GlobalStyles.titleLargeRegular}>Invited Trips</Text>
             {invitedTrips.map((trip) => (
-              <TripCard key={trip.tripId} tripItem={trip} />
+              <TripCard
+                key={trip.tripId}
+                tripItem={trip}
+                onDelete={() => confirmDelete(trip)}
+              />
             ))}
           </View>
         )}

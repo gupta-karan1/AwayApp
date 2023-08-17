@@ -63,7 +63,7 @@ const Register = () => {
     } catch (error) {
       // error alert
       console.log(error);
-      alert("Registration failed: ", error.message);
+      Alert.alert("Registration failed: ", error.message);
     }
   };
 

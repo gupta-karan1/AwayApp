@@ -166,6 +166,16 @@ const BoardScreen = () => {
           showsVerticalScrollIndicator={false} // hide scroll bar
           contentContainerStyle={{ paddingHorizontal: 15 }} // add padding to left and right
           // List header component to display the article details
+          ListEmptyComponent={
+            <Pressable
+              onPress={() => Navigation.navigate("ExploreStackGroup")}
+              style={styles.promptText}
+            >
+              <Text>
+                Go to the Explore page to save a place to your travel board!
+              </Text>
+            </Pressable>
+          }
           ListHeaderComponent={
             <View>
               {/* <Image
@@ -216,7 +226,7 @@ const BoardScreen = () => {
         />
       )}
 
-      {placeData.length === 0 && !loading && (
+      {/* {placeData.length === 0 && !loading && (
         <Pressable
           onPress={() => Navigation.navigate("ExploreStackGroup")}
           style={styles.promptText}
@@ -225,7 +235,7 @@ const BoardScreen = () => {
             Go to the Explore page to save a place to your travel board!
           </Text>
         </Pressable>
-      )}
+      )} */}
     </View>
   );
 };
@@ -261,7 +271,7 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     alignItems: "center",
     backgroundColor: "lightgrey",
-    margin: 10,
+    marginBottom: 10,
     borderRadius: 10,
   },
 });
