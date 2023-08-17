@@ -48,7 +48,14 @@ const TripCard = ({ tripItem, path, onDelete }) => {
         })
       }
     >
-      <ImageBackground source={{ uri: coverImage }} style={styles.image}>
+      <ImageBackground
+        source={
+          coverImage
+            ? { uri: coverImage }
+            : require("../../../assets/image-placeholder.png")
+        }
+        style={styles.image}
+      >
         <View style={styles.textContainer}>
           <View style={styles.label}>
             <Text style={styles.title}>{tripTitle}</Text>

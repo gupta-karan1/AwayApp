@@ -179,7 +179,7 @@ const CreateTripForm = () => {
 
       await addDoc(collection(userRef, "trips"), tripData); // Add the trip data to the "trips" subcollection under specific user
     } catch (error) {
-      Alert.alert("Error saving trip details:", error);
+      Alert.alert("Error saving trip details:", error.message);
     }
   };
 
@@ -189,8 +189,8 @@ const CreateTripForm = () => {
       setLoading(true); // show loading indicator
       // Prepare the trip data object with the form inputs etc
       const tripData = {
-        tripTitle: tripTitle,
-        tripLocation: tripLocation,
+        tripTitle: tripTitle || "Untitled Trip",
+        tripLocation: tripLocation || "No Location",
         startDate: startDate,
         endDate: endDate,
         tripType: tripType,
@@ -218,7 +218,8 @@ const CreateTripForm = () => {
 
       navigation.navigate("Trips"); // navigate to trips screen after submitting form
     } catch (error) {
-      console.error("Error saving trip details:", error);
+      // console.error("Error saving trip details:", error);
+      Alert.alert("Error saving trip details:", error.message);
     } finally {
       setLoading(false); // set laoding state to flase after form submission
     }
@@ -251,7 +252,7 @@ const CreateTripForm = () => {
       });
       setUsers(users);
     } catch (error) {
-      Alert.alert("Error fetching users:", error);
+      Alert.alert("Error fetching users:", error.message);
     }
   };
 
@@ -294,18 +295,26 @@ const CreateTripForm = () => {
                 setTripLocation(itemValue);
                 // set the cover image to the destination.imageUrl when the destination is selected
                 // filter through the destinationData array to find the destination with the same destinationId as the selected destination
-                setCoverImage(
-                  destinationData.filter(
-                    (destination) => destination.destinationName === itemValue
-                  )[0].imageUrl
-                );
+                if (itemValue) {
+                  setCoverImage(
+                    destinationData.filter(
+                      (destination) => destination.destinationName === itemValue
+                    )[0].imageUrl
+                  );
+                } else {
+                  setCoverImage(null);
+                }
               }}
             >
               {/* Render list of destinations in Picker */}
+              <Picker.Item label="Select a Location" value="" />
               {destinationData.map((destination) => (
                 <Picker.Item
                   key={destination.destinationId}
-                  label={destination.destinationName} // Assuming each destination document in Firebase has a "name" field
+                  // label="Select a Location"
+                  label={destination.destinationName}
+                  // Assuming each destination document in Firebase has a "name" field
+                  // value={destination.destinationName}
                   value={destination.destinationName}
                 />
               ))}
@@ -466,9 +475,15 @@ const CreateTripForm = () => {
               {coverImage && (
                 <Image source={{ uri: coverImage }} style={styles.image} />
               )} */}
-              {coverImage && (
-                <Image source={{ uri: coverImage }} style={styles.image} />
-              )}
+
+              <Image
+                source={
+                  coverImage
+                    ? { uri: coverImage }
+                    : require("../../../assets/image-placeholder.png")
+                }
+                style={styles.image}
+              />
             </View>
           )}
           {loading ? (
