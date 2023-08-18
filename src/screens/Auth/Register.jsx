@@ -9,16 +9,28 @@ import {
   Text,
   Image,
   Pressable,
+  FlatList,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useAuth } from "../../../hooks/useAuth";
-import { collection, addDoc } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  query,
+  where,
+  getDocs,
+  doc,
+  updateDoc,
+} from "firebase/firestore";
 import { FIREBASE_DB } from "../../../firebaseConfig";
 import * as ImagePicker from "expo-image-picker";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { FIREBASE_STORAGE } from "../../../firebaseConfig";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
+import { updateProfile } from "firebase/auth";
+import { AuthContext } from "../../../hooks/AuthContext";
+import { UNSPLASH_ACCESS_KEY } from "@env";
 
 const Register = () => {
   // State variables to store user input
@@ -26,11 +38,36 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [userName, setUserName] = useState("");
   const [coverImage, setCoverImage] = useState(null);
+  const [boardImage, setBoardImage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [searchImage, setSearchImage] = useState("");
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [searchResults, setSearchResults] = useState([]);
+  const [searchResultsLoading, setSearchResultsLoading] = useState(false);
+
+  const { user } = useContext(AuthContext);
+
+  const getSingleUserData = async () => {
+    try {
+      setIsLoading(true);
+      const q = query(
+        collection(FIREBASE_DB, "users"),
+        where("userId", "==", user.uid)
+      );
+
+      const querySnapshot = await getDocs(q);
+      const userData = querySnapshot.docs.map((doc) => doc.data());
+      setBoardImage(userData[0].headerImage);
+    } catch (error) {
+      Alert.alert("Error fetching user data:", error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   // Custom hook to register user
   const { register, loading, addDisplayName, addPhotoURL } = useAuth();
-  const Navigation = useNavigation();
+  // const Navigation = useNavigation();
 
   // Function to handle registration
   const handleRegister = async () => {
@@ -45,7 +82,8 @@ const Register = () => {
         userId: userCredential.user.uid, // Get the user's ID from the userCredential object
         email: email,
         username: userName,
-        coverImage: coverImage,
+        profileImage: coverImage,
+        headerImage: "",
       };
 
       // create a new users collection in the database
@@ -102,7 +140,7 @@ const Register = () => {
     }
   };
 
-  // Fucntion to pick an image from image library
+  // Function to pick an image from image library
   const pickImage = async () => {
     setIsLoading(true); // Show loading image
 
@@ -159,6 +197,70 @@ const Register = () => {
     }
   };
 
+  const route = useRoute();
+  const { username, profileImage, userEmail, userId } = route.params || {};
+  // console.log(user);
+  useEffect(() => {
+    if (userId) {
+      setEmail(userEmail);
+      setUserName(username);
+      setCoverImage(profileImage);
+      getSingleUserData();
+    }
+  }, [userId]);
+
+  const navigation = useNavigation();
+
+  const handleUpdateProfile = async () => {
+    try {
+      const q = query(
+        collection(FIREBASE_DB, "users"),
+        where("userId", "==", userId) // Query to find the user document based on the userId
+      );
+      const querySnapshot1 = await getDocs(q);
+      const userRef = doc(FIREBASE_DB, "users", querySnapshot1.docs[0].id); // Create a reference to the user's document
+
+      await updateDoc(userRef, {
+        username: userName,
+        profileImage: coverImage,
+        headerImage: boardImage,
+      });
+
+      await updateProfile(user, {
+        displayName: userName,
+        photoURL: coverImage,
+      });
+
+      // User registration and 'users' collection creation successful
+      Alert.alert("User profile updated successfully!");
+      navigation.navigate("Profile");
+    } catch (error) {
+      Alert.alert("Update failed: ", error.message);
+    }
+  };
+
+  const fetchImages = async () => {
+    try {
+      setSearchResultsLoading(true);
+      const data = await fetch(
+        `https://api.unsplash.com/search/photos?query=${searchImage}&client_id=${UNSPLASH_ACCESS_KEY}`
+      );
+      const images = await data.json();
+      setSearchResults(images.results);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setSearchResultsLoading(false);
+    }
+  };
+
+  const handleImageSelection = (image) => {
+    setBoardImage(image.urls.small);
+    setSelectedImage(image);
+    // set search results to one selected image
+    setSearchResults([image]);
+  };
+
   return (
     <KeyboardAvoidingView style={styles.container} keyboardVerticalOffset={40}>
       {isLoading ? (
@@ -199,31 +301,83 @@ const Register = () => {
           onChangeText={(text) => setUserName(text)}
           style={styles.input}
         />
-        <Text style={styles.label}>Email:</Text>
-        <TextInput
-          placeholder="Email"
-          value={email}
-          onChangeText={(text) => setEmail(text)}
-          style={styles.input}
-          autoCapitalize="none"
-          inputMode="email"
-        />
-        <Text style={styles.label}>Password:</Text>
-        <TextInput
-          placeholder="Password"
-          value={password}
-          onChangeText={(text) => setPassword(text)}
-          style={styles.input}
-          secureTextEntry
-        />
       </View>
+
+      {!userId && (
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Email:</Text>
+          <TextInput
+            placeholder="Email"
+            value={email}
+            onChangeText={(text) => setEmail(text)}
+            style={styles.input}
+            autoCapitalize="none"
+            inputMode="email"
+          />
+          <Text style={styles.label}>Password:</Text>
+          <TextInput
+            placeholder="Password"
+            value={password}
+            onChangeText={(text) => setPassword(text)}
+            style={styles.input}
+            secureTextEntry
+          />
+        </View>
+      )}
+
+      <View style={styles.inputContainer}>
+        {userId && (
+          <View>
+            <Text style={styles.titleText}>Cover Image (Unsplash):</Text>
+
+            <TextInput
+              label="Search for a cover image"
+              value={searchImage}
+              onChangeText={(text) => setSearchImage(text)}
+              onSubmitEditing={fetchImages}
+              style={[styles.input, styles.inputStyle]}
+              reg
+              placeholder="Search for an image"
+            />
+          </View>
+        )}
+        {userId && searchResults?.length === 0 && (
+          <Text>Nothing found. Try a different query</Text>
+        )}
+        {userId && searchResultsLoading && <ActivityIndicator />}
+        {userId && searchResults.length > 1 && (
+          <FlatList
+            data={searchResults}
+            renderItem={({ item }) => (
+              <Pressable
+                onPress={() => handleImageSelection(item)}
+                key={item.urls.small}
+              >
+                <Image source={{ uri: item.urls.small }} style={styles.image} />
+              </Pressable>
+            )}
+            contentContainerStyle={{ alignItems: "center" }}
+            keyExtractor={(item) => item.id}
+            horizontal
+            ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
+            showsHorizontalScrollIndicator={false}
+          />
+        )}
+        {userId && searchResults.length === 1 && (
+          <Image
+            source={{ uri: selectedImage.urls.small }}
+            style={styles.selectedImage}
+          />
+        )}
+      </View>
+
       {loading ? (
         <ActivityIndicator size="large" color="#0782F9" />
       ) : (
         <View style={styles.buttonContainer}>
           <Button
-            title="Register"
-            onPress={handleRegister}
+            title={userId ? "Update Profile" : "Register"}
+            onPress={userId ? handleUpdateProfile : handleRegister}
             style={styles.button}
           />
         </View>
@@ -239,9 +393,10 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    paddingHorizontal: 30,
   },
   inputContainer: {
-    width: "80%",
+    width: "100%",
   },
   input: {
     backgroundColor: "white",
@@ -249,19 +404,20 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 10,
     marginBottom: 20,
+    width: "100%",
   },
   buttonContainer: {
     width: "100%",
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 48,
+    // justifyContent: "center",
+    // alignItems: "center",
+    marginTop: 15,
   },
-  button: {
-    backgroundColor: "#0782F9",
-    width: "100%",
-    padding: 15,
-    borderRadius: 10,
-  },
+  // button: {
+  //   backgroundColor: "#0782F9",
+  //   width: "100%",
+  //   padding: 15,
+  //   borderRadius: 10,
+  // },
   label: {
     marginBottom: 5,
   },
@@ -284,6 +440,29 @@ const styles = StyleSheet.create({
   iconContainer: {
     justifyContent: "space-between",
     paddingVertical: 5,
+  },
+  // imageWrapper: {
+  //   // flex: 1,
+  //   // flexDirection: "row",
+  //   // flexWrap: "wrap",
+  //   // alignItems: "center",
+  //   marginBottom: 20,
+  //   // justifyContent: "center",
+  // },
+  image: {
+    height: 180,
+    width: 250,
+    // objectFit: "cover",
+    borderRadius: 10,
+  },
+  selectedImage: {
+    alignSelf: "center",
+    // marginHorizontal: "auto",
+    height: 180,
+    width: 250,
+    objectFit: "cover",
+    borderRadius: 10,
+    marginBottom: 10,
   },
 });
 

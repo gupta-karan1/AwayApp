@@ -14,6 +14,7 @@ import TripTopNav from "./TripTopNav";
 import { useNavigation } from "@react-navigation/native";
 // import { Ionicons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 
 // Component to render Trip Plan screen
 const TripPlan = () => {
@@ -31,19 +32,33 @@ const TripPlan = () => {
     invitees,
     tripId,
     userId,
-    path,
+    // path,
+    // createdAt,
+    tripItem,
   } = route.params;
 
   return (
     <SafeAreaView style={styles.container}>
       {/* Trip Details Header */}
       <ImageBackground source={{ uri: coverImage }} style={styles.image}>
-        <Pressable
-          onPress={() => Navigation.navigate("Trips")}
-          style={styles.backButton}
-        >
-          <AntDesign name="arrowleft" size={24} color="black" />
-        </Pressable>
+        <View style={styles.iconContainer}>
+          <Pressable
+            onPress={() => Navigation.navigate("Trips")}
+            style={styles.backButton}
+          >
+            <AntDesign name="arrowleft" size={24} color="black" />
+          </Pressable>
+          <Pressable
+            onPress={() =>
+              Navigation.navigate("CreateTripForm", {
+                tripItem: tripItem,
+              })
+            }
+            style={styles.backButton}
+          >
+            <Feather name="edit-2" size={22} color="black" />
+          </Pressable>
+        </View>
         <View style={styles.textContainer}>
           <Text style={styles.text}>{tripTitle}</Text>
           <Text style={styles.text}>
@@ -76,7 +91,7 @@ const styles = StyleSheet.create({
   },
   image: {
     height: 180,
-    justifyContent: "flex-end",
+    justifyContent: "space-between",
     backgroundColor: "lightgrey",
   },
   textContainer: {
@@ -89,12 +104,16 @@ const styles = StyleSheet.create({
     color: "white",
   },
   backButton: {
-    position: "absolute",
-    top: 10,
-    left: 10,
-    padding: 5,
+    padding: 8,
     borderRadius: 50,
     backgroundColor: "rgba(255, 255, 255, 0.5)",
+  },
+  iconContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 15,
+    paddingTop: 15,
   },
 });
 

@@ -27,7 +27,7 @@ const TripsStackGroup = () => {
         name="CreateTripForm"
         component={CreateTripForm}
         options={{
-          headerTitle: "Create New Trip",
+          headerTitle: "Trip Details",
           animation: "slide_from_bottom",
         }}
       />

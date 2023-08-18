@@ -23,6 +23,7 @@ import {
   query,
   where,
   getDocs,
+  updateDoc,
 } from "firebase/firestore";
 import { FlatList } from "react-native-gesture-handler";
 import uuid from "react-native-uuid";
@@ -67,8 +68,6 @@ const CreateTravelBoard = () => {
   };
 
   const Navigation = useNavigation();
-  // const route = useRoute();
-  // const { userId } = route.params;
 
   const saveBoardDetails = async (userId, boardData) => {
     try {
@@ -103,6 +102,62 @@ const CreateTravelBoard = () => {
     } catch (error) {
       console.log(error);
       Alert.alert("Error creating board", error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const route = useRoute();
+  const { boardId, title, description, image } = route.params;
+
+  useEffect(() => {
+    if (boardId) {
+      setBoardTitle(title);
+      setBoardDescription(description);
+      setBoardImage(image);
+    }
+  }, [boardId]);
+
+  const handleUpdateBoard = async () => {
+    try {
+      setLoading(true);
+      const q = query(
+        collection(FIREBASE_DB, "users"),
+        where("userId", "==", userId)
+      );
+
+      const querySnapshot = await getDocs(q); // get user documents from user collection based on user id
+      const userRef = doc(FIREBASE_DB, "users", querySnapshot.docs[0].id); //Create a reference to this user's document
+
+      const q2 = query(
+        collection(userRef, "boards"),
+        where("boardId", "==", boardId)
+      );
+
+      const querySnapshot2 = await getDocs(q2);
+      const boardRef = doc(userRef, "boards", querySnapshot2.docs[0].id);
+
+      // await addDoc(boardRef, {
+      //   title: boardTitle,
+      //   description: boardDescription,
+      //   image: boardImage,
+      //   createdAt: new Date(),
+      //   boardId: boardId,
+      // });
+
+      await updateDoc(boardRef, {
+        title: boardTitle,
+        description: boardDescription,
+        image: boardImage,
+        createdAt: new Date(),
+        boardId: boardId,
+      });
+
+      Alert.alert("Board updated successfully");
+      Navigation.navigate("Profile");
+    } catch (error) {
+      console.log(error);
+      Alert.alert("Error updating board", error.message);
     } finally {
       setLoading(false);
     }
@@ -153,18 +208,6 @@ const CreateTravelBoard = () => {
 
         {searchResults && !searchResultsLoading && (
           <>
-            {/* {searchResults.map((image) => (
-              <Pressable
-                onPress={() => handleImageSelection(image)}
-                key={image.urls.small}
-                style={styles.imageWrapper}
-              >
-                <Image
-                  source={{ uri: image.urls.small }}
-                  style={styles.image}
-                />
-              </Pressable>
-            ))} */}
             {searchResults.length > 1 && (
               <FlatList
                 data={searchResults}
@@ -196,7 +239,12 @@ const CreateTravelBoard = () => {
         )}
       </View>
       {loading && <ActivityIndicator />}
-      {!loading && <Button title="Submit" onPress={handleSubmit} />}
+      {!loading && (
+        <Button
+          title={boardId ? "Update Board" : "Submit Board"}
+          onPress={boardId ? handleUpdateBoard : handleSubmit}
+        />
+      )}
     </KeyboardAvoidingView>
   );
 };

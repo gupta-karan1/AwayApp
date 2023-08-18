@@ -26,11 +26,15 @@ import {
 import { ActivityIndicator } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
+import { useRoute } from "@react-navigation/native";
 
 export default function Profile() {
   const [travelBoards, setTravelBoards] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
+  // const [userData, setUserData] = useState([]);
+  const [headerImage, setHeaderImage] = useState("");
 
   const { user } = useContext(AuthContext);
   const Navigation = useNavigation();
@@ -41,6 +45,24 @@ export default function Profile() {
 
   // Fetch user's trip data when the screen mounted
 
+  const getSingleUserData = async () => {
+    try {
+      setIsLoading(true);
+      const q = query(
+        collection(FIREBASE_DB, "users"),
+        where("userId", "==", user.uid)
+      );
+
+      const querySnapshot = await getDocs(q);
+      const userData = querySnapshot.docs.map((doc) => doc.data());
+      setHeaderImage(userData[0].headerImage);
+    } catch (error) {
+      Alert.alert("Error fetching user data:", error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useFocusEffect(
     useCallback(() => {
       if (!deleteLoading) {
@@ -48,6 +70,7 @@ export default function Profile() {
 
         const timerId = setTimeout(() => {
           getTravelBoards();
+          getSingleUserData();
         }, delay);
 
         return () => {
@@ -142,9 +165,27 @@ export default function Profile() {
   return (
     <View style={styles.container}>
       <ImageBackground
-        source={require("../../../assets/headerDefault.jpg")}
+        source={
+          headerImage
+            ? { uri: headerImage }
+            : require("../../../assets/headerDefault.jpg")
+        }
         style={styles.headerImage}
-      ></ImageBackground>
+      >
+        <Pressable
+          onPress={() =>
+            Navigation.navigate("Register", {
+              username: user.displayName,
+              userEmail: user.email,
+              profileImage: user.photoURL,
+              userId: user.uid,
+            })
+          }
+          style={styles.backButton}
+        >
+          <Feather name="edit-2" size={22} color="black" />
+        </Pressable>
+      </ImageBackground>
       <View style={styles.textContainer}>
         <Text style={GlobalStyles.titleLargeRegular}>
           {user ? user.displayName : null}
@@ -327,42 +368,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 5,
   },
+  backButton: {
+    position: "absolute",
+    top: 10,
+    right: 10,
+    padding: 8,
+    borderRadius: 50,
+    backgroundColor: "rgba(255, 255, 255, 0.5)",
+  },
 });
 
 // SUMMARY: Profile Screen with logout button that redirects user to Login screen.
-
-// <View style={styles.buttonContainer}>
-// <Pressable
-//   onPress={() => handleTabView("all")}
-//   style={[styles.button, tabView === "all" && styles.selected]}
-// >
-//   <Text>All</Text>
-// </Pressable>
-// <Pressable
-//   onPress={() => handleTabView("personal")}
-//   style={[styles.button, tabView === "personal" && styles.selected]}
-// >
-//   <Text>My Trips</Text>
-// </Pressable>
-// <Pressable
-//   onPress={() => handleTabView("invited")}
-//   style={[styles.button, tabView === "invited" && styles.selected]}
-// >
-//   <Text>Invited</Text>
-// </Pressable>
-// </View>
-// {loading && <ActivityIndicator size="large" />}
-// {!loading && tripData.length === 0 && invitedTrips.length === 0 && (
-// <Pressable style={styles.emptyContainer} onPress={handleAddTrip}>
-//   <Text style={{ textAlign: "center" }}>
-//     You don't have any trips yet. Start planning your first trip now!
-//   </Text>
-// </Pressable>
-// )}
-// {!loading && tripData && invitedTrips && (
-// <ScrollView showsVerticalScrollIndicator={false}>
-//   {tabView === "all" && <AllTrips />}
-//   {tabView === "personal" && <MyTrips />}
-//   {tabView === "invited" && <InvitedTrips />}
-// </ScrollView>
-// )}

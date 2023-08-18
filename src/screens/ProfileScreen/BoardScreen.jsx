@@ -5,7 +5,7 @@ import {
   Alert,
   FlatList,
   ActivityIndicator,
-  Image,
+  ImageBackground,
   TouchableOpacity,
   Pressable,
 } from "react-native";
@@ -24,6 +24,7 @@ import {
 import GlobalStyles from "../../GlobalStyles";
 import ProfilePlaceCard from "../../components/ProfileComp/ProfilePlaceCard";
 import { useNavigation } from "@react-navigation/native";
+import { Feather } from "@expo/vector-icons";
 
 const BoardScreen = () => {
   const route = useRoute();
@@ -177,19 +178,32 @@ const BoardScreen = () => {
             </Pressable>
           }
           ListHeaderComponent={
-            <View>
-              {/* <Image
-                source={image ? { uri: image } : null}
-                style={styles.image}
-              /> */}
-              <Image
-                source={
-                  image
-                    ? { uri: image }
-                    : require("../../../assets/image-placeholder.png")
-                }
-                style={styles.image}
-              />
+            <View style={styles.container}>
+              <View style={styles.imageContainer}>
+                <ImageBackground
+                  source={
+                    image
+                      ? { uri: image }
+                      : require("../../../assets/image-placeholder.png")
+                  }
+                  style={styles.image}
+                >
+                  <Pressable
+                    onPress={() =>
+                      Navigation.navigate("CreateTravelBoard", {
+                        boardId: boardId,
+                        title: title,
+                        description: description,
+                        image: image,
+                        userId: userId,
+                      })
+                    }
+                    style={styles.backButton}
+                  >
+                    <Feather name="edit-2" size={22} color="black" />
+                  </Pressable>
+                </ImageBackground>
+              </View>
               <Text style={[GlobalStyles.titleLargeRegular, styles.titleText]}>
                 {title}
               </Text>
@@ -225,17 +239,6 @@ const BoardScreen = () => {
           }
         />
       )}
-
-      {/* {placeData.length === 0 && !loading && (
-        <Pressable
-          onPress={() => Navigation.navigate("ExploreStackGroup")}
-          style={styles.promptText}
-        >
-          <Text>
-            Go to the Explore page to save a place to your travel board!
-          </Text>
-        </Pressable>
-      )} */}
     </View>
   );
 };
@@ -243,11 +246,19 @@ const BoardScreen = () => {
 export default BoardScreen;
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingVertical: 20,
+  },
   image: {
     height: 200,
     width: "100%",
     backgroundColor: "lightgrey",
-    marginTop: 20,
+  },
+  imageContainer: {
+    width: "100%",
+    height: 200,
+    overflow: "hidden",
     borderRadius: 10,
   },
   titleText: {
@@ -273,5 +284,13 @@ const styles = StyleSheet.create({
     backgroundColor: "lightgrey",
     marginBottom: 10,
     borderRadius: 10,
+  },
+  backButton: {
+    position: "absolute",
+    top: 10,
+    right: 10,
+    padding: 8,
+    borderRadius: 50,
+    backgroundColor: "rgba(255, 255, 255, 0.5)",
   },
 });

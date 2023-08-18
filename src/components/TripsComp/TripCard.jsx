@@ -23,6 +23,7 @@ const TripCard = ({ tripItem, path, onDelete }) => {
     coverImage,
     userId,
     tripId,
+    createdAt,
   } = tripItem;
 
   const { navigate } = useNavigation(); // The useNavigation hook is used to access the navigation prop of the component.
@@ -45,6 +46,8 @@ const TripCard = ({ tripItem, path, onDelete }) => {
           invitees: invitees,
           userId: userId,
           path: path,
+          createdAt: createdAt,
+          tripItem: tripItem,
         })
       }
     >

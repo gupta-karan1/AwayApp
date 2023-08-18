@@ -26,6 +26,7 @@ import {
   query,
   where,
   getDocs,
+  updateDoc,
 } from "firebase/firestore";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import uuid from "react-native-uuid";
@@ -33,10 +34,13 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import moment from "moment";
 import useDestinationFeed from "../../../hooks/useDestinationFeed";
 import { Ionicons } from "@expo/vector-icons";
+import { useRoute } from "@react-navigation/native";
 // import { PickerIOS } from "@react-native-picker/picker";
 
 // Component to render the Trip Form
 const CreateTripForm = () => {
+  // console.log(tripItem);
+
   // State variables to manage form data
   const [tripTitle, setTripTitle] = useState("");
   const [tripLocation, setTripLocation] = useState();
@@ -48,6 +52,19 @@ const CreateTripForm = () => {
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState("");
   const [showInviteesPicker, setShowInviteesPicker] = useState(false);
+
+  // const [tripTitle, setTripTitle] = useState(tripItem.tripTitle || "");
+  // const [tripLocation, setTripLocation] = useState(tripItem.tripLocation || "");
+  // const [startDate, setStartDate] = useState(tripItem.startDate || new Date());
+  // const [endDate, setEndDate] = useState(tripItem.endDate || new Date());
+  // const [tripType, setTripType] = useState(tripItem.tripType || "solo");
+  // const [invitees, setInvitees] = useState(tripItem.invitees || []);
+  // const [coverImage, setCoverImage] = useState(tripItem.coverImage || null);
+  // const [users, setUsers] = useState([]);
+  // const [selectedUser, setSelectedUser] = useState("");
+  // const [showInviteesPicker, setShowInviteesPicker] = useState(
+  //   tripItem === "group" && invitees.length > 0
+  // );
 
   // State variables to manage date picker modal
   const [showStartDateModal, setShowStartDateModal] = useState(false);
@@ -69,15 +86,6 @@ const CreateTripForm = () => {
   // Fucntion to pick an image from image library
   const pickImage = async () => {
     setIsLoading(true); // Show loading image
-
-    /*  Ask for permission to access the image library
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-
-    if (status !== "granted") {
-      alert("Sorry, we need camera roll permissions to make this work!");
-      return;
-    }
-    No permissions request is necessary for launching the image library */
 
     // Launch image picker
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -206,16 +214,6 @@ const CreateTripForm = () => {
 
       Alert.alert("Trip details saved successfully!");
 
-      // Navigate to Trip Plan Screen with trip details as parameters
-      // navigation.navigate("TripPlan", {
-      //   tripTitle: tripTitle,
-      //   startDate: moment(startDate).format("DD MMM YYYY"),
-      //   endDate: moment(endDate).format("DD MMM YYYY"),
-      //   coverImage: coverImage,
-      //   tripLocation: tripLocation,
-      //   invitees: invitees,
-      // });
-
       navigation.navigate("Trips"); // navigate to trips screen after submitting form
     } catch (error) {
       // console.error("Error saving trip details:", error);
@@ -234,6 +232,57 @@ const CreateTripForm = () => {
     } else {
       // getUsers();
       setShowInviteesPicker(true); // Show invitees picker when trip type is changed to group
+    }
+  };
+
+  const handleUpdate = async () => {
+    try {
+      setLoading(true);
+      const newTripData = {
+        tripTitle: tripTitle || "Untitled Trip",
+        tripLocation: tripLocation || "No Location",
+        startDate: startDate,
+        endDate: endDate,
+        tripType: tripType,
+        invitees: invitees,
+        coverImage: coverImage,
+        userId: user.uid,
+        tripId: tripItem.tripId,
+        createdAt: tripItem.createdAt,
+      };
+
+      const q = query(
+        collection(FIREBASE_DB, "users"),
+        where("userId", "==", user.uid)
+      );
+
+      const querySnapshot = await getDocs(q); // get user documents from user collection based on user id
+      const userRef = doc(FIREBASE_DB, "users", querySnapshot.docs[0].id); //Create a reference to this user's document
+
+      // await addDoc(collection(userRef, "trips"), newTripData); // Add the trip data to the "trips" subcollection under specific user
+
+      const q2 = query(
+        collection(userRef, "trips"),
+        where("tripId", "==", tripItem.tripId)
+      );
+      const querySnapshot2 = await getDocs(q2);
+      const tripRef = doc(
+        FIREBASE_DB,
+        "users",
+        querySnapshot.docs[0].id,
+        "trips",
+        querySnapshot2.docs[0].id
+      );
+
+      await updateDoc(tripRef, newTripData);
+
+      Alert.alert("Trip details updated successfully!");
+
+      navigation.navigate("Trips"); // navigate to trips screen after submitting form
+    } catch (error) {
+      Alert.alert("Error updating trip details:", error.message);
+    } finally {
+      setLoading(false); // set laoding state to flase after form submission
     }
   };
 
@@ -273,6 +322,20 @@ const CreateTripForm = () => {
     }, [showInviteesPicker, tripType])
   );
 
+  const route = useRoute();
+  const { tripItem } = route.params || {};
+  useEffect(() => {
+    if (tripItem) {
+      setTripTitle(tripItem.tripTitle);
+      setTripLocation(tripItem.tripLocation);
+      setStartDate(tripItem.startDate.toDate());
+      setEndDate(tripItem.endDate.toDate());
+      setTripType(tripItem.tripType);
+      setInvitees(tripItem.invitees);
+      setCoverImage(tripItem.coverImage);
+    }
+  }, [tripItem]);
+
   return (
     <ScrollView>
       <KeyboardAvoidingView style={styles.container}>
@@ -311,10 +374,7 @@ const CreateTripForm = () => {
               {destinationData.map((destination) => (
                 <Picker.Item
                   key={destination.destinationId}
-                  // label="Select a Location"
                   label={destination.destinationName}
-                  // Assuming each destination document in Firebase has a "name" field
-                  // value={destination.destinationName}
                   value={destination.destinationName}
                 />
               ))}
@@ -464,17 +524,7 @@ const CreateTripForm = () => {
             <ActivityIndicator />
           ) : (
             <View>
-              {/* Cover Image Upload */}
               <Button title="Upload Cover Image" onPress={pickImage} />
-              {/* Placeholder for Image
-              {!coverImage && (
-                <View style={styles.image}>
-                  <Text>Your Cover Image will Appear Here</Text>
-                </View>
-              )}
-              {coverImage && (
-                <Image source={{ uri: coverImage }} style={styles.image} />
-              )} */}
 
               <Image
                 source={
@@ -490,8 +540,8 @@ const CreateTripForm = () => {
             <ActivityIndicator size="large" color="#0000ff" />
           ) : (
             <Button
-              title="Save Trip"
-              onPress={handleSubmit}
+              title={tripItem ? "Update Trip" : "Create Trip"}
+              onPress={tripItem ? handleUpdate : handleSubmit}
               style={styles.button}
             />
           )}
