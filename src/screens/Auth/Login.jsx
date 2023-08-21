@@ -7,6 +7,7 @@ import {
   Text,
   ActivityIndicator,
   Pressable,
+  Alert,
 } from "react-native";
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
@@ -29,10 +30,11 @@ const Login = () => {
     try {
       // Call the login function to authenticate the user with the provided email and password
       await login(email, password);
+      Alert.alert("Login Successful");
     } catch (error) {
       // error alert
-      console.log(error);
-      alert("Login failed: ", error.message);
+      // console.log(error);
+      Alert.alert("Login failed: ", error.message);
     }
   };
 

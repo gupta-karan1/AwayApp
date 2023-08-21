@@ -158,17 +158,11 @@ const ProfilePlace = ({ route }) => {
     );
   };
 
-  // console.log(selectedBoards[0].boardId);
-
   // create handleSubmitBoard which will save the particular place within a places array to the selected board
 
   const handleSubmitBoard = async () => {
     try {
       setIsLoading(true);
-      // const boardData = {
-      //   ...selectedBoards[0],
-      //   places: [...selectedBoards[0].places, singlePlaceData],
-      // };
 
       const q = query(
         collection(FIREBASE_DB, "users"),
@@ -230,9 +224,6 @@ const ProfilePlace = ({ route }) => {
 
   return (
     <View style={styles.container}>
-      {/* {loading ? (
-        <ActivityIndicator size="large" />
-      ) : ( */}
       <ScrollView showsVerticalScrollIndicator={false}>
         <Image source={{ uri: placeImage }} style={styles.image} />
         <View style={styles.textContainer}>

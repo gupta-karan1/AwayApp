@@ -100,7 +100,7 @@ const Register = () => {
       Alert.alert("New user registered successfully!");
     } catch (error) {
       // error alert
-      console.log(error);
+      // console.log(error);
       Alert.alert("Registration failed: ", error.message);
     }
   };

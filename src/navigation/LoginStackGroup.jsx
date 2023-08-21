@@ -11,7 +11,6 @@ const LoginStackGroup = () => {
       initialRouteName="Login"
       screenOptions={{
         animation: "slide_from_right",
-        presentation: "formSheet",
         headerTitleAlign: "center",
       }}
     >

@@ -30,6 +30,11 @@ import SavedPlaceCard from "../../components/TripsComp/SavedPlaceCard";
 import { Ionicons } from "@expo/vector-icons";
 import GlobalStyles from "../../GlobalStyles";
 import { useNavigation } from "@react-navigation/native";
+import DraggableFlatList from "react-native-draggable-flatlist";
+import {
+  NestableScrollContainer,
+  NestableDraggableFlatList,
+} from "react-native-draggable-flatlist";
 
 const Itinerary = ({ startDate, endDate, tripId, userId, invitees }) => {
   // State variables for modal visibility and selected place
@@ -374,18 +379,37 @@ const Itinerary = ({ startDate, endDate, tripId, userId, invitees }) => {
           }))}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item, section }) => (
-            <View style={styles.item}>
-              <FlatList
-                data={item["places"] || []}
-                renderItem={({ item }) => (
-                  <SavedPlaceCard
-                    placeItem={item}
-                    onDelete={() => confirmDelete(item, section)}
-                  />
-                )}
-                keyExtractor={(item) => item.placeId}
-              />
-            </View>
+            // <View style={styles.item}>
+            //   <FlatList
+            //     data={item["places"] || []}
+            //     renderItem={({ item }) => (
+            //       <SavedPlaceCard
+            //         placeItem={item}
+            //         onDelete={() => confirmDelete(item, section)}
+            //       />
+            //     )}
+            //     keyExtractor={(item) => item.placeId}
+            //   />
+            // </View>
+            <DraggableFlatList
+              data={item["places"] || []}
+              renderItem={({ item, drag }) => (
+                <SavedPlaceCard
+                  placeItem={item}
+                  onDelete={() => confirmDelete(item.placeId, section)}
+                  onDrag={drag} // Attach the drag function to the SavedPlaceCard component
+                />
+              )}
+              keyExtractor={(item) => item.placeId}
+              onDragEnd={({ data }) => {
+                // Update the order of places in the state or Firebase here
+                const updatedItineraryData = {
+                  ...itineraryData,
+                  [formatDateString(section.title)]: data, // Update the data for the specific date
+                };
+                setItineraryData(updatedItineraryData);
+              }}
+            />
           )}
           stickySectionHeadersEnabled={true}
           renderSectionHeader={({ section: { title } }) => (

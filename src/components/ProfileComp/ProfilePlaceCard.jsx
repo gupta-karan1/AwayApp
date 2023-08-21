@@ -57,12 +57,6 @@ const ProfilePlaceCard = ({ placeItem, path, onDelete }) => {
           </Text>
         </View>
         <View style={styles.iconBox}>
-          {/* <Ionicons
-            onPress={() => setModalVisible(true)}
-            name="information-circle-outline"
-            size={24}
-            color="black"
-          /> */}
           <Ionicons
             onPress={onDelete}
             name="md-trash-outline"

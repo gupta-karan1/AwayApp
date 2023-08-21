@@ -33,7 +33,6 @@ export default function Profile() {
   const [travelBoards, setTravelBoards] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
-  // const [userData, setUserData] = useState([]);
   const [headerImage, setHeaderImage] = useState("");
 
   const { user } = useContext(AuthContext);

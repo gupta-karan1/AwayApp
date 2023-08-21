@@ -55,10 +55,7 @@ const FindArticle = ({ route }) => {
     );
   }, []); // add an empty array as the second argument to useCallback to avoid re-rendering the component
 
-  const Navigation = useNavigation();
-
-  // const buttonPosition = new Animated.ValueXY({ x: 10, y: 10 });
-  // const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+  // const Navigation = useNavigation();
 
   return (
     <View style={styles.container}>
@@ -80,38 +77,13 @@ const FindArticle = ({ route }) => {
           }}
           showsVerticalScrollIndicator={false} // hide scroll bar
           contentContainerStyle={{ paddingHorizontal: 15 }} // add padding to left and right
-          // List header component to display the article details
-          // onScroll={Animated.event(
-          //   [{ nativeEvent: { contentOffset: { y: buttonPosition.y } } }],
-          //   { useNativeDriver: false }
-          // )}
           ListHeaderComponent={
             <View>
-              {/* <Image source={{ uri: articleImg }} style={styles.image} /> */}
               <ImageBackground
                 source={{ uri: articleImg }}
                 style={styles.image}
                 imageStyle={{ borderRadius: 10 }}
-              >
-                {/* <Pressable
-                  onPress={() => Navigation.goBack()}
-                  style={styles.backButton}
-                >
-                  <AntDesign name="arrowleft" size={24} color="black" />
-                </Pressable> */}
-
-                {/* <AnimatedPressable
-                  onPress={() => Navigation.goBack()}
-                  style={[
-                    styles.backButton,
-                    {
-                      transform: [{ translateY: buttonPosition.y }],
-                    },
-                  ]}
-                >
-                  <AntDesign name="arrowleft" size={24} color="black" />
-                </AnimatedPressable> */}
-              </ImageBackground>
+              ></ImageBackground>
               <View style={styles.subtitleText}>
                 <Text style={GlobalStyles.bodySmallRegular}>
                   {articleCategory}
@@ -178,17 +150,6 @@ const FindArticle = ({ route }) => {
           }
         />
       )}
-      {/* <AnimatedPressable
-        onPress={() => Navigation.goBack()}
-        style={[
-          styles.backButton,
-          {
-            transform: [{ translateY: buttonPosition.y }],
-          },
-        ]}
-      >
-        <AntDesign name="arrowleft" size={24} color="black" />
-      </AnimatedPressable> */}
     </View>
   );
 };

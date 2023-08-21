@@ -35,12 +35,9 @@ import moment from "moment";
 import useDestinationFeed from "../../../hooks/useDestinationFeed";
 import { Ionicons } from "@expo/vector-icons";
 import { useRoute } from "@react-navigation/native";
-// import { PickerIOS } from "@react-native-picker/picker";
 
 // Component to render the Trip Form
 const CreateTripForm = () => {
-  // console.log(tripItem);
-
   // State variables to manage form data
   const [tripTitle, setTripTitle] = useState("");
   const [tripLocation, setTripLocation] = useState();
@@ -52,19 +49,6 @@ const CreateTripForm = () => {
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState("");
   const [showInviteesPicker, setShowInviteesPicker] = useState(false);
-
-  // const [tripTitle, setTripTitle] = useState(tripItem.tripTitle || "");
-  // const [tripLocation, setTripLocation] = useState(tripItem.tripLocation || "");
-  // const [startDate, setStartDate] = useState(tripItem.startDate || new Date());
-  // const [endDate, setEndDate] = useState(tripItem.endDate || new Date());
-  // const [tripType, setTripType] = useState(tripItem.tripType || "solo");
-  // const [invitees, setInvitees] = useState(tripItem.invitees || []);
-  // const [coverImage, setCoverImage] = useState(tripItem.coverImage || null);
-  // const [users, setUsers] = useState([]);
-  // const [selectedUser, setSelectedUser] = useState("");
-  // const [showInviteesPicker, setShowInviteesPicker] = useState(
-  //   tripItem === "group" && invitees.length > 0
-  // );
 
   // State variables to manage date picker modal
   const [showStartDateModal, setShowStartDateModal] = useState(false);
@@ -107,8 +91,6 @@ const CreateTripForm = () => {
 
       delete result["cancelled"];
     } else {
-      // If no image selected set coverImage to null
-      // setCoverImage(null);
       // if no cover image is selected, set the cover image to the destination.imageUrl
       setCoverImage(
         destinationData.filter(
@@ -235,6 +217,7 @@ const CreateTripForm = () => {
     }
   };
 
+  // function to update trip details via the same form using route params
   const handleUpdate = async () => {
     try {
       setLoading(true);
@@ -258,8 +241,6 @@ const CreateTripForm = () => {
 
       const querySnapshot = await getDocs(q); // get user documents from user collection based on user id
       const userRef = doc(FIREBASE_DB, "users", querySnapshot.docs[0].id); //Create a reference to this user's document
-
-      // await addDoc(collection(userRef, "trips"), newTripData); // Add the trip data to the "trips" subcollection under specific user
 
       const q2 = query(
         collection(userRef, "trips"),

@@ -3,6 +3,7 @@ import DestinationScreen from "../screens/ExploreScreen/DestinationScreen";
 import ArticleScreen from "../screens/ExploreScreen/ArticleScreen";
 import PlaceScreen from "../screens/ExploreScreen/PlaceScreen";
 import Explore from "../screens/tabScreens/Explore";
+import SavePlaceModal from "../screens/ExploreScreen/SavePlaceModal";
 
 const ExploreStack = createNativeStackNavigator(); // The createNativeStackNavigator function is used to create a stack navigator for the Explore tab.
 
@@ -38,6 +39,14 @@ const ExploreStackGroup = () => {
           title: "Place",
         }}
       />
+      {/* <ExploreStack.Screen
+        name="SavePlaceModal"
+        component={SavePlaceModal}
+        options={{
+          title: "Save Place",
+          animation: "slide_from_bottom",
+        }}
+      /> */}
     </ExploreStack.Navigator>
   );
 };

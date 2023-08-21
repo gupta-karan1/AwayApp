@@ -9,6 +9,8 @@ import {
   Pressable,
   Button,
   Alert,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from "react-native";
 import React, { useState, useContext, useEffect } from "react";
 // import { EvilIcons } from "@expo/vector-icons";
@@ -108,7 +110,7 @@ const CreateTravelBoard = () => {
   };
 
   const route = useRoute();
-  const { boardId, title, description, image } = route.params;
+  const { boardId, title, description, image } = route.params || {}; // if there are no existing parameters from the existing database, set it to empty object
 
   useEffect(() => {
     if (boardId) {
@@ -154,7 +156,12 @@ const CreateTravelBoard = () => {
       });
 
       Alert.alert("Board updated successfully");
-      Navigation.navigate("Profile");
+      Navigation.navigate("BoardScreen", {
+        boardId: boardId,
+        title: boardTitle,
+        description: boardDescription,
+        image: boardImage,
+      });
     } catch (error) {
       console.log(error);
       Alert.alert("Error updating board", error.message);
@@ -164,88 +171,90 @@ const CreateTravelBoard = () => {
   };
 
   return (
-    <KeyboardAvoidingView style={styles.container}>
-      <View style={styles.inputContainer}>
-        <Text style={styles.titleText}>Title:</Text>
-        <TextInput
-          label="Travel Board Title"
-          value={boardTitle}
-          onChangeText={(text) => setBoardTitle(text)}
-          style={styles.input}
-          placeholder="Title"
-        />
-        <Text style={styles.titleText}>Description:</Text>
-        <TextInput
-          label="Description"
-          value={boardDescription}
-          onChangeText={(text) => setBoardDescription(text)}
-          style={[styles.descriptionInput, styles.input]}
-          placeholder="Description"
-          multiline={true}
-          numberOfLines={3}
-          // maxLength={250}
-          maxHeight={110} // Stop submit button from going of screen
-          returnKeyType="done" // To hide keyboard when done typing
-        />
-        <Text style={styles.titleText}>Cover Image (Unsplash):</Text>
-        {/* <View style={styles.searchContainer}> */}
-        <TextInput
-          label="Search for a cover image"
-          value={searchImage}
-          onChangeText={(text) => setSearchImage(text)}
-          onSubmitEditing={fetchImages}
-          style={[styles.input, styles.inputStyle]}
-          reg
-          placeholder="Search for an image"
-        />
-        {/* <EvilIcons name="search" size={20} color="black" />
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      <KeyboardAvoidingView style={styles.container}>
+        <View style={styles.inputContainer}>
+          <Text style={styles.titleText}>Title:</Text>
+          <TextInput
+            label="Travel Board Title"
+            value={boardTitle}
+            onChangeText={(text) => setBoardTitle(text)}
+            style={styles.input}
+            placeholder="Title"
+          />
+          <Text style={styles.titleText}>Description:</Text>
+          <TextInput
+            label="Description"
+            // value={boardDescription}
+            onChangeText={(text) => setBoardDescription(text)}
+            style={[styles.descriptionInput, styles.input]}
+            placeholder="Description"
+            multiline={true}
+            numberOfLines={3}
+            maxwidth={50}
+            maxHeight={110} // Stop submit button from going of screen
+            // returnKeyType="done"
+          />
+          <Text style={styles.titleText}>Cover Image (Unsplash):</Text>
+          {/* <View style={styles.searchContainer}> */}
+          <TextInput
+            label="Search for a cover image"
+            value={searchImage}
+            onChangeText={(text) => setSearchImage(text)}
+            onSubmitEditing={fetchImages}
+            style={[styles.input, styles.inputStyle]}
+            reg
+            placeholder="Search for an image"
+          />
+          {/* <EvilIcons name="search" size={20} color="black" />
           </View> */}
-        {searchResults?.length === 0 && (
-          <Text>Nothing found. Try a different query</Text>
-        )}
+          {searchResults?.length === 0 && (
+            <Text>Nothing found. Try a different query</Text>
+          )}
 
-        {searchResultsLoading && <ActivityIndicator />}
+          {searchResultsLoading && <ActivityIndicator />}
 
-        {searchResults && !searchResultsLoading && (
-          <>
-            {searchResults.length > 1 && (
-              <FlatList
-                data={searchResults}
-                renderItem={({ item }) => (
-                  <Pressable
-                    onPress={() => handleImageSelection(item)}
-                    key={item.urls.small}
-                    style={styles.imageWrapper}
-                  >
-                    <Image
-                      source={{ uri: item.urls.small }}
-                      style={styles.image}
-                    />
-                  </Pressable>
-                )}
-                keyExtractor={(item) => item.id}
-                horizontal
-                ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
-                showsHorizontalScrollIndicator={false}
-              />
-            )}
-            {searchResults.length === 1 && (
-              <Image
-                source={{ uri: selectedImage.urls.small }}
-                style={styles.selectedImage}
-              />
-            )}
-          </>
+          {searchResults && !searchResultsLoading && (
+            <>
+              {searchResults.length > 1 && (
+                <FlatList
+                  data={searchResults}
+                  renderItem={({ item }) => (
+                    <Pressable
+                      onPress={() => handleImageSelection(item)}
+                      key={item.urls.small}
+                      style={styles.imageWrapper}
+                    >
+                      <Image
+                        source={{ uri: item.urls.small }}
+                        style={styles.image}
+                      />
+                    </Pressable>
+                  )}
+                  keyExtractor={(item) => item.id}
+                  horizontal
+                  ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
+                  showsHorizontalScrollIndicator={false}
+                />
+              )}
+              {searchResults.length === 1 && (
+                <Image
+                  source={{ uri: selectedImage.urls.small }}
+                  style={styles.selectedImage}
+                />
+              )}
+            </>
+          )}
+        </View>
+        {loading && <ActivityIndicator />}
+        {!loading && (
+          <Button
+            title={boardId ? "Update Board" : "Save Board"}
+            onPress={boardId ? handleUpdateBoard : handleSubmit}
+          />
         )}
-      </View>
-      {loading && <ActivityIndicator />}
-      {!loading && (
-        <Button
-          title={boardId ? "Update Board" : "Submit Board"}
-          onPress={boardId ? handleUpdateBoard : handleSubmit}
-        />
-      )}
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   );
 };
 

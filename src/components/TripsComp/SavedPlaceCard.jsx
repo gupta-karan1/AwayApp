@@ -16,7 +16,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 
 // display places on the destination screen based on the pathId prop passed to it.
-const SavedPlaceCard = ({ placeItem, onDelete }) => {
+const SavedPlaceCard = ({ placeItem, onDelete, onDrag }) => {
   // The placeItem prop is destructured to extract the data for the place to be displayed.
   const {
     placeAddress,
@@ -61,7 +61,7 @@ const SavedPlaceCard = ({ placeItem, onDelete }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.card}>
+      <TouchableOpacity style={styles.card} onLongPress={onDrag}>
         <Image source={{ uri: placeImage }} style={styles.image} />
         <View style={styles.cardText}>
           <Text style={GlobalStyles.labelMediumMedium} numberOfLines={2}>
@@ -85,7 +85,7 @@ const SavedPlaceCard = ({ placeItem, onDelete }) => {
             color="black"
           />
         </View>
-      </View>
+      </TouchableOpacity>
 
       <Modal
         animationType="fade"
