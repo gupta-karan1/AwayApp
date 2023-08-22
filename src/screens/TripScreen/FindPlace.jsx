@@ -27,6 +27,7 @@ import {
 } from "firebase/firestore";
 import { FIREBASE_DB } from "../../../firebaseConfig";
 import { useNavigation } from "@react-navigation/native";
+import MapView, { Marker } from "react-native-maps";
 
 // PlaceScreen component for the find section within a trip
 const FindPlace = ({ route }) => {
@@ -166,17 +167,7 @@ const FindPlace = ({ route }) => {
             style={styles.image}
             source={{ uri: singlePlaceData.placeImage }}
             imageStyle={{ borderRadius: 10 }}
-          >
-            {/* <Pressable onPress={savePlace} style={styles.saveIcon}>
-              {/* {isSaved ? (
-                // <Ionicons name="bookmark" size={24} color="black" />
-                <FontAwesome name="bookmark" size={24} color="black" />
-              ) : (
-                // <Feather name="bookmark" size={24} color="black" />
-              )} */}
-            {/* <FontAwesome name="bookmark-o" size={24} color="black" />
-            </Pressable> */}
-          </ImageBackground>
+          ></ImageBackground>
           <View style={styles.textContainer}>
             <Text style={[GlobalStyles.bodySmallRegular, styles.subtitleText]}>
               {singlePlaceData.placeCategory}
@@ -280,14 +271,26 @@ const FindPlace = ({ route }) => {
               </Text>
             </View>
           )}
-          {/* <View style={styles.button}>
-            {/* Save Place button not functional yet */}
-          {/* //   {isLoading ? ( */}
-          {/* //     <ActivityIndicator size="large" />
-          //   ) : (
-          //     <Button title="Save Place" type="submit" onPress={savePlace} />
-          //   )}
-          // </View> */}
+          <View style={styles.mapContainer}>
+            <MapView
+              style={styles.map}
+              initialRegion={{
+                latitude: singlePlaceData.placeLatitude,
+                longitude: singlePlaceData.placeLongitude,
+                latitudeDelta: 0.003,
+                longitudeDelta: 0.003,
+              }}
+            >
+              <Marker
+                coordinate={{
+                  latitude: singlePlaceData.placeLatitude,
+                  longitude: singlePlaceData.placeLongitude,
+                }}
+                title={singlePlaceData.placeTitle}
+                description={singlePlaceData.placeCategory}
+              />
+            </MapView>
+          </View>
         </ScrollView>
       )}
     </View>
@@ -341,17 +344,15 @@ const styles = StyleSheet.create({
   button: {
     marginVertical: 10,
   },
-  // saveIcon: {
-  //   position: "absolute",
-  //   top: 10,
-  //   right: 10,
-  //   // height: 100,
-  //   // width: 100,
-  //   padding: 15,
-  //   borderRadius: 100,
-  //   backgroundColor: "rgba(255, 255, 255, 0.8)",
-  //   elevation: 2,
-  // },
+  mapContainer: {
+    flex: 1,
+    borderRadius: 10,
+    overflow: "hidden", // This is important to clip the border radius
+  },
+  map: {
+    height: 200,
+    width: "100%",
+  },
   saveButton: {
     backgroundColor: "lightblue",
     paddingVertical: 10,

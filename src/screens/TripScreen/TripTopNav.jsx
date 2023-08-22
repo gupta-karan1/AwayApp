@@ -113,6 +113,7 @@ function FindStack() {
         options={{
           headerTitle: "Article",
         }}
+        initialParams={{ tripId: tripId, userId: userId }}
       />
       <Stack.Screen
         name="FindPlace"

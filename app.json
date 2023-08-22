@@ -15,12 +15,20 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "jsEngine": "hermes"
+      "jsEngine": "hermes",
+      "config": {
+        "googleMapsApiKey": "AIzaSyBxu_7vriZr_HochNOZmK64QTsbm4UhyZA"
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#ffffff",
+        "config": {
+          "googleMaps": {
+            "apiKey": "AIzaSyBxu_7vriZr_HochNOZmK64QTsbm4UhyZA"
+          }
+        }
       },
       "jsEngine": "hermes"
     },

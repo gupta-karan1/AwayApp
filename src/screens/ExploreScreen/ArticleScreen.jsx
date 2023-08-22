@@ -63,7 +63,7 @@ const ArticleScreen = ({ route }) => {
           removeClippedSubviews={true}
           initialNumToRender={2}
           maxToRenderPerBatch={2}
-          updateCellsBatchingPeriod={50}
+          updateCellsBatchingPeriod={100}
           windowSize={2}
           columnWrapperStyle={{
             justifyContent: "space-between", // add space between columns

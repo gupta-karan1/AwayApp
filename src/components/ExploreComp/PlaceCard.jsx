@@ -1,7 +1,13 @@
-import { StyleSheet, Text, Pressable, ImageBackground } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  Pressable,
+  ImageBackground,
+  View,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import GlobalStyles from "../../GlobalStyles";
-import { FontAwesome } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 import SavePlaceModal from "../../screens/ExploreScreen/SavePlaceModal";
 import { useState } from "react";
 import { useContext } from "react";
@@ -56,20 +62,22 @@ const PlaceCard = ({ placeItem, path }) => {
         })
       }
     >
-      <ImageBackground source={{ uri: placeImage }} style={styles.image}>
-        <Pressable
-          style={styles.saveButton}
-          onPress={() => {
-            if (!user) {
-              Navigation.navigate("ProfileStackGroup");
-            } else {
-              setModalVisible(true);
-            }
-          }}
-        >
-          <FontAwesome name="plus-circle" size={24} color="black" />
-        </Pressable>
-      </ImageBackground>
+      <View style={styles.imageContainer}>
+        <ImageBackground source={{ uri: placeImage }} style={styles.image}>
+          <Pressable
+            style={styles.saveButton}
+            onPress={() => {
+              if (!user) {
+                Navigation.navigate("ProfileStackGroup");
+              } else {
+                setModalVisible(true);
+              }
+            }}
+          >
+            <Feather name="plus" size={24} color="black" />
+          </Pressable>
+        </ImageBackground>
+      </View>
       {modalVisible && (
         <SavePlaceModal
           onClose={() => setModalVisible(false)}
@@ -107,9 +115,22 @@ const styles = StyleSheet.create({
   },
   image: {
     height: 130,
-    borderRadius: 10,
     marginBottom: 5,
     backgroundColor: "lightgrey",
+  },
+  imageContainer: {
+    width: "100%",
+    height: 130,
+    overflow: "hidden",
+    borderRadius: 10,
+  },
+  saveButton: {
+    position: "absolute",
+    top: 5,
+    right: 5,
+    padding: 5,
+    backgroundColor: "rgba(255, 255, 255, 0.8)",
+    borderRadius: 50,
   },
 });
 

@@ -11,7 +11,6 @@ import {
 import { AuthContext } from "../../../hooks/AuthContext";
 import React, { useContext, useEffect, useState, useCallback } from "react";
 import GlobalStyles from "../../GlobalStyles";
-import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { FIREBASE_DB } from "../../../firebaseConfig";
 import {
@@ -214,7 +213,7 @@ export default function Profile() {
               onPress={handleCreateTravelBoard}
               style={styles.fabButton}
             >
-              <AntDesign name="plus" size={18} color="black" />
+              <Feather name="plus" size={24} color="black" />
               <Text style={styles.fabText}> Travel Board</Text>
             </Pressable>
           </View>
@@ -253,7 +252,7 @@ export default function Profile() {
                 onPress={handleCreateTravelBoard}
                 style={styles.fabButton}
               >
-                <AntDesign name="plus" size={18} color="black" />
+                <Feather name="plus" size={24} color="black" />
                 <Text style={styles.fabText}> Travel Board</Text>
               </Pressable>
             </View>
