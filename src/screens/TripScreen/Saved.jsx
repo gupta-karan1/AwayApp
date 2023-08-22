@@ -1,4 +1,10 @@
-import { StyleSheet, View, ActivityIndicator, Text } from "react-native";
+import {
+  StyleSheet,
+  View,
+  ActivityIndicator,
+  Text,
+  TouchableOpacity,
+} from "react-native";
 import { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../../../hooks/AuthContext";
 import { Alert } from "react-native";
@@ -16,11 +22,16 @@ import { FlatList } from "react-native";
 import SavedPlaceCard from "../../components/TripsComp/SavedPlaceCard";
 import { useFocusEffect } from "@react-navigation/native";
 import { useCallback } from "react";
+import GlobalStyles from "../../GlobalStyles";
+import { Feather } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
+import ViewMapModal from "./ViewMapModal";
 
 const Saved = ({ tripId, userId }) => {
   const [savedPlaces, setSavedPlaces] = useState([]); // State to store saved places
   const [isLoading, setIsLoading] = useState(false); // State to show loading indicator
   const [deleteLoading, setDeleteLoading] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false); // State to show modal
 
   // Access user object from AuthContext to get user id
   // const { user } = useContext(AuthContext);
@@ -145,11 +156,32 @@ const Saved = ({ tripId, userId }) => {
             renderItem={renderPlaceCard}
             keyExtractor={(item) => item.placeId}
             showsVerticalScrollIndicator={false} // hide scroll bar
-            contentContainerStyle={{
-              paddingHorizontal: 15,
-              paddingTop: 15,
-              paddingBottom: 60,
-            }}
+            contentContainerStyle={styles.contentContainer}
+            removeClippedSubviews={true}
+            initialNumToRender={3}
+            maxToRenderPerBatch={3}
+            updateCellsBatchingPeriod={100}
+            windowSize={3}
+            ListHeaderComponent={
+              <View style={styles.headerContainer}>
+                <Text style={GlobalStyles.titleLargeRegular}>Saved Places</Text>
+                <TouchableOpacity
+                  style={styles.button}
+                  title="View Map"
+                  onPress={() => setModalVisible(true)}
+                >
+                  <Ionicons name="map-outline" size={18} color="black" />
+                  <Text>Map</Text>
+                </TouchableOpacity>
+                {modalVisible && (
+                  <ViewMapModal
+                    onClose={() => setModalVisible(false)}
+                    modalVisible={modalVisible}
+                    placeData={savedPlaces}
+                  />
+                )}
+              </View>
+            }
           />
         )}
       </View>
@@ -159,4 +191,25 @@ const Saved = ({ tripId, userId }) => {
 
 export default Saved;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  headerContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 15,
+  },
+  contentContainer: {
+    paddingHorizontal: 15,
+    paddingTop: 15,
+    paddingBottom: 60,
+  },
+  button: {
+    backgroundColor: "lightblue",
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    borderRadius: 5,
+    flexDirection: "row",
+    gap: 10,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});

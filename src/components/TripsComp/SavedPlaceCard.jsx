@@ -61,7 +61,7 @@ const SavedPlaceCard = ({ placeItem, onDelete, onDrag }) => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.card} onLongPress={onDrag}>
+      <View style={styles.card}>
         <Image source={{ uri: placeImage }} style={styles.image} />
         <View style={styles.cardText}>
           <Text style={GlobalStyles.labelMediumMedium} numberOfLines={2}>
@@ -85,7 +85,7 @@ const SavedPlaceCard = ({ placeItem, onDelete, onDrag }) => {
             color="black"
           />
         </View>
-      </TouchableOpacity>
+      </View>
 
       <Modal
         animationType="fade"

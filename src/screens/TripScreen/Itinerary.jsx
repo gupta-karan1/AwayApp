@@ -35,6 +35,7 @@ import {
   NestableScrollContainer,
   NestableDraggableFlatList,
 } from "react-native-draggable-flatlist";
+import ViewMapModal from "./ViewMapModal";
 
 const Itinerary = ({ startDate, endDate, tripId, userId, invitees }) => {
   // State variables for modal visibility and selected place
@@ -47,6 +48,7 @@ const Itinerary = ({ startDate, endDate, tripId, userId, invitees }) => {
   const [itineraryData, setItineraryData] = useState({}); // state variable to store itinerary data
   const [loading, setLoading] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
+  const [mapModalVisible, setMapModalVisible] = useState(false);
 
   const startDateObj = moment(startDate, "DD-MMM-YYYY").toDate();
   const endDateObj = moment(endDate, "DD-MMM-YYYY").toDate();
@@ -66,7 +68,7 @@ const Itinerary = ({ startDate, endDate, tripId, userId, invitees }) => {
   const dateRange = generateDateRange(startDateObj, endDateObj);
 
   const formatDateString = (date) => {
-    return moment(date).format("ddd Do MMM"); // change it to DD later
+    return moment(date).format("ddd D MMM"); // change it to DD later
   };
 
   //   get saved places from firebase:
@@ -379,55 +381,72 @@ const Itinerary = ({ startDate, endDate, tripId, userId, invitees }) => {
           }))}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item, section }) => (
-            // <View style={styles.item}>
-            //   <FlatList
-            //     data={item["places"] || []}
-            //     renderItem={({ item }) => (
-            //       <SavedPlaceCard
-            //         placeItem={item}
-            //         onDelete={() => confirmDelete(item, section)}
-            //       />
-            //     )}
-            //     keyExtractor={(item) => item.placeId}
-            //   />
-            // </View>
-            <DraggableFlatList
-              data={item["places"] || []}
-              renderItem={({ item, drag }) => (
-                <SavedPlaceCard
-                  placeItem={item}
-                  onDelete={() => confirmDelete(item.placeId, section)}
-                  onDrag={drag} // Attach the drag function to the SavedPlaceCard component
-                />
-              )}
-              keyExtractor={(item) => item.placeId}
-              onDragEnd={({ data }) => {
-                // Update the order of places in the state or Firebase here
-                const updatedItineraryData = {
-                  ...itineraryData,
-                  [formatDateString(section.title)]: data, // Update the data for the specific date
-                };
-                setItineraryData(updatedItineraryData);
-              }}
-            />
+            <View style={styles.item}>
+              <FlatList
+                data={item["places"] || []}
+                renderItem={({ item }) => (
+                  <SavedPlaceCard
+                    placeItem={item}
+                    onDelete={() => confirmDelete(item, section)}
+                  />
+                )}
+                keyExtractor={(item) => item.placeId}
+              />
+            </View>
+            // <DraggableFlatList
+            //   data={item["places"] || []}
+            //   renderItem={({ item, drag }) => (
+            //     <SavedPlaceCard
+            //       placeItem={item}
+            //       onDelete={() => confirmDelete(item.placeId, section)}
+            //       onDrag={drag} // Attach the drag function to the SavedPlaceCard component
+            //     />
+            //   )}
+            //   keyExtractor={(item) => item.placeId}
+            //   onDragEnd={({ data }) => {
+            //     // Update the order of places in the state or Firebase here
+            //     const updatedItineraryData = {
+            //       ...itineraryData,
+            //       [formatDateString(section.title)]: data, // Update the data for the specific date
+            //     };
+            //     setItineraryData(updatedItineraryData);
+            //   }}
+            // />
           )}
           stickySectionHeadersEnabled={true}
-          renderSectionHeader={({ section: { title } }) => (
+          renderSectionHeader={({ section: { title, data } }) => (
             <View style={styles.headerContainer}>
               <Text style={[styles.dateTitle, GlobalStyles.titleLargeRegular]}>
                 {title}
               </Text>
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity
+                  style={styles.mapButton}
+                  title="View Map"
+                  onPress={() => setMapModalVisible(true)}
+                >
+                  <Ionicons name="map-outline" size={18} color="black" />
+                  <Text>Map</Text>
+                </TouchableOpacity>
+                {mapModalVisible && (
+                  <ViewMapModal
+                    onClose={() => setMapModalVisible(false)}
+                    modalVisible={mapModalVisible}
+                    placeData={[]}
+                  />
+                )}
 
-              <TouchableOpacity
-                style={styles.button}
-                title="Add Place"
-                onPress={() => {
-                  setModalVisible(true);
-                  setSelectedDate(title);
-                }}
-              >
-                <Text>Add Place</Text>
-              </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.button}
+                  title="Add Place"
+                  onPress={() => {
+                    setModalVisible(true);
+                    setSelectedDate(title);
+                  }}
+                >
+                  <Text>Add Place</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           )}
         />
@@ -536,20 +555,34 @@ const styles = StyleSheet.create({
     width: "60%",
   },
   headerContainer: {
-    flex: 1,
+    // flex: 1,
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "space-around",
     paddingBottom: 10,
-    width: "100%",
+    // width: "100%",
     alignItems: "center",
     backgroundColor: "#F6F6F6",
     padding: 10,
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    gap: 5,
   },
   button: {
     backgroundColor: "lightblue",
     paddingVertical: 10,
     paddingHorizontal: 10,
     borderRadius: 5,
+  },
+  mapButton: {
+    backgroundColor: "lightblue",
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    borderRadius: 5,
+    flexDirection: "row",
+    gap: 10,
+    // justifyContent: "center",
+    // alignItems: "center",
   },
   placeCard: {
     flexDirection: "row",
