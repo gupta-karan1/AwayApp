@@ -61,7 +61,8 @@ const Trips = () => {
       setTripData(data);
 
       const userData = querySnapshot1.docs.map((doc) => doc.data());
-      const { userId, username, email } = userData[0];
+      const { userId, username, email, headerImage, profileImage } =
+        userData[0];
 
       // make a collectionGroup query to get all trips where the user is an invitee
       if (userId && username && email) {
@@ -71,6 +72,8 @@ const Trips = () => {
             userId: userId,
             username: username,
             email: email,
+            headerImage: headerImage,
+            profileImage: profileImage,
           })
         );
         const querySnapshot = await getDocs(q2);

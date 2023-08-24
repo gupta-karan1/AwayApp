@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
   backButton: {
     padding: 8,
     borderRadius: 50,
-    backgroundColor: "rgba(255, 255, 255, 0.5)",
+    backgroundColor: "rgba(255, 255, 255, 0.8)",
   },
   iconContainer: {
     flexDirection: "row",

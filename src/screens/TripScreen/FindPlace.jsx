@@ -274,6 +274,7 @@ const FindPlace = ({ route }) => {
           <View style={styles.mapContainer}>
             <MapView
               style={styles.map}
+              provider="google"
               initialRegion={{
                 latitude: singlePlaceData.placeLatitude,
                 longitude: singlePlaceData.placeLongitude,
