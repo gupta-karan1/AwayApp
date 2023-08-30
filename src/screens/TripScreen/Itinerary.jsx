@@ -30,12 +30,14 @@ import SavedPlaceCard from "../../components/TripsComp/SavedPlaceCard";
 import { Ionicons } from "@expo/vector-icons";
 import GlobalStyles from "../../GlobalStyles";
 import { useNavigation } from "@react-navigation/native";
-import DraggableFlatList from "react-native-draggable-flatlist";
-import {
-  NestableScrollContainer,
-  NestableDraggableFlatList,
-} from "react-native-draggable-flatlist";
 import ViewMapModal from "./ViewMapModal";
+import { useEffect } from "react";
+
+// import DraggableFlatList from "react-native-draggable-flatlist";
+// import {
+//   NestableScrollContainer,
+//   NestableDraggableFlatList,
+// } from "react-native-draggable-flatlist";
 
 const Itinerary = ({ startDate, endDate, tripId, userId, invitees }) => {
   // State variables for modal visibility and selected place
@@ -49,6 +51,8 @@ const Itinerary = ({ startDate, endDate, tripId, userId, invitees }) => {
   const [loading, setLoading] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [mapModalVisible, setMapModalVisible] = useState(false);
+  const [selectedMapDate, setSelectedMapDate] = useState("");
+  const [selectedMapPlaces, setSelectedMapPlaces] = useState([]);
 
   const startDateObj = moment(startDate, "DD-MMM-YYYY").toDate();
   const endDateObj = moment(endDate, "DD-MMM-YYYY").toDate();
@@ -355,6 +359,13 @@ const Itinerary = ({ startDate, endDate, tripId, userId, invitees }) => {
   };
   const Navigation = useNavigation();
 
+  // const handleMapButtonClick = (title) => {
+  //   setSelectedMapDate(title);
+  //   console.log("Selected Itinerary Date:", selectedMapDate);
+  //   console.log("Selected Places:", selectedPlaces);
+  //   // setMapModalVisible(true);
+  // };
+
   return (
     <View>
       {loading && <ActivityIndicator size={"large"} />}
@@ -370,6 +381,14 @@ const Itinerary = ({ startDate, endDate, tripId, userId, invitees }) => {
           <Text>You don't have any saved places yet.</Text>
           <Text>Add a place from the Find Section.</Text>
         </Pressable>
+      )}
+      {mapModalVisible && (
+        <ViewMapModal
+          onClose={() => setMapModalVisible(false)}
+          modalVisible={mapModalVisible}
+          selectedMapDate={selectedMapDate}
+          selectedMapPlaces={selectedMapPlaces}
+        />
       )}
       {!loading && (
         <SectionList
@@ -422,19 +441,17 @@ const Itinerary = ({ startDate, endDate, tripId, userId, invitees }) => {
               <View style={styles.buttonContainer}>
                 <TouchableOpacity
                   style={styles.mapButton}
-                  title="View Map"
-                  onPress={() => setMapModalVisible(true)}
+                  title="Map"
+                  onPress={() => {
+                    setSelectedMapDate(title);
+                    const selectedPlaces = data.map((item) => item.places);
+                    setSelectedMapPlaces(selectedPlaces);
+                    setMapModalVisible(true);
+                  }}
                 >
                   <Ionicons name="map-outline" size={18} color="black" />
                   <Text>Map</Text>
                 </TouchableOpacity>
-                {mapModalVisible && (
-                  <ViewMapModal
-                    onClose={() => setMapModalVisible(false)}
-                    modalVisible={mapModalVisible}
-                    placeData={[]}
-                  />
-                )}
 
                 <TouchableOpacity
                   style={styles.button}

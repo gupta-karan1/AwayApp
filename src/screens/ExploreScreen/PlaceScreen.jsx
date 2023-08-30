@@ -16,6 +16,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import { useContext } from "react";
 import { AuthContext } from "../../../hooks/AuthContext";
 import { useNavigation } from "@react-navigation/native";
+import MapView, { Marker } from "react-native-maps";
 
 import SavePlaceModal from "./SavePlaceModal";
 
@@ -198,6 +199,27 @@ const PlaceScreen = ({ route }) => {
             </Text>
           </View>
         )}
+        <View style={styles.mapContainer}>
+          <MapView
+            style={styles.map}
+            provider="google"
+            initialRegion={{
+              latitude: placeLatitude,
+              longitude: placeLongitude,
+              latitudeDelta: 0.003,
+              longitudeDelta: 0.003,
+            }}
+          >
+            <Marker
+              coordinate={{
+                latitude: placeLatitude,
+                longitude: placeLongitude,
+              }}
+              title={placeTitle}
+              description={placeCategory}
+            />
+          </MapView>
+        </View>
       </ScrollView>
 
       {/* <Modal
@@ -481,6 +503,15 @@ const styles = StyleSheet.create({
     marginHorizontal: 90,
     marginVertical: 10,
     borderRadius: 100,
+  },
+  mapContainer: {
+    flex: 1,
+    borderRadius: 10,
+    overflow: "hidden", // This is important to clip the border radius
+  },
+  map: {
+    height: 200,
+    width: "100%",
   },
 });
 
