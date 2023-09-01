@@ -92,10 +92,12 @@ const Register = () => {
       const usersCollectionRef = collection(FIREBASE_DB, "users");
       await addDoc(usersCollectionRef, userData);
 
-      // Navigation.navigate("LoginStackGroup", {
+      // navigation.navigate("LoginStackGroup", {
       //   screen: "Login",
       // }); // Navigate to the Login screen
 
+      // Avoid going back to register screen instead of profile
+      navigation.replace("Profile");
       // User registration and 'users' collection creation successful
       Alert.alert("New user registered successfully!");
     } catch (error) {
@@ -149,7 +151,6 @@ const Register = () => {
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [1, 1],
-      // quality: 1, // 0 is lowest and 1 is highest quality
     });
 
     // Check if image is selected
@@ -267,7 +268,6 @@ const Register = () => {
         <ActivityIndicator />
       ) : (
         <View>
-          {/* <Text style={styles.profileText}>Profile Image</Text> */}
           <View style={styles.profileContainer}>
             <Image
               source={
@@ -408,16 +408,8 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     width: "100%",
-    // justifyContent: "center",
-    // alignItems: "center",
     marginTop: 15,
   },
-  // button: {
-  //   backgroundColor: "#0782F9",
-  //   width: "100%",
-  //   padding: 15,
-  //   borderRadius: 10,
-  // },
   label: {
     marginBottom: 5,
   },
@@ -441,23 +433,13 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingVertical: 5,
   },
-  // imageWrapper: {
-  //   // flex: 1,
-  //   // flexDirection: "row",
-  //   // flexWrap: "wrap",
-  //   // alignItems: "center",
-  //   marginBottom: 20,
-  //   // justifyContent: "center",
-  // },
   image: {
     height: 180,
     width: 250,
-    // objectFit: "cover",
     borderRadius: 10,
   },
   selectedImage: {
     alignSelf: "center",
-    // marginHorizontal: "auto",
     height: 180,
     width: 250,
     objectFit: "cover",

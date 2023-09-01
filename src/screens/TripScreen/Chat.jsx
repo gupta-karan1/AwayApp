@@ -1,8 +1,8 @@
-import { StyleSheet, Text } from "react-native";
+import { StyleSheet } from "react-native";
 import React, { useState, useCallback, useEffect, useContext } from "react";
 import { GiftedChat } from "react-native-gifted-chat";
 import { useRoute } from "@react-navigation/native";
-import { Alert, ActivityIndicator } from "react-native";
+import { Alert } from "react-native";
 import {
   collection,
   doc,
@@ -21,7 +21,7 @@ const Chat = () => {
   const { tripId, invitees, userId } = route.params;
   const [messages, setMessages] = useState([]);
 
-  const { user } = useContext(AuthContext);
+  const { user } = useContext(AuthContext); // AuthContext to get user id
   // console.log(user);
 
   useEffect(() => {
@@ -79,6 +79,7 @@ const Chat = () => {
     addMessages(newMessages);
   }, []);
 
+  // Add messages to the "messages" subcollection under specific trip
   const addMessages = async (newMessages) => {
     try {
       const q3 = query(
@@ -96,6 +97,7 @@ const Chat = () => {
       const querySnapshot1 = await getDocs(q2);
       const tripRef = doc(userRef, "trips", querySnapshot1.docs[0].id);
 
+      // for loop to add each message to the "messages" subcollection
       for (const message of newMessages) {
         const messageData = {
           _id: message._id,
@@ -113,14 +115,16 @@ const Chat = () => {
     }
   };
 
+  // GiftedChat library that provides a chat UI
   return (
     <GiftedChat
       isTyping={true}
-      showAvatarForEveryMessage={true}
+      showAvatarForEveryMessage={true} // show avatar for every message
       showUserAvatar={true}
-      messages={messages}
-      onSend={(messages) => onSend(messages)}
+      messages={messages} // messages to display
+      onSend={(messages) => onSend(messages)} // callback function to send messages
       user={{
+        // user object
         _id: user.uid,
         name: user.displayName,
       }}

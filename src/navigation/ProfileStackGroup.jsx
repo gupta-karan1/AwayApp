@@ -38,6 +38,7 @@ const ProfileStackGroup = () => {
               <MaterialIcons name="logout" size={24} color="black" />
             </Pressable>
           ),
+          // headerLeft: null,
         }}
       />
       <ProfileStack.Screen

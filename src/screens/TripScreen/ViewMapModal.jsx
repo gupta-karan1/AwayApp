@@ -5,25 +5,30 @@ import { Ionicons } from "@expo/vector-icons";
 import MapView, { Marker } from "react-native-maps";
 import { Dimensions } from "react-native";
 
+// Map Modal to view saved/itinerary by date places on a map
 const ViewMapModal = ({
-  placeData,
-  selectedMapDate,
-  selectedMapPlaces,
+  placeData, // array of saved places
+  selectedMapDate, // selected itinerary date
+  selectedMapPlaces, // array of places for selected itinerary date
   onClose,
   modalVisible,
 }) => {
-  const [mapInitialized, setMapInitialized] = useState(false);
-  const [selectedPlaces, setSelectedPlaces] = useState([]);
+  const [mapInitialized, setMapInitialized] = useState(false); // State to check if map is initialized
+  const [selectedPlaces, setSelectedPlaces] = useState([]); // State to store selected places
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    // Check if selectedMapDate and selectedMapPlaces are not null
     if (selectedMapDate && selectedMapPlaces) {
+      // convert itinerary data to match PlaceData structure
       const flattenedSelectedPlaces = selectedMapPlaces.flatMap(
         (innerArray) => innerArray
       );
+      // Set selected places to flattened array
       setSelectedPlaces(flattenedSelectedPlaces);
       setIsLoading(false);
     } else {
+      // Otherwsie set selected places to placeData
       setSelectedPlaces(placeData);
       setIsLoading(false);
     }
@@ -46,10 +51,13 @@ const ViewMapModal = ({
           <View style={styles.modalView}>
             <View style={styles.modalHeader}>
               <Text style={styles.modalText}>
+                // If selected map date is not null, display itinerary title
+                otherwise saved title
                 {selectedMapDate
                   ? "Itinerary: " + selectedMapDate
                   : "Saved Places"}
               </Text>
+              // Close icon
               <Ionicons
                 name="close-outline"
                 size={30}
@@ -57,12 +65,14 @@ const ViewMapModal = ({
                 onPress={onClose}
               />
             </View>
-
+            // If selected map date is not null and selected map places is
+            empty, display prompt message
             {selectedMapPlaces && selectedMapPlaces.length === 0 ? (
               <Text style={styles.promptMsg}>
                 No places in the itinerary for this date.
               </Text>
             ) : (
+              // Otherwise display map
               <View style={styles.mapContainer}>
                 <MapView
                   style={styles.map}
@@ -70,6 +80,7 @@ const ViewMapModal = ({
                   onMapReady={() => setMapInitialized(true)}
                   loadingEnabled={true}
                   initialRegion={{
+                    // If selected places is not null and has length > 0, display first place in array
                     latitude:
                       selectedPlaces && selectedPlaces.length > 0
                         ? selectedPlaces[0].placeLatitude
@@ -78,12 +89,16 @@ const ViewMapModal = ({
                       selectedPlaces && selectedPlaces.length > 0
                         ? selectedPlaces[0].placeLongitude
                         : 0,
+                    // Zoom on map
                     latitudeDelta: 0.15,
                     longitudeDelta: 0.15,
                   }}
                 >
+                  // If map is initialized and selected places is not null,
+                  display markers for each place
                   {mapInitialized &&
                     selectedPlaces &&
+                    // Map through selected places array
                     selectedPlaces.map((place) => (
                       <Marker
                         key={place.placeId}
