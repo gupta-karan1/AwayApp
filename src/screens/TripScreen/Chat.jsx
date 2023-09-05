@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 import React, { useState, useCallback, useEffect, useContext } from "react";
 import { GiftedChat } from "react-native-gifted-chat";
-import { useRoute } from "@react-navigation/native";
+import { useRoute, useIsFocused } from "@react-navigation/native";
 import { Alert } from "react-native";
 import {
   collection,
@@ -18,15 +18,28 @@ import { AuthContext } from "../../../hooks/AuthContext";
 
 const Chat = () => {
   const route = useRoute();
-  const { tripId, invitees, userId } = route.params;
+  const { tripId, invitees, userId } = route.params || {};
   const [messages, setMessages] = useState([]);
+  const isFocused = useIsFocused(); // Track component focus
 
   const { user } = useContext(AuthContext); // AuthContext to get user id
   // console.log(user);
 
   useEffect(() => {
-    setupMessageListener();
-  }, []);
+    if (isFocused && tripId) {
+      // Start message listener only when the component is focused and tripId is available
+      setupMessageListener();
+    }
+
+    return () => {
+      // Clean up the listener when leaving the component
+      cleanupMessageListener();
+    };
+  }, [isFocused, tripId]);
+
+  const cleanupMessageListener = () => {
+    // Implement the logic to clean up your message listener here
+  };
 
   const setupMessageListener = async () => {
     const q3 = query(
@@ -41,6 +54,7 @@ const Chat = () => {
       collection(userRef, "trips"),
       where("tripId", "==", tripId)
     );
+
     const unsubscribe = onSnapshot(q, (querySnapshot1) => {
       const tripRef = doc(userRef, "trips", querySnapshot1.docs[0].id);
       const messagesQuery = query(
@@ -125,8 +139,8 @@ const Chat = () => {
       onSend={(messages) => onSend(messages)} // callback function to send messages
       user={{
         // user object
-        _id: user.uid,
-        name: user.displayName,
+        _id: user ? user.uid : "",
+        name: user ? user.displayName : "",
       }}
     />
   );

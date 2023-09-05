@@ -21,9 +21,13 @@ const ViewMapModal = ({
     // Check if selectedMapDate and selectedMapPlaces are not null
     if (selectedMapDate && selectedMapPlaces) {
       // convert itinerary data to match PlaceData structure
-      const flattenedSelectedPlaces = selectedMapPlaces.flatMap(
-        (innerArray) => innerArray
-      );
+      // const flattenedSelectedPlaces = selectedMapPlaces.flatMap(
+      //   (innerArray) => innerArray );
+      const flattenedSelectedPlaces =
+        selectedMapPlaces && [0].length === 0 && selectedMapPlaces.length === 0
+          ? []
+          : selectedMapPlaces.flatMap((innerArray) => innerArray);
+
       // Set selected places to flattened array
       setSelectedPlaces(flattenedSelectedPlaces);
       setIsLoading(false);
@@ -62,13 +66,9 @@ const ViewMapModal = ({
                 onPress={onClose}
               />
             </View>
-            {selectedMapPlaces && selectedMapPlaces.length === 0 ? (
-              <Text style={styles.promptMsg}>
-                No places in the itinerary for this date.
-              </Text>
-            ) : (
-              // Otherwise display map
-              <View style={styles.mapContainer}>
+
+            <View style={styles.mapContainer}>
+              {selectedPlaces.length > 0 ? (
                 <MapView
                   style={styles.map}
                   provider="google"
@@ -104,8 +104,12 @@ const ViewMapModal = ({
                       />
                     ))}
                 </MapView>
-              </View>
-            )}
+              ) : (
+                <Text style={styles.promptMsg}>
+                  No places in the itinerary for this date.
+                </Text>
+              )}
+            </View>
           </View>
         </View>
       )}

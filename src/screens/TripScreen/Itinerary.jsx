@@ -438,6 +438,7 @@ const Itinerary = ({ startDate, endDate, tripId, userId, invitees }) => {
               <Text style={[styles.dateTitle, GlobalStyles.titleLargeRegular]}>
                 {title}
               </Text>
+
               <View style={styles.buttonContainer}>
                 <TouchableOpacity
                   style={styles.mapButton}
