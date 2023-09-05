@@ -51,13 +51,10 @@ const ViewMapModal = ({
           <View style={styles.modalView}>
             <View style={styles.modalHeader}>
               <Text style={styles.modalText}>
-                // If selected map date is not null, display itinerary title
-                otherwise saved title
                 {selectedMapDate
                   ? "Itinerary: " + selectedMapDate
                   : "Saved Places"}
               </Text>
-              // Close icon
               <Ionicons
                 name="close-outline"
                 size={30}
@@ -65,8 +62,6 @@ const ViewMapModal = ({
                 onPress={onClose}
               />
             </View>
-            // If selected map date is not null and selected map places is
-            empty, display prompt message
             {selectedMapPlaces && selectedMapPlaces.length === 0 ? (
               <Text style={styles.promptMsg}>
                 No places in the itinerary for this date.
@@ -94,8 +89,6 @@ const ViewMapModal = ({
                     longitudeDelta: 0.15,
                   }}
                 >
-                  // If map is initialized and selected places is not null,
-                  display markers for each place
                   {mapInitialized &&
                     selectedPlaces &&
                     // Map through selected places array
