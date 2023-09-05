@@ -11,7 +11,7 @@ import { useContext } from "react";
 const Tab = createBottomTabNavigator(); // The createBottomTabNavigator function is used to create the bottom tab navigation.
 
 const Tabs = () => {
-  const { isUserLoggedIn } = useContext(AuthContext); // The isUserLoggedIn state variable is retrieved from the AuthContext using the useContext hook.
+  const { isUserLoggedIn, user } = useContext(AuthContext); // The isUserLoggedIn state variable is retrieved from the AuthContext using the useContext hook.
 
   return (
     <Tab.Navigator
@@ -41,7 +41,7 @@ const Tabs = () => {
       />
       <Tab.Screen
         name={"TripsStackGroup"}
-        component={isUserLoggedIn ? TripsStackGroup : LoginStackGroup}
+        component={user ? TripsStackGroup : LoginStackGroup}
         options={{
           tabBarIcon: ({ focused }) => (
             <Feather
@@ -57,7 +57,7 @@ const Tabs = () => {
 
       <Tab.Screen
         name={"ProfileStackGroup"}
-        component={isUserLoggedIn ? ProfileStackGroup : LoginStackGroup}
+        component={user ? ProfileStackGroup : LoginStackGroup}
         options={{
           tabBarIcon: ({ focused }) => (
             <Feather

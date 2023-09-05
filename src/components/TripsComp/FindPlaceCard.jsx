@@ -116,6 +116,7 @@ const FindPlaceCard = ({ placeItem, path, tripId, userId }) => {
         placeWebsite: singlePlaceData.placeWebsite || "",
         userId: user.uid,
         createdAt: new Date(),
+        userName: user.displayName,
       };
 
       // Save the place details to Firebase using the savePlaceDetails function

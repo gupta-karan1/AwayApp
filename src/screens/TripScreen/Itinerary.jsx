@@ -359,17 +359,10 @@ const Itinerary = ({ startDate, endDate, tripId, userId, invitees }) => {
   };
   const Navigation = useNavigation();
 
-  // const handleMapButtonClick = (title) => {
-  //   setSelectedMapDate(title);
-  //   console.log("Selected Itinerary Date:", selectedMapDate);
-  //   console.log("Selected Places:", selectedPlaces);
-  //   // setMapModalVisible(true);
-  // };
-
   return (
     <View>
       {loading && <ActivityIndicator size={"large"} />}
-      {!loading && savedPlaces.length === 0 && (
+      {!loading && savedPlaces.length === 0 && !itineraryData && (
         <Pressable
           style={styles.instructionText}
           onPress={() =>

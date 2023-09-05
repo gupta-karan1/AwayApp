@@ -26,7 +26,6 @@ import { ActivityIndicator } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
-import { useRoute } from "@react-navigation/native";
 
 export default function Profile() {
   const [travelBoards, setTravelBoards] = useState([]);
@@ -172,9 +171,8 @@ export default function Profile() {
       >
         <Pressable
           onPress={() =>
-            Navigation.navigate("Register", {
+            Navigation.navigate("EditProfile", {
               username: user.displayName,
-              userEmail: user.email,
               profileImage: user.photoURL,
               userId: user.uid,
             })

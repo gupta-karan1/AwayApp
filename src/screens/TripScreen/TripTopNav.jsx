@@ -31,33 +31,6 @@ function TripTopNav({
       }}
     >
       <Tab.Screen
-        name="Plan"
-        component={Plan}
-        initialParams={{
-          tripId: tripId,
-          invitees: invitees,
-          startDate: startDate,
-          endDate: endDate,
-          userId: userId,
-        }}
-        options={{
-          tabBarLabel: "Plan",
-          lazy: true,
-        }}
-      />
-      {tripType === "group" && (
-        <Tab.Screen
-          name="Chat"
-          component={Chat}
-          initialParams={{
-            tripId: tripId,
-            invitees: invitees,
-            userId: userId,
-          }}
-        />
-      )}
-
-      <Tab.Screen
         name="FindStack"
         component={FindStack}
         // tripLocation prop as initial parameter
@@ -74,6 +47,34 @@ function TripTopNav({
           },
         }}
       />
+
+      <Tab.Screen
+        name="Plan"
+        component={Plan}
+        initialParams={{
+          tripId: tripId,
+          invitees: invitees,
+          startDate: startDate,
+          endDate: endDate,
+          userId: userId,
+        }}
+        options={{
+          tabBarLabel: "Plan",
+          lazy: true,
+        }}
+      />
+
+      {tripType === "group" && (
+        <Tab.Screen
+          name="Chat"
+          component={Chat}
+          initialParams={{
+            tripId: tripId,
+            invitees: invitees,
+            userId: userId,
+          }}
+        />
+      )}
     </Tab.Navigator>
   );
 }

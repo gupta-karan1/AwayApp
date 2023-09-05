@@ -144,6 +144,7 @@ const FindPlace = ({ route }) => {
         placeId: singlePlaceData.placeId,
         placeWebsite: singlePlaceData.placeWebsite || "",
         userId: user.uid,
+        userName: user.displayName,
         createdAt: new Date(),
       };
 

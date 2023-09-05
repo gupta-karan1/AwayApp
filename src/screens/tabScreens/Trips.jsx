@@ -7,7 +7,7 @@ import {
   ActivityIndicator,
   ScrollView,
 } from "react-native";
-import { useState, useContext, useCallback } from "react";
+import { useState, useContext, useCallback, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { AuthContext } from "../../../hooks/AuthContext";
 import {
@@ -34,6 +34,7 @@ const Trips = () => {
   const [loading, setLoading] = useState(false);
   const [invitedTrips, setInvitedTrips] = useState([]);
   const [tabView, setTabView] = useState("all");
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
   // Get the user object from the AuthContext
   const { user } = useContext(AuthContext);
@@ -82,7 +83,7 @@ const Trips = () => {
         setInvitedTrips(data2);
       }
     } catch (error) {
-      Alert.alert("Error getting trip details:", error.message);
+      Alert.alert("Error getting trips:", error.message);
     } finally {
       setLoading(false);
     }
@@ -90,6 +91,7 @@ const Trips = () => {
 
   const deleteSingleTrip = async (tripId) => {
     try {
+      setDeleteLoading(true);
       const q = query(
         collection(FIREBASE_DB, "users"),
         where("userId", "==", user.uid) // Query to find the user document based on the userId
@@ -106,12 +108,23 @@ const Trips = () => {
 
       const tripRef = doc(userRef, "trips", querySnapshot2.docs[0].id);
 
+      const messagesQuery = query(
+        collection(tripRef, "messages"),
+        orderBy("createdAt", "desc")
+      );
+
+      const querySnapshot3 = await getDocs(messagesQuery);
+
+      querySnapshot3.forEach(async (doc) => {
+        await deleteDoc(doc.ref);
+      });
+
       await deleteDoc(tripRef);
       Alert.alert("Trip deleted successfully!");
     } catch (error) {
       Alert.alert("Error deleting trip:", error.message);
     } finally {
-      getUserTripData();
+      setDeleteLoading(false);
     }
   };
 
@@ -132,11 +145,19 @@ const Trips = () => {
     );
   };
 
-  // Fetch user's trip data when the screen mounted
   useFocusEffect(
     useCallback(() => {
-      getUserTripData();
-    }, []) // Function to call once
+      if (!deleteLoading) {
+        const delay = 1000; // 1000 milliseconds (5 seconds)
+        const timerId = setTimeout(() => {
+          getUserTripData();
+        }, delay);
+
+        return () => {
+          clearTimeout(timerId); // Clear the timeout if the effect is cleaned up
+        };
+      }
+    }, [deleteLoading])
   );
 
   // Function to navigate to the TripForm screen

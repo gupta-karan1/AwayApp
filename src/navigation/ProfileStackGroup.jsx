@@ -7,7 +7,7 @@ import { Pressable, Alert } from "react-native";
 import CreateTravelBoard from "../screens/ProfileScreen/CreateTravelBoard";
 import BoardScreen from "../screens/ProfileScreen/BoardScreen";
 import ProfilePlace from "../screens/ProfileScreen/ProfilePlace";
-import Register from "../screens/Auth/Register";
+import EditProfile from "../screens/ProfileScreen/EditProfile";
 // create stack navigator for profile screen group to allow for navigation between profile, login, and register screens
 const ProfileStack = createNativeStackNavigator(); // create stack navigator
 
@@ -50,8 +50,8 @@ const ProfileStackGroup = () => {
         }}
       />
       <ProfileStack.Screen
-        name="Register"
-        component={Register}
+        name="EditProfile"
+        component={EditProfile}
         options={{
           headerTitle: "Edit Profile",
           animation: "slide_from_bottom",

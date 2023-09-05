@@ -9,53 +9,55 @@ import {
   Text,
   Image,
   Pressable,
+  FlatList,
 } from "react-native";
-import React, { useState } from "react";
-import { useAuth } from "../../../hooks/useAuth";
-import { collection, addDoc } from "firebase/firestore";
+import React, { useState, useEffect, useContext } from "react";
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  doc,
+  updateDoc,
+} from "firebase/firestore";
 import { FIREBASE_DB } from "../../../firebaseConfig";
 import * as ImagePicker from "expo-image-picker";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { FIREBASE_STORAGE } from "../../../firebaseConfig";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
+import { updateProfile } from "firebase/auth";
+import { AuthContext } from "../../../hooks/AuthContext";
+import { UNSPLASH_ACCESS_KEY } from "@env";
 
-const Register = () => {
-  // State variables to store user input
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+const EditProfile = () => {
   const [userName, setUserName] = useState("");
   const [coverImage, setCoverImage] = useState(null);
+  const [boardImage, setBoardImage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [searchImage, setSearchImage] = useState("");
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [searchResults, setSearchResults] = useState([]);
+  const [searchResultsLoading, setSearchResultsLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  // Custom hook to register user
-  const { register, loading, addDisplayName, addPhotoURL } = useAuth();
+  const { user } = useContext(AuthContext);
 
-  // Function to handle registration
-  const handleRegister = async () => {
+  const getSingleUserData = async () => {
     try {
-      // Register function to create a new user with the provided email and password
-      const userCredential = await register(email, password);
-      await addDisplayName(userCredential.user, userName);
-      await addPhotoURL(userCredential.user, coverImage);
+      setIsLoading(true);
+      const q = query(
+        collection(FIREBASE_DB, "users"),
+        where("userId", "==", user.uid)
+      );
 
-      // Create a new document in the 'users' collection in Firestore
-      const userData = {
-        userId: userCredential.user.uid, // Get the user's ID from the userCredential object
-        email: email,
-        username: userName,
-        profileImage: coverImage,
-        headerImage: "",
-      };
-
-      // Add the new document to the 'users' collection
-      const usersCollectionRef = collection(FIREBASE_DB, "users");
-      await addDoc(usersCollectionRef, userData);
-
-      Alert.alert("New user registered successfully!");
+      const querySnapshot = await getDocs(q);
+      const userData = querySnapshot.docs.map((doc) => doc.data());
+      setBoardImage(userData[0].headerImage);
     } catch (error) {
-      // error alert
-      // console.log(error);
-      Alert.alert("Registration failed: ", error.message);
+      Alert.alert("Error fetching user data:", error.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -150,6 +152,72 @@ const Register = () => {
     }
   };
 
+  const route = useRoute();
+  const { username, profileImage, userId } = route.params || {};
+  // console.log(user);
+  useEffect(() => {
+    if (userId) {
+      setUserName(username);
+      setCoverImage(profileImage);
+      getSingleUserData();
+    }
+  }, [userId]);
+
+  const navigation = useNavigation();
+
+  const handleUpdateProfile = async () => {
+    try {
+      setIsLoading(true);
+      const q = query(
+        collection(FIREBASE_DB, "users"),
+        where("userId", "==", userId) // Query to find the user document based on the userId
+      );
+      const querySnapshot1 = await getDocs(q);
+      const userRef = doc(FIREBASE_DB, "users", querySnapshot1.docs[0].id); // Create a reference to the user's document
+
+      await updateDoc(userRef, {
+        username: userName,
+        profileImage: coverImage,
+        headerImage: boardImage,
+      });
+
+      await updateProfile(user, {
+        displayName: userName,
+        photoURL: coverImage,
+      });
+
+      // User registration and 'users' collection creation successful
+      Alert.alert("User profile updated successfully!");
+      navigation.navigate("Profile");
+    } catch (error) {
+      Alert.alert("Update failed: ", error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchImages = async () => {
+    try {
+      setSearchResultsLoading(true);
+      const data = await fetch(
+        `https://api.unsplash.com/search/photos?query=${searchImage}&client_id=${UNSPLASH_ACCESS_KEY}`
+      );
+      const images = await data.json();
+      setSearchResults(images.results);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setSearchResultsLoading(false);
+    }
+  };
+
+  const handleImageSelection = (image) => {
+    setBoardImage(image.urls.small);
+    setSelectedImage(image);
+    // set search results to one selected image
+    setSearchResults([image]);
+  };
+
   return (
     <KeyboardAvoidingView style={styles.container} keyboardVerticalOffset={40}>
       {isLoading ? (
@@ -191,23 +259,47 @@ const Register = () => {
       </View>
 
       <View style={styles.inputContainer}>
-        <Text style={styles.label}>Email:</Text>
-        <TextInput
-          placeholder="Email"
-          value={email}
-          onChangeText={(text) => setEmail(text)}
-          style={styles.input}
-          autoCapitalize="none"
-          inputMode="email"
-        />
-        <Text style={styles.label}>Password:</Text>
-        <TextInput
-          placeholder="Password"
-          value={password}
-          onChangeText={(text) => setPassword(text)}
-          style={styles.input}
-          secureTextEntry
-        />
+        <View>
+          <Text style={styles.titleText}>Cover Image (Unsplash):</Text>
+
+          <TextInput
+            label="Search for a cover image"
+            value={searchImage}
+            onChangeText={(text) => setSearchImage(text)}
+            onSubmitEditing={fetchImages}
+            style={[styles.input, styles.inputStyle]}
+            reg
+            placeholder="Search for an image"
+          />
+        </View>
+        {userId && searchResults?.length === 0 && (
+          <Text>Nothing found. Try a different query</Text>
+        )}
+        {searchResultsLoading && <ActivityIndicator />}
+        {searchResults.length > 1 && (
+          <FlatList
+            data={searchResults}
+            renderItem={({ item }) => (
+              <Pressable
+                onPress={() => handleImageSelection(item)}
+                key={item.urls.small}
+              >
+                <Image source={{ uri: item.urls.small }} style={styles.image} />
+              </Pressable>
+            )}
+            contentContainerStyle={{ alignItems: "center" }}
+            keyExtractor={(item) => item.id}
+            horizontal
+            ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
+            showsHorizontalScrollIndicator={false}
+          />
+        )}
+        {searchResults.length === 1 && (
+          <Image
+            source={{ uri: selectedImage.urls.small }}
+            style={styles.selectedImage}
+          />
+        )}
       </View>
 
       {loading ? (
@@ -215,8 +307,8 @@ const Register = () => {
       ) : (
         <View style={styles.buttonContainer}>
           <Button
-            title={"Register"}
-            onPress={handleRegister}
+            title={"Update Profile"}
+            onPress={handleUpdateProfile}
             style={styles.button}
           />
         </View>
@@ -225,7 +317,7 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default EditProfile;
 
 const styles = StyleSheet.create({
   container: {

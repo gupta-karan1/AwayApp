@@ -25,69 +25,150 @@ const Chat = () => {
   const { user } = useContext(AuthContext); // AuthContext to get user id
   // console.log(user);
 
+  // const unsubscribe = () => {
+  //   // Implement the logic to clean up your message listener here
+  //   // Check if there is an active listener and stop it
+  //   if (unsubscribe) {
+  //     unsubscribe();
+  //   }
+  // };
+
   useEffect(() => {
-    if (isFocused && tripId) {
-      // Start message listener only when the component is focused and tripId is available
+    let unsubscribeTripListener; // Store the trip listener unsubscribe function
+    let unsubscribeMessagesListener; // Store the messages listener unsubscribe function
+
+    const setupMessageListener = async () => {
+      if (!tripId) {
+        // Handle the case where tripId is not available
+        return;
+      }
+
+      const q3 = query(
+        collection(FIREBASE_DB, "users"),
+        where("userId", "==", userId)
+      );
+
+      const querySnapshot1 = await getDocs(q3);
+      const userRef = doc(FIREBASE_DB, "users", querySnapshot1.docs[0].id);
+
+      const q = query(
+        collection(userRef, "trips"),
+        where("tripId", "==", tripId)
+      );
+
+      unsubscribeTripListener = onSnapshot(q, (querySnapshot1) => {
+        if (querySnapshot1.empty) {
+          // Handle the case where the trip document no longer exists
+          return;
+        }
+
+        const tripRef = doc(userRef, "trips", querySnapshot1.docs[0].id);
+        const messagesQuery = query(
+          collection(tripRef, "messages"),
+          orderBy("createdAt", "desc")
+        );
+
+        unsubscribeMessagesListener = onSnapshot(
+          messagesQuery,
+          (querySnapshot2) => {
+            const messagesData = querySnapshot2.docs.map((doc) => doc.data());
+            const transformedMessages = messagesData.map((message) => ({
+              _id: message._id,
+              text: message.text,
+              createdAt: message.createdAt.toDate(),
+              user: {
+                _id: message.user._id,
+                name: message.user.name,
+              },
+            }));
+            setMessages(transformedMessages);
+          }
+        );
+      });
+    };
+
+    if (isFocused) {
       setupMessageListener();
     }
 
     return () => {
-      // Clean up the listener when leaving the component
-      cleanupMessageListener();
+      // Unsubscribe from both listeners when the component is unmounted
+      if (unsubscribeTripListener) {
+        unsubscribeTripListener();
+      }
+      if (unsubscribeMessagesListener) {
+        unsubscribeMessagesListener();
+      }
     };
-  }, [isFocused, tripId]);
+  }, [isFocused, tripId, userId]);
 
-  const cleanupMessageListener = () => {
-    // Implement the logic to clean up your message listener here
-  };
+  // useEffect(() => {
+  //   if (isFocused && tripId) {
+  //     // Start message listener only when the component is focused and tripId is available
+  //     setupMessageListener();
+  //   }
 
-  const setupMessageListener = async () => {
-    const q3 = query(
-      collection(FIREBASE_DB, "users"),
-      where("userId", "==", userId)
-    );
+  //   return () => {
+  //     // Clean up the listener when leaving the component
+  //     cleanupMessageListener();
+  //   };
+  // }, [isFocused, tripId]);
 
-    const querySnapshot1 = await getDocs(q3);
-    const userRef = doc(FIREBASE_DB, "users", querySnapshot1.docs[0].id);
+  // const cleanupMessageListener = () => {
+  //   // Implement the logic to clean up your message listener here
+  //   // Check if there is an active listener and stop it
+  //   if (unsubscribe) {
+  //     unsubscribe();
+  //   }
+  // };
 
-    const q = query(
-      collection(userRef, "trips"),
-      where("tripId", "==", tripId)
-    );
+  // const setupMessageListener = async () => {
+  //   const q3 = query(
+  //     collection(FIREBASE_DB, "users"),
+  //     where("userId", "==", userId)
+  //   );
 
-    const unsubscribe = onSnapshot(q, (querySnapshot1) => {
-      const tripRef = doc(userRef, "trips", querySnapshot1.docs[0].id);
-      const messagesQuery = query(
-        collection(tripRef, "messages"),
-        orderBy("createdAt", "desc")
-      );
+  //   const querySnapshot1 = await getDocs(q3);
+  //   const userRef = doc(FIREBASE_DB, "users", querySnapshot1.docs[0].id);
 
-      const unsubscribeMessages = onSnapshot(
-        messagesQuery,
-        (querySnapshot2) => {
-          const messagesData = querySnapshot2.docs.map((doc) => doc.data());
-          const transformedMessages = messagesData.map((message) => ({
-            _id: message._id,
-            text: message.text,
-            createdAt: message.createdAt.toDate(),
-            user: {
-              _id: message.user._id,
-              name: message.user.name,
-            },
-          }));
-          setMessages(transformedMessages);
-        }
-      );
+  //   const q = query(
+  //     collection(userRef, "trips"),
+  //     where("tripId", "==", tripId)
+  //   );
 
-      return () => {
-        unsubscribeMessages();
-      };
-    });
+  //   const unsubscribe = onSnapshot(q, (querySnapshot1) => {
+  //     const tripRef = doc(userRef, "trips", querySnapshot1.docs[0].id);
+  //     const messagesQuery = query(
+  //       collection(tripRef, "messages"),
+  //       orderBy("createdAt", "desc")
+  //     );
 
-    return () => {
-      unsubscribe();
-    };
-  };
+  //     const unsubscribeMessages = onSnapshot(
+  //       messagesQuery,
+  //       (querySnapshot2) => {
+  //         const messagesData = querySnapshot2.docs.map((doc) => doc.data());
+  //         const transformedMessages = messagesData.map((message) => ({
+  //           _id: message._id,
+  //           text: message.text,
+  //           createdAt: message.createdAt.toDate(),
+  //           user: {
+  //             _id: message.user._id,
+  //             name: message.user.name,
+  //           },
+  //         }));
+  //         setMessages(transformedMessages);
+  //       }
+  //     );
+
+  //     return () => {
+  //       unsubscribeMessages();
+  //     };
+  //   });
+
+  //   return () => {
+  //     unsubscribe();
+  //   };
+  // };
 
   const onSend = useCallback((newMessages = []) => {
     addMessages(newMessages);
