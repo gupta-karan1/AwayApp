@@ -10,6 +10,7 @@ import {
   Pressable,
   Modal,
   Alert,
+  Linking,
 } from "react-native";
 import { useState } from "react";
 import GlobalStyles from "../../GlobalStyles";
@@ -29,6 +30,7 @@ import {
 import { useContext, useCallback } from "react";
 import { AuthContext } from "../../../hooks/AuthContext";
 import { useFocusEffect } from "@react-navigation/native";
+import MapView, { Marker } from "react-native-maps";
 
 // PlaceScreen component
 const ProfilePlace = ({ route }) => {
@@ -277,43 +279,56 @@ const ProfilePlace = ({ route }) => {
 
         {/* Only display if data exists */}
         {placeAddress && (
-          <View style={styles.iconContainer}>
-            <FontAwesome
-              style={[styles.icon, styles.AddressIcon]}
-              name="map-marker"
-              size={20} // Smaller icon require more margin
-              color="grey"
-            />
-            <Text
-              style={[
-                GlobalStyles.bodySmallRegular,
-                styles.bodyText,
-                styles.iconText,
-              ]}
-            >
-              {placeAddress}
-            </Text>
-          </View>
+          <Pressable
+            onPress={() => {
+              Linking.openURL(placeGoogleMapLink);
+            }}
+          >
+            <View style={styles.iconContainer}>
+              <FontAwesome
+                style={[styles.icon, styles.AddressIcon]}
+                name="map-marker"
+                size={20} // Smaller icon require more margin
+                color="grey"
+              />
+              <Text
+                style={[
+                  GlobalStyles.bodySmallRegular,
+                  styles.bodyText,
+                  styles.iconText,
+                ]}
+              >
+                {placeAddress}
+              </Text>
+            </View>
+          </Pressable>
         )}
 
         {placeContact && (
-          <View style={styles.iconContainer}>
-            <FontAwesome
-              style={styles.icon}
-              name="phone"
-              size={18}
-              color="grey"
-            />
-            <Text
-              style={[
-                GlobalStyles.bodySmallRegular,
-                styles.bodyText,
-                styles.iconText,
-              ]}
-            >
-              {placeContact}
-            </Text>
-          </View>
+          <Pressable
+            onPress={() => {
+              const phoneNumber = `tel:${placeContact}`;
+              Linking.openURL(phoneNumber);
+            }}
+          >
+            <View style={styles.iconContainer}>
+              <FontAwesome
+                style={styles.icon}
+                name="phone"
+                size={18}
+                color="grey"
+              />
+              <Text
+                style={[
+                  GlobalStyles.bodySmallRegular,
+                  styles.bodyText,
+                  styles.iconText,
+                ]}
+              >
+                {placeContact}
+              </Text>
+            </View>
+          </Pressable>
         )}
         {placeHours && (
           <View style={styles.iconContainer}>
@@ -334,6 +349,27 @@ const ProfilePlace = ({ route }) => {
             </Text>
           </View>
         )}
+        <View style={styles.mapContainer}>
+          <MapView
+            style={styles.map}
+            provider="google"
+            initialRegion={{
+              latitude: placeLatitude,
+              longitude: placeLongitude,
+              latitudeDelta: 0.003,
+              longitudeDelta: 0.003,
+            }}
+          >
+            <Marker
+              coordinate={{
+                latitude: placeLatitude,
+                longitude: placeLongitude,
+              }}
+              title={placeTitle}
+              description={placeCategory}
+            />
+          </MapView>
+        </View>
       </ScrollView>
       {/* )} */}
 
@@ -545,6 +581,15 @@ const styles = StyleSheet.create({
     marginBottom: 2,
     paddingLeft: 10,
     paddingTop: 8,
+  },
+  mapContainer: {
+    flex: 1,
+    borderRadius: 10,
+    overflow: "hidden", // This is important to clip the border radius
+  },
+  map: {
+    height: 200,
+    width: "100%",
   },
 });
 

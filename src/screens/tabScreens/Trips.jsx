@@ -62,20 +62,35 @@ const Trips = () => {
       setTripData(data);
 
       const userData = querySnapshot1.docs.map((doc) => doc.data());
-      const { userId, username, email, headerImage, profileImage } =
-        userData[0];
+      // const { userId, username, email, headerImage, profileImage } =
+      //   userData[0];
+
+      // Extract user's email
+      const userEmail = userData[0].email;
 
       // make a collectionGroup query to get all trips where the user is an invitee
-      if (userId && username && email) {
-        const q2 = query(
-          collectionGroup(FIREBASE_DB, "trips"),
-          where("invitees", "array-contains", userData)
-        );
-        const querySnapshot = await getDocs(q2);
 
-        const data2 = querySnapshot.docs.map((doc) => doc.data());
-        setInvitedTrips(data2);
-      }
+      const q2 = query(
+        collectionGroup(FIREBASE_DB, "trips"),
+        where("invitees", "array-contains", userEmail)
+      );
+
+      // if (email) {
+      //   const q2 = query(
+      //     collectionGroup(FIREBASE_DB, "trips"),
+      //     where("invitees", "array-contains", {
+      //       // userId: userId,
+      //       // username: username,
+      //       email: email,
+      //       // headerImage: headerImage,
+      //       // profileImage: profileImage,
+      //     })
+      //   );
+
+      const querySnapshot = await getDocs(q2);
+
+      const data2 = querySnapshot.docs.map((doc) => doc.data());
+      setInvitedTrips(data2);
     } catch (error) {
       Alert.alert("Error getting trips:", error.message);
     } finally {
@@ -199,7 +214,7 @@ const Trips = () => {
 
   const AllTrips = () => {
     return (
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false} style={styles.wrapper}>
         <MyTrips />
         <InvitedTrips />
       </ScrollView>
@@ -232,6 +247,7 @@ const Trips = () => {
           <Text>Invited</Text>
         </Pressable>
       </View>
+
       {loading && <ActivityIndicator size="large" />}
       {!loading && tripData.length === 0 && invitedTrips.length === 0 && (
         <Pressable style={styles.emptyContainer} onPress={handleAddTrip}>
@@ -241,13 +257,13 @@ const Trips = () => {
         </Pressable>
       )}
       {!loading && tripData && invitedTrips && (
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView showsVerticalScrollIndicator={false} style={styles.wrapper}>
           {tabView === "all" && <AllTrips />}
           {tabView === "personal" && <MyTrips />}
           {tabView === "invited" && <InvitedTrips />}
+          {/* FAB to add a new trip */}
         </ScrollView>
       )}
-      {/* FAB to add a new trip */}
       <Pressable style={styles.fabButton} onPress={handleAddTrip}>
         <Text style={styles.fabText}>Create Trip</Text>
       </Pressable>
@@ -263,6 +279,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     // paddingTop: 15,
   },
+  wrapper: {
+    paddingBottom: 75,
+    // flex: 1,
+  },
   tripContainer: {
     marginBottom: 15,
     marginTop: 15,
@@ -274,6 +294,7 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 10,
     backgroundColor: "#0D47A1",
+    elevation: 4,
   },
   fabText: {
     fontSize: 15,

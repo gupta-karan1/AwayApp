@@ -7,6 +7,7 @@ import {
   Modal,
   ScrollView,
   TouchableOpacity,
+  Linking,
 } from "react-native";
 // import { useNavigation } from "@react-navigation/native";
 import GlobalStyles from "../../GlobalStyles";
@@ -150,35 +151,48 @@ const SavedPlaceCard = ({ placeItem, onDelete, onDrag }) => {
 
                 {/* Only display if data exists */}
                 {placeAddress && (
-                  <View style={styles.iconContainer}>
-                    <FontAwesome
-                      style={[styles.icon, styles.AddressIcon]}
-                      name="map-marker"
-                      size={20} // Smaller icon require more margin
-                      color="grey"
-                    />
-                    <Text
-                      style={[GlobalStyles.bodySmallRegular, styles.bodyText]}
-                    >
-                      {placeAddress}
-                    </Text>
-                  </View>
+                  <Pressable
+                    onPress={() => {
+                      Linking.openURL(placeGoogleMapLink);
+                    }}
+                  >
+                    <View style={styles.iconContainer}>
+                      <FontAwesome
+                        style={[styles.icon, styles.AddressIcon]}
+                        name="map-marker"
+                        size={20} // Smaller icon require more margin
+                        color="grey"
+                      />
+                      <Text
+                        style={[GlobalStyles.bodySmallRegular, styles.bodyText]}
+                      >
+                        {placeAddress}
+                      </Text>
+                    </View>
+                  </Pressable>
                 )}
 
                 {placeContact && (
-                  <View style={styles.iconContainer}>
-                    <FontAwesome
-                      style={styles.icon}
-                      name="phone"
-                      size={18}
-                      color="grey"
-                    />
-                    <Text
-                      style={[GlobalStyles.bodySmallRegular, styles.bodyText]}
-                    >
-                      {placeContact}
-                    </Text>
-                  </View>
+                  <Pressable
+                    onPress={() => {
+                      const phoneNumber = `tel:${placeContact}`;
+                      Linking.openURL(phoneNumber);
+                    }}
+                  >
+                    <View style={styles.iconContainer}>
+                      <FontAwesome
+                        style={styles.icon}
+                        name="phone"
+                        size={18}
+                        color="grey"
+                      />
+                      <Text
+                        style={[GlobalStyles.bodySmallRegular, styles.bodyText]}
+                      >
+                        {placeContact}
+                      </Text>
+                    </View>
+                  </Pressable>
                 )}
                 {placeHours && (
                   <View style={styles.iconContainer}>

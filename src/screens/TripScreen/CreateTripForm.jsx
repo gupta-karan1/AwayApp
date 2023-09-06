@@ -35,6 +35,10 @@ import moment from "moment";
 import useDestinationFeed from "../../../hooks/useDestinationFeed";
 import { Ionicons } from "@expo/vector-icons";
 import { useRoute } from "@react-navigation/native";
+import {
+  SelectList,
+  MultipleSelectList,
+} from "react-native-dropdown-select-list";
 
 // Component to render the Trip Form
 const CreateTripForm = () => {
@@ -47,8 +51,9 @@ const CreateTripForm = () => {
   const [invitees, setInvitees] = useState([]);
   const [coverImage, setCoverImage] = useState(null);
   const [users, setUsers] = useState([]);
-  const [selectedUser, setSelectedUser] = useState("");
+  const [selectedUsers, setSelectedUsers] = useState([]);
   const [showInviteesPicker, setShowInviteesPicker] = useState(false);
+  const [selectedDestination, setSelectedDestination] = useState();
 
   // State variables to manage date picker modal
   const [showStartDateModal, setShowStartDateModal] = useState(false);
@@ -180,11 +185,11 @@ const CreateTripForm = () => {
       // Prepare the trip data object with the form inputs etc
       const tripData = {
         tripTitle: tripTitle || "Untitled Trip",
-        tripLocation: tripLocation || "No Location",
+        tripLocation: tripLocation || "Amsterdam",
         startDate: startDate,
         endDate: endDate,
         tripType: tripType,
-        invitees: invitees,
+        invitees: invitees || [],
         coverImage: coverImage,
         userId: user.uid,
         tripId: uuid.v4(),
@@ -286,13 +291,13 @@ const CreateTripForm = () => {
     }
   };
 
-  // Function to remove an invitee from the invitees array
-  const removeInvitee = (inviteeId) => {
-    setInvitees((prevInvitees) =>
-      prevInvitees.filter((invitee) => invitee.userId !== inviteeId)
-    );
-    setSelectedUser("");
-  };
+  // // Function to remove an invitee from the invitees array
+  // const removeInvitee = (inviteeId) => {
+  //   setInvitees((prevInvitees) =>
+  //     prevInvitees.filter((invitee) => invitee.userId !== inviteeId)
+  //   );
+  //   setSelectedUser("");
+  // };
 
   // run the get Users function only when the showInviteesPicker state variable is true and the trip type is group
   useFocusEffect(
@@ -317,6 +322,11 @@ const CreateTripForm = () => {
     }
   }, [tripItem]);
 
+  // const startDateObj = moment(startDate, "DD-MMM-YYYY").toDate();
+  // const endDateObj = moment(endDate, "DD-MMM-YYYY").toDate();
+
+  // console.log(invitees);
+
   return (
     <ScrollView>
       <KeyboardAvoidingView style={styles.container}>
@@ -331,7 +341,7 @@ const CreateTripForm = () => {
           />
           <View>
             <Text style={styles.titleText}>Trip Location:</Text>
-            <Picker
+            {/* <Picker
               // mode="dropdown"
               style={styles.picker}
               selectedValue={tripLocation}
@@ -351,7 +361,7 @@ const CreateTripForm = () => {
               }}
             >
               {/* Render list of destinations in Picker */}
-              <Picker.Item label="Select a Location" value="" />
+            {/* <Picker.Item label="Select a Location" value="" />
               {destinationData.map((destination) => (
                 <Picker.Item
                   key={destination.destinationId}
@@ -359,7 +369,28 @@ const CreateTripForm = () => {
                   value={destination.destinationName}
                 />
               ))}
-            </Picker>
+            </Picker> */}
+
+            <SelectList
+              data={destinationData.map((destination) => ({
+                key: destination.destinationId,
+                value: destination.destinationName,
+              }))}
+              setSelected={(val) => {
+                setTripLocation(val);
+                if (val) {
+                  setCoverImage(
+                    destinationData.filter(
+                      (destination) => destination.destinationName === val
+                    )[0].imageUrl
+                  );
+                } else {
+                  setCoverImage(null);
+                }
+              }}
+              save="value"
+              placeholder="Select a Location"
+            />
           </View>
           <View style={styles.dateContainer}>
             {/* Start date picker for Android */}
@@ -455,8 +486,7 @@ const CreateTripForm = () => {
           {showInviteesPicker && tripType === "group" && (
             <View>
               <Text style={styles.titleText}>Select Invitees:</Text>
-
-              <Picker
+              {/* <Picker
                 style={styles.picker}
                 selectedValue={selectedUser}
                 onValueChange={(itemValue, itemIndex) => {
@@ -480,9 +510,50 @@ const CreateTripForm = () => {
                     value={user}
                   />
                 ))}
-              </Picker>
+              </Picker> */}
 
-              <View style={styles.invitees}>
+              {/* <MultipleSelectList
+                data={users.map((user) => ({
+                  key: user.userId,
+                  value: `${user.email}`,
+                }))}
+                setSelected={(selectedItems) => {
+                  setSelectedUser(selectedItems);
+                  // Update the invitees array with the selected users
+                  // Add the selected user to the selectedInvitees array
+                  if (
+                    selectedItems &&
+                    !invitees.some(
+                      (invitee) => invitee.userId === selectedItems.userId
+                    )
+                  ) {
+                    setInvitees([...invitees, selectedItems]);
+                  }
+                }}
+                save="value"
+                placeholder="Select invitees"
+              /> */}
+
+              <MultipleSelectList
+                data={users.map((user) => ({
+                  key: user.userId,
+                  value: `${user.email}`,
+                }))}
+                setSelected={(val) => {
+                  setSelectedUsers(val);
+                  // setSelectedUser(selectedItems);
+                  // Update the invitees array with the selected users
+                  // const newInvitees = val.map((item) => ({
+                  //   userId: item.key,
+                  //   email: item.value,
+                  // }));
+                  setInvitees(val);
+                }}
+                save="value"
+                placeholder="Select invitees"
+              />
+
+              {/* <View style={styles.invitees}>
                 {invitees.map((invitee) => (
                   <View style={styles.inviteeText} key={invitee.userId}>
                     <Text>{invitee.username}</Text>
@@ -498,9 +569,10 @@ const CreateTripForm = () => {
                     </TouchableOpacity>
                   </View>
                 ))}
-              </View>
+              </View> */}
             </View>
           )}
+
           {isLoading ? (
             <ActivityIndicator />
           ) : (

@@ -6,6 +6,8 @@ import {
   Image,
   ActivityIndicator,
   TouchableOpacity,
+  Pressable,
+  Linking,
 } from "react-native";
 import { useState, useCallback } from "react";
 import PlaceCard from "../../components/ExploreComp/PlaceCard";
@@ -78,9 +80,15 @@ const ArticleScreen = ({ route }) => {
                 <Text style={GlobalStyles.bodySmallRegular}>
                   {articleCategory}
                 </Text>
-                <Text style={GlobalStyles.bodySmallRegular}>
-                  {articleSource}
-                </Text>
+                <Pressable
+                  onPress={() => {
+                    Linking.openURL(articleUrl);
+                  }}
+                >
+                  <Text style={GlobalStyles.bodySmallRegular}>
+                    {articleSource}
+                  </Text>
+                </Pressable>
               </View>
               <Text style={[GlobalStyles.titleLargeRegular, styles.titleText]}>
                 {articleTitle}

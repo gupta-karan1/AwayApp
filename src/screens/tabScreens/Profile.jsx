@@ -34,6 +34,7 @@ export default function Profile() {
   const [headerImage, setHeaderImage] = useState("");
 
   const { user } = useContext(AuthContext);
+  // console.log(user);
   const Navigation = useNavigation();
 
   const handleCreateTravelBoard = () => {

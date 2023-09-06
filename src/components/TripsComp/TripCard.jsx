@@ -9,6 +9,8 @@ import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import moment from "moment";
 import { Ionicons } from "@expo/vector-icons";
+import { useContext } from "react";
+import { AuthContext } from "../../../hooks/AuthContext";
 
 // component that displays a trip card on the trips screen based on the tripItem and path props passed to it. It will be different for different users.
 const TripCard = ({ tripItem, path, onDelete }) => {
@@ -25,6 +27,8 @@ const TripCard = ({ tripItem, path, onDelete }) => {
     tripId,
     createdAt,
   } = tripItem;
+
+  const { user } = useContext(AuthContext);
 
   const { navigate } = useNavigation(); // The useNavigation hook is used to access the navigation prop of the component.
 
@@ -66,13 +70,15 @@ const TripCard = ({ tripItem, path, onDelete }) => {
               {startDateTime} - {endDateTime}
             </Text>
           </View>
-          <Ionicons
-            onPress={onDelete}
-            name="md-trash-outline"
-            size={24}
-            color="white"
-            style={styles.icon}
-          />
+          {user.uid === userId && (
+            <Ionicons
+              onPress={onDelete}
+              name="md-trash-outline"
+              size={24}
+              color="white"
+              style={styles.icon}
+            />
+          )}
         </View>
       </ImageBackground>
     </Pressable>

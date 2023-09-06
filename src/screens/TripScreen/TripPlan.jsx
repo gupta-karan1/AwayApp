@@ -7,7 +7,7 @@ import {
   Pressable,
   View,
 } from "react-native";
-import React from "react";
+import React, { useContext } from "react";
 import { useRoute } from "@react-navigation/native";
 import TripTopNav from "./TripTopNav";
 // import { StatusBar } from "expo-status-bar";
@@ -15,6 +15,7 @@ import { useNavigation } from "@react-navigation/native";
 // import { Ionicons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
+import { AuthContext } from "../../../hooks/AuthContext";
 
 // Component to render Trip Plan screen
 const TripPlan = () => {
@@ -37,6 +38,9 @@ const TripPlan = () => {
     tripItem,
   } = route.params;
 
+  // Get the user object from the AuthContext
+  const { user } = useContext(AuthContext);
+
   return (
     <SafeAreaView style={styles.container}>
       {/* Trip Details Header */}
@@ -48,16 +52,18 @@ const TripPlan = () => {
           >
             <AntDesign name="arrowleft" size={24} color="black" />
           </Pressable>
-          <Pressable
-            onPress={() =>
-              Navigation.navigate("CreateTripForm", {
-                tripItem: tripItem,
-              })
-            }
-            style={styles.backButton}
-          >
-            <Feather name="edit-2" size={22} color="black" />
-          </Pressable>
+          {user.uid === userId && (
+            <Pressable
+              onPress={() =>
+                Navigation.navigate("CreateTripForm", {
+                  tripItem: tripItem,
+                })
+              }
+              style={styles.backButton}
+            >
+              <Feather name="edit-2" size={22} color="black" />
+            </Pressable>
+          )}
         </View>
         <View style={styles.textContainer}>
           <Text style={styles.text}>{tripTitle}</Text>

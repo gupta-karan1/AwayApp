@@ -9,6 +9,7 @@ import {
   Pressable,
   Modal,
   Alert,
+  Linking,
 } from "react-native";
 import { useState } from "react";
 import GlobalStyles from "../../GlobalStyles";
@@ -17,7 +18,7 @@ import { useContext } from "react";
 import { AuthContext } from "../../../hooks/AuthContext";
 import { useNavigation } from "@react-navigation/native";
 import MapView, { Marker } from "react-native-maps";
-
+import { Ionicons } from "@expo/vector-icons";
 import SavePlaceModal from "./SavePlaceModal";
 
 // PlaceScreen component
@@ -142,43 +143,56 @@ const PlaceScreen = ({ route }) => {
 
         {/* Only display if data exists */}
         {placeAddress && (
-          <View style={styles.iconContainer}>
-            <FontAwesome
-              style={[styles.icon, styles.AddressIcon]}
-              name="map-marker"
-              size={20} // Smaller icon require more margin
-              color="grey"
-            />
-            <Text
-              style={[
-                GlobalStyles.bodySmallRegular,
-                styles.bodyText,
-                styles.iconText,
-              ]}
-            >
-              {placeAddress}
-            </Text>
-          </View>
+          <Pressable
+            onPress={() => {
+              Linking.openURL(placeGoogleMapLink);
+            }}
+          >
+            <View style={styles.iconContainer}>
+              <FontAwesome
+                style={[styles.icon, styles.AddressIcon]}
+                name="map-marker"
+                size={20} // Smaller icon require more margin
+                color="grey"
+              />
+              <Text
+                style={[
+                  GlobalStyles.bodySmallRegular,
+                  styles.bodyText,
+                  styles.iconText,
+                ]}
+              >
+                {placeAddress}
+              </Text>
+            </View>
+          </Pressable>
         )}
 
         {placeContact && (
-          <View style={styles.iconContainer}>
-            <FontAwesome
-              style={styles.icon}
-              name="phone"
-              size={18}
-              color="grey"
-            />
-            <Text
-              style={[
-                GlobalStyles.bodySmallRegular,
-                styles.bodyText,
-                styles.iconText,
-              ]}
-            >
-              {placeContact}
-            </Text>
-          </View>
+          <Pressable
+            onPress={() => {
+              const phoneNumber = `tel:${placeContact}`;
+              Linking.openURL(phoneNumber);
+            }}
+          >
+            <View style={styles.iconContainer}>
+              <FontAwesome
+                style={styles.icon}
+                name="phone"
+                size={18}
+                color="grey"
+              />
+              <Text
+                style={[
+                  GlobalStyles.bodySmallRegular,
+                  styles.bodyText,
+                  styles.iconText,
+                ]}
+              >
+                {placeContact}
+              </Text>
+            </View>
+          </Pressable>
         )}
         {placeHours && (
           <View style={styles.iconContainer}>
@@ -221,104 +235,6 @@ const PlaceScreen = ({ route }) => {
           </MapView>
         </View>
       </ScrollView>
-
-      {/* <Modal
-        animationType="slide"
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
-        //   style={styles.modal}
-        presentationStyle="overFullScreen"
-        transparent={true}
-      >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <View style={styles.modalHeader}>
-              <Text style={styles.modalText}>Save to:</Text>
-              <Ionicons
-                name="ios-close"
-                size={30}
-                color="black"
-                onPress={() => setModalVisible(false)}
-              />
-            </View>
-            <ScrollView
-              showsVerticalScrollIndicator={false}
-              style={styles.innerContainer}
-            >
-              <Text style={GlobalStyles.titleLargeRegular}>
-                My Travel Boards
-              </Text>
-              {travelBoards.length === 0 && !isLoading && (
-                <View>
-                  <Text style={styles.promptMsg}>
-                    You have no Travel Boards yet. Create one in the Profile.
-                  </Text>
-                  <Pressable
-                    style={styles.promptText}
-                    onPress={() => {
-                      Navigation.navigate("ProfileStackGroup");
-                      setModalVisible(false);
-                    }}
-                  >
-                    <Text>Go to Profile</Text>
-                  </Pressable>
-                </View>
-              )}
-
-              {!isLoading &&
-                travelBoards.length > 0 &&
-                travelBoards.map((board) => (
-                  <ChecklistItem
-                    key={board.boardId}
-                    board={board}
-                    isSelected={selectedBoards.includes(board)}
-                    onToggleSelection={toggleSelection}
-                  />
-                ))}
-              {!isLoading && travelBoards.length > 0 && (
-                <Pressable
-                  style={styles.secondaryAction}
-                  onPress={() => {
-                    Navigation.navigate("ProfileStackGroup", {
-                      // screen: "CreateTravelBoard",
-                    });
-                    setModalVisible(false);
-                  }}
-                >
-                  <Text>Create New Board</Text>
-                </Pressable>
-              )}
-
-              {isLoading && <ActivityIndicator size={"large"} />}
-              <Text style={styles.promptMsg}>
-                You can also save places to a trip.
-              </Text>
-
-              <Pressable
-                style={styles.promptText}
-                onPress={() => {
-                  Navigation.navigate("TripsStackGroup");
-                  setModalVisible(false);
-                }}
-              >
-                <Text>Go to Trips</Text>
-              </Pressable>
-
-            </ScrollView>
-            <View style={styles.modalFooter}>
-              <Pressable
-                style={styles.submitButton}
-                title="Submit"
-                onPress={() => {
-                  handleSubmitBoard();
-                }}
-              >
-                <Text>Save</Text>
-              </Pressable>
-            </View>
-          </View>
-        </View>
-      </Modal> */}
     </View>
   );
 };
