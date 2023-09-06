@@ -201,6 +201,7 @@ const Chat = () => {
           user: {
             _id: user.uid,
             name: user.displayName,
+            avatar: user.photoURL,
           },
         };
         await addDoc(collection(tripRef, "messages"), messageData);
@@ -214,7 +215,7 @@ const Chat = () => {
   return (
     <GiftedChat
       isTyping={true}
-      showAvatarForEveryMessage={true} // show avatar for every message
+      showAvatarForEveryMessage={false} // show avatar for every message
       showUserAvatar={true}
       messages={messages} // messages to display
       onSend={(messages) => onSend(messages)} // callback function to send messages
@@ -222,7 +223,9 @@ const Chat = () => {
         // user object
         _id: user ? user.uid : "",
         name: user ? user.displayName : "",
+        avatar: user ? user.photoURL : "",
       }}
+      placeholder="Send a message to the group..."
     />
   );
 };

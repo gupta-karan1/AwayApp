@@ -4,6 +4,7 @@ import {
   ActivityIndicator,
   Text,
   TouchableOpacity,
+  Pressable,
 } from "react-native";
 import { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../../../hooks/AuthContext";
@@ -26,6 +27,7 @@ import GlobalStyles from "../../GlobalStyles";
 import { Feather } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import ViewMapModal from "./ViewMapModal";
+import { useNavigation } from "@react-navigation/native";
 
 const Saved = ({ tripId, userId }) => {
   const [savedPlaces, setSavedPlaces] = useState([]); // State to store saved places
@@ -35,6 +37,8 @@ const Saved = ({ tripId, userId }) => {
 
   // Access user object from AuthContext to get user id
   // const { user } = useContext(AuthContext);
+
+  const Navigation = useNavigation();
 
   const getSavedPlaces = async () => {
     try {
@@ -146,9 +150,17 @@ const Saved = ({ tripId, userId }) => {
       <View>
         {isLoading && <ActivityIndicator size="large" />}
         {savedPlaces.length === 0 && !isLoading && (
-          <Text>
-            You have no saved places. Go to the Find Section to add places.
-          </Text>
+          <Pressable
+            style={styles.instructionText}
+            onPress={() => {
+              Navigation.navigate("FindStack");
+              setModalVisible(false);
+            }}
+          >
+            <Text>
+              You have no saved places. Go to the Find Section to add places.
+            </Text>
+          </Pressable>
         )}
         {!isLoading && savedPlaces.length > 0 && (
           <FlatList
@@ -211,5 +223,12 @@ const styles = StyleSheet.create({
     gap: 10,
     justifyContent: "center",
     alignItems: "center",
+  },
+  instructionText: {
+    padding: 10,
+    alignItems: "center",
+    backgroundColor: "lightgrey",
+    margin: 10,
+    borderRadius: 10,
   },
 });

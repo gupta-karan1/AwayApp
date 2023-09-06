@@ -69,13 +69,7 @@ const Trips = () => {
       if (userId && username && email) {
         const q2 = query(
           collectionGroup(FIREBASE_DB, "trips"),
-          where("invitees", "array-contains", {
-            userId: userId,
-            username: username,
-            email: email,
-            headerImage: headerImage,
-            profileImage: profileImage,
-          })
+          where("invitees", "array-contains", userData)
         );
         const querySnapshot = await getDocs(q2);
 
@@ -280,7 +274,6 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 10,
     backgroundColor: "#0D47A1",
-    elevation: 4,
   },
   fabText: {
     fontSize: 15,

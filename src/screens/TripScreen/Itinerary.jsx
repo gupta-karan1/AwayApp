@@ -486,10 +486,18 @@ const Itinerary = ({ startDate, endDate, tripId, userId, invitees }) => {
               <ScrollView showsVerticalScrollIndicator={false}>
                 {isLoading && <ActivityIndicator size={"large"} />}
                 {savedPlaces.length === 0 && !isLoading && (
-                  <Text>
-                    You have no saved places. Go to the Find section to add
-                    places.
-                  </Text>
+                  <Pressable
+                    style={styles.emptyContainer}
+                    onPress={() => {
+                      Navigation.navigate("FindStack");
+                      setModalVisible(false);
+                    }}
+                  >
+                    <Text>
+                      You have no saved places. Go to the Find section to add
+                      places.
+                    </Text>
+                  </Pressable>
                 )}
 
                 {!isLoading &&
@@ -663,6 +671,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "lightgrey",
     margin: 10,
+    borderRadius: 10,
+  },
+  emptyContainer: {
+    backgroundColor: "lightgrey",
+    padding: 20,
     borderRadius: 10,
   },
 });

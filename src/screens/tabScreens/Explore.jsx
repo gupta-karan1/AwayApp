@@ -1,8 +1,10 @@
 import { StyleSheet, ScrollView, SafeAreaView } from "react-native";
+
 import { useCustomFonts } from "../../../hooks/useCustomFonts";
 import DestinationFeed from "../../components/ExploreComp/DestinationFeed";
 import FeaturedArticle from "../../components/ExploreComp/FeaturedArticle";
 import CategoryFeed from "../../components/ExploreComp/CategoryFeed";
+import ExplorePrompt from "../../components/ExploreComp/ExplorePrompt";
 
 const Explore = () => {
   // Load custom fonts using the useCustomFonts hook
@@ -17,6 +19,7 @@ const Explore = () => {
     // Wrap the content in SafeAreaView and handle onLayout event for the root view
     <SafeAreaView onLayout={onLayoutRootView}>
       <ScrollView showsVerticalScrollIndicator={false}>
+        <ExplorePrompt />
         <DestinationFeed />
         <FeaturedArticle />
         <CategoryFeed articleCategory="Things to do" />

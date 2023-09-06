@@ -34,6 +34,7 @@ const SavedPlaceCard = ({ placeItem, onDelete, onDrag }) => {
     placeWebsite,
     createdAt,
     userId,
+    userName,
   } = placeItem;
 
   // const { loading, singlePlaceData } = usePlaceScreen(pathId);
@@ -61,31 +62,32 @@ const SavedPlaceCard = ({ placeItem, onDelete, onDrag }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.card}>
-        <Image source={{ uri: placeImage }} style={styles.image} />
-        <View style={styles.cardText}>
-          <Text style={GlobalStyles.labelMediumMedium} numberOfLines={2}>
-            {placeCategory}
-          </Text>
-          <Text style={GlobalStyles.bodyMediumBold} numberOfLines={3}>
-            {placeTitle}
-          </Text>
+      <Pressable onPress={() => setModalVisible(true)}>
+        <View style={styles.card}>
+          <Image source={{ uri: placeImage }} style={styles.image} />
+          <View style={styles.cardContainer}>
+            <View>
+              <Text style={GlobalStyles.labelMediumMedium} numberOfLines={2}>
+                {placeCategory}
+              </Text>
+              <Text style={GlobalStyles.bodyMediumBold} numberOfLines={2}>
+                {placeTitle}
+              </Text>
+            </View>
+            <View>
+              <Text style={GlobalStyles.labelMediumMedium}>{userName}</Text>
+            </View>
+          </View>
+          <View style={styles.iconBox}>
+            <Ionicons
+              onPress={onDelete}
+              name="md-trash-outline"
+              size={24}
+              color="black"
+            />
+          </View>
         </View>
-        <View style={styles.iconBox}>
-          <Ionicons
-            onPress={() => setModalVisible(true)}
-            name="information-circle-outline"
-            size={24}
-            color="black"
-          />
-          <Ionicons
-            onPress={onDelete}
-            name="md-trash-outline"
-            size={24}
-            color="black"
-          />
-        </View>
-      </View>
+      </Pressable>
 
       <Modal
         animationType="fade"
@@ -218,21 +220,18 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "flex-start",
     borderRadius: 10,
   },
-  cardText: {
-    width: "45%",
-    paddingLeft: 10,
-    paddingTop: 20,
-    paddingRight: 10,
+  cardContainer: {
+    flex: 1,
+    padding: 15,
+    justifyContent: "space-between",
   },
   iconBox: {
-    flex: 1,
-    flexDirection: "column",
-    alignItems: "center",
-    paddingVertical: 4,
-    gap: 69,
+    position: "absolute",
+    right: 7,
+    bottom: 7,
+    padding: 5,
   },
   image: {
     height: 130,
@@ -250,7 +249,7 @@ const styles = StyleSheet.create({
     // overflow: "hidden",
   },
   modalView: {
-    width: "90%",
+    // width: "90%",
     backgroundColor: "white",
     borderRadius: 15,
     padding: 20,
@@ -263,10 +262,10 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-    // overflow: "hidden",
+    overflow: "hidden",
   },
   modalImage: {
-    width: "100%",
+    // width: "50%",
     height: 200,
     borderRadius: 10,
     marginBottom: 15,
@@ -291,7 +290,6 @@ const styles = StyleSheet.create({
   textContainer: {
     width: 290,
   },
-
   iconContainer: {
     flexDirection: "row",
     alignItems: "flex-start",
@@ -306,7 +304,6 @@ const styles = StyleSheet.create({
   button: {
     marginVertical: 10,
   },
-
   buttonClose: {
     backgroundColor: "#2196F3",
     padding: 10,
