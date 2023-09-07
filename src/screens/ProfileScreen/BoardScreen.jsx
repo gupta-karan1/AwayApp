@@ -207,7 +207,7 @@ const BoardScreen = () => {
               <Text style={[GlobalStyles.titleLargeRegular, styles.titleText]}>
                 {title}
               </Text>
-              {showFullText ? (
+              {/* {showFullText ? (
                 <View>
                   <Text
                     style={[GlobalStyles.bodySmallRegular, styles.bodyText]}
@@ -234,7 +234,41 @@ const BoardScreen = () => {
                     </Text>
                   </TouchableOpacity>
                 </View>
-              )}
+              )} */}
+              {description ? (
+                showFullText ? (
+                  <View>
+                    <Text
+                      style={[GlobalStyles.bodySmallRegular, styles.bodyText]}
+                    >
+                      {description}
+                    </Text>
+                    <TouchableOpacity onPress={toggleFullText}>
+                      <Text
+                        style={[styles.para, GlobalStyles.bodySmallRegular]}
+                      >
+                        Read Less
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                ) : (
+                  <View>
+                    <Text
+                      style={[GlobalStyles.bodySmallRegular, styles.bodyText]}
+                    >
+                      {description.slice(0, 50)}
+                      {"... "}
+                    </Text>
+                    <TouchableOpacity onPress={toggleFullText}>
+                      <Text
+                        style={[GlobalStyles.bodySmallRegular, styles.para]}
+                      >
+                        Read More
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                )
+              ) : null}
             </View>
           }
         />
@@ -273,17 +307,18 @@ const styles = StyleSheet.create({
   },
   para: {
     marginTop: 10,
-    marginBottom: 30,
+    // marginBottom: 30,
     textDecorationLine: "underline",
   },
   promptText: {
-    textAlign: "center",
+    // textAlign: "center",
     paddingHorizontal: 10,
     paddingVertical: 20,
     alignItems: "center",
     backgroundColor: "lightgrey",
-    marginBottom: 10,
+    // marginBottom: 10,
     borderRadius: 10,
+    // marginTop: -30,
   },
   backButton: {
     position: "absolute",

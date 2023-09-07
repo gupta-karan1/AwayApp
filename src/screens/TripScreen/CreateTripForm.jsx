@@ -391,6 +391,10 @@ const CreateTripForm = () => {
               }}
               save="value"
               placeholder="Select a Location"
+              // inputStyles={{ marginBottom: 10 }}
+              // boxStyles={{ marginBottom: 10 }}
+              // inputStyles={{ paddingBottom: 10 }}
+              dropdownStyles={{ marginBottom: 10 }}
             />
           </View>
           <View style={styles.dateContainer}>
@@ -649,7 +653,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    // marginBottom: 5,
+    marginTop: 10,
   },
   radioButtonContainer: {
     flexDirection: "row",

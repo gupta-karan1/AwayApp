@@ -176,6 +176,7 @@ export default function Profile() {
               username: user.displayName,
               profileImage: user.photoURL,
               userId: user.uid,
+              headerImage: headerImage,
             })
           }
           style={styles.backButton}

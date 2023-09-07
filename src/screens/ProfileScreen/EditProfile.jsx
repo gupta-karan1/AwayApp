@@ -90,7 +90,7 @@ const EditProfile = () => {
 
       delete result["cancelled"];
     } else {
-      setCoverImage(null); // If no image selected set coverImage to null
+      // setCoverImage(null); // If no image selected set coverImage to null
       setIsLoading(false);
       return;
     }
@@ -118,7 +118,7 @@ const EditProfile = () => {
 
       delete result["cancelled"];
     } else {
-      setCoverImage(null);
+      // setCoverImage(null);
       setIsLoading(false);
       return;
     }
@@ -153,12 +153,13 @@ const EditProfile = () => {
   };
 
   const route = useRoute();
-  const { username, profileImage, userId } = route.params || {};
+  const { username, profileImage, userId, headerImage } = route.params || {};
   // console.log(user);
   useEffect(() => {
     if (userId) {
       setUserName(username);
       setCoverImage(profileImage);
+      setBoardImage(headerImage);
       getSingleUserData();
     }
   }, [userId]);
@@ -260,7 +261,7 @@ const EditProfile = () => {
 
       <View style={styles.inputContainer}>
         <View>
-          <Text style={styles.titleText}>Cover Image (Unsplash):</Text>
+          <Text style={styles.titleText}>Cover Image:</Text>
 
           <TextInput
             label="Search for a cover image"
@@ -269,12 +270,12 @@ const EditProfile = () => {
             onSubmitEditing={fetchImages}
             style={[styles.input, styles.inputStyle]}
             reg
-            placeholder="Search for an image"
+            placeholder="Search with a keyword"
           />
         </View>
-        {userId && searchResults?.length === 0 && (
+        {/* {userId && searchResults?.length === 0 && (
           <Text>Nothing found. Try a different query</Text>
-        )}
+        )} */}
         {searchResultsLoading && <ActivityIndicator />}
         {searchResults.length > 1 && (
           <FlatList
@@ -297,6 +298,17 @@ const EditProfile = () => {
         {searchResults.length === 1 && (
           <Image
             source={{ uri: selectedImage.urls.small }}
+            style={styles.selectedImage}
+          />
+        )}
+
+        {searchResults.length === 0 && (
+          <Image
+            source={
+              boardImage
+                ? { uri: boardImage }
+                : require("../../../assets/headerDefault.jpg")
+            }
             style={styles.selectedImage}
           />
         )}

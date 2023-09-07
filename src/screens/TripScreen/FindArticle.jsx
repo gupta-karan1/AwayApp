@@ -7,6 +7,7 @@ import {
   ActivityIndicator,
   TouchableOpacity,
   Pressable,
+  Linking,
 } from "react-native";
 import { useState, useCallback } from "react";
 import useArticleScreen from "../../../hooks/useArticleScreen";
@@ -92,9 +93,15 @@ const FindArticle = ({ route }) => {
                 <Text style={GlobalStyles.bodySmallRegular}>
                   {articleCategory}
                 </Text>
-                <Text style={GlobalStyles.bodySmallRegular}>
-                  {articleSource}
-                </Text>
+                <Pressable
+                  onPress={() => {
+                    Linking.openURL(articleUrl);
+                  }}
+                >
+                  <Text style={GlobalStyles.bodySmallRegular}>
+                    {articleSource}
+                  </Text>
+                </Pressable>
               </View>
               <Text style={[GlobalStyles.titleLargeRegular, styles.titleText]}>
                 {articleTitle}

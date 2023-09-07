@@ -96,7 +96,7 @@ const SavedPlaceCard = ({ placeItem, onDelete, onDrag }) => {
         // presentationStyle="overFullScreen"
         visible={modalVisible}
         onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
+          // Alert.alert("Modal has been closed.");
           setModalVisible(!modalVisible);
         }}
       >
@@ -260,7 +260,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: 90,
     backgroundColor: "rgba(0,0,0,0.6)",
-    // overflow: "hidden",
+    // overflow: "visible",
+    // width: "100%",
   },
   modalView: {
     // width: "90%",
@@ -276,7 +277,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-    overflow: "hidden",
+    // overflow: "hidden",
+    // overflow: "visible",
+    // overflow: "scroll",
   },
   modalImage: {
     // width: "50%",
@@ -294,6 +297,9 @@ const styles = StyleSheet.create({
   },
   bodyText: {
     marginBottom: 5,
+    // width: "100%",
+    maxWidth: 270,
+    // overflow: "visible",
   },
   icon: {
     marginRight: 15,
