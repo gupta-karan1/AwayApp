@@ -185,7 +185,7 @@ const CreateTravelBoard = () => {
           <Text style={styles.titleText}>Description:</Text>
           <TextInput
             label="Description"
-            // value={boardDescription}
+            value={boardDescription}
             onChangeText={(text) => setBoardDescription(text)}
             style={[styles.descriptionInput, styles.input]}
             placeholder="Description"
@@ -195,7 +195,7 @@ const CreateTravelBoard = () => {
             maxHeight={110} // Stop submit button from going of screen
             // returnKeyType="done"
           />
-          <Text style={styles.titleText}>Cover Image (Unsplash):</Text>
+          <Text style={styles.titleText}> Cover Image:</Text>
           {/* <View style={styles.searchContainer}> */}
           <TextInput
             label="Search for a cover image"
@@ -204,13 +204,13 @@ const CreateTravelBoard = () => {
             onSubmitEditing={fetchImages}
             style={[styles.input, styles.inputStyle]}
             reg
-            placeholder="Search for an image"
+            placeholder="Search with a keyword"
           />
           {/* <EvilIcons name="search" size={20} color="black" />
           </View> */}
-          {searchResults?.length === 0 && (
+          {/* {searchResults.length === 0 && (
             <Text>Nothing found. Try a different query</Text>
-          )}
+          )} */}
 
           {searchResultsLoading && <ActivityIndicator />}
 
@@ -240,6 +240,12 @@ const CreateTravelBoard = () => {
               {searchResults.length === 1 && (
                 <Image
                   source={{ uri: selectedImage.urls.small }}
+                  style={styles.selectedImage}
+                />
+              )}
+              {searchResults.length === 0 && boardImage !== "" && boardId && (
+                <Image
+                  source={{ uri: boardImage }}
                   style={styles.selectedImage}
                 />
               )}
