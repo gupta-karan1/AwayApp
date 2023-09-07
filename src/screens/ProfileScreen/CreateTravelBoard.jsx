@@ -151,7 +151,7 @@ const CreateTravelBoard = () => {
         title: boardTitle,
         description: boardDescription,
         image: boardImage,
-        createdAt: new Date(),
+        // createdAt: createdAt,
         boardId: boardId,
       });
 

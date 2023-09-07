@@ -176,7 +176,7 @@ const Trips = () => {
 
   const MyTrips = () => {
     return (
-      <ScrollView style={styles.tripContainer}>
+      <ScrollView style={styles.myTripContainer}>
         {tripData.length > 0 && (
           <View>
             <Text style={GlobalStyles.titleLargeRegular}>My Trips</Text>
@@ -195,7 +195,7 @@ const Trips = () => {
 
   const InvitedTrips = () => {
     return (
-      <View style={styles.tripContainer}>
+      <View style={styles.inviteTripContainer}>
         {invitedTrips.length > 0 && (
           <View>
             <Text style={GlobalStyles.titleLargeRegular}>Invited Trips</Text>
@@ -258,12 +258,18 @@ const Trips = () => {
       )}
       {!loading && tripData && invitedTrips && (
         <ScrollView showsVerticalScrollIndicator={false} style={styles.wrapper}>
-          {tabView === "all" && <AllTrips />}
+          {/* {tabView === "all" && <AllTrips />} */}
+          {tabView === "all" && (
+            <>
+              <MyTrips />
+              <InvitedTrips />
+            </>
+          )}
           {tabView === "personal" && <MyTrips />}
           {tabView === "invited" && <InvitedTrips />}
-          {/* FAB to add a new trip */}
         </ScrollView>
       )}
+      {/* FAB to add a new trip */}
       <Pressable style={styles.fabButton} onPress={handleAddTrip}>
         <Text style={styles.fabText}>Create Trip</Text>
       </Pressable>
@@ -283,8 +289,12 @@ const styles = StyleSheet.create({
     paddingBottom: 75,
     // flex: 1,
   },
-  tripContainer: {
-    marginBottom: 15,
+  myTripContainer: {
+    // marginBottom: 50,
+    // marginTop: 20,
+  },
+  inviteTripContainer: {
+    // marginBottom: 50,
     marginTop: 15,
   },
   fabButton: {

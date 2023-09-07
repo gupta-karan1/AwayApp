@@ -64,6 +64,8 @@ const CreateTripForm = () => {
   // State variables to manage image upload progress
   const [isLoading, setIsLoading] = useState(false);
 
+  const [showInvitees, setShowInvitees] = useState(false);
+
   // Access navigation object from React Navigation
   const navigation = useNavigation();
 
@@ -291,13 +293,10 @@ const CreateTripForm = () => {
     }
   };
 
-  // // Function to remove an invitee from the invitees array
-  // const removeInvitee = (inviteeId) => {
-  //   setInvitees((prevInvitees) =>
-  //     prevInvitees.filter((invitee) => invitee.userId !== inviteeId)
-  //   );
-  //   setSelectedUser("");
-  // };
+  // Function to remove an invitee from the invitees array
+  const removeInvitee = (invitee) => {
+    setInvitees(invitees.filter((item) => item !== invitee));
+  };
 
   // run the get Users function only when the showInviteesPicker state variable is true and the trip type is group
   useFocusEffect(
@@ -321,6 +320,8 @@ const CreateTripForm = () => {
       setCoverImage(tripItem.coverImage);
     }
   }, [tripItem]);
+
+  // console.log(invitees);
 
   // const startDateObj = moment(startDate, "DD-MMM-YYYY").toDate();
   // const endDateObj = moment(endDate, "DD-MMM-YYYY").toDate();
@@ -485,7 +486,7 @@ const CreateTripForm = () => {
           </View>
           {showInviteesPicker && tripType === "group" && (
             <View>
-              <Text style={styles.titleText}>Select Invitees:</Text>
+              <Text style={styles.titleText}>Invite a Tripmate:</Text>
               {/* <Picker
                 style={styles.picker}
                 selectedValue={selectedUser}
@@ -537,39 +538,60 @@ const CreateTripForm = () => {
               <MultipleSelectList
                 data={users.map((user) => ({
                   key: user.userId,
-                  value: `${user.email}`,
+                  value: user.email,
+                  disabled: invitees.some((invitee) => invitee === user.email),
                 }))}
                 setSelected={(val) => {
-                  setSelectedUsers(val);
-                  // setSelectedUser(selectedItems);
-                  // Update the invitees array with the selected users
-                  // const newInvitees = val.map((item) => ({
-                  //   userId: item.key,
-                  //   email: item.value,
-                  // }));
                   setInvitees(val);
+
+                  // if the selected user is not already in the invitees array, add the selected user to the invitees array
+                  // if (
+                  //   val &&
+                  //   !invitees.some((invitee) => invitee.userId === val.key)
+                  // ) {
+                  //   setInvitees([...invitees, val]);
+                  // }
                 }}
                 save="value"
-                placeholder="Select invitees"
+                placeholder="Select a user"
+                label="Selected Users"
+                notFoundText="No users found"
+                searchPlaceholder="Search"
+                // maxHeight={200}
+                dropdownStyles={{ marginBottom: 20 }}
               />
 
-              {/* <View style={styles.invitees}>
-                {invitees.map((invitee) => (
-                  <View style={styles.inviteeText} key={invitee.userId}>
-                    <Text>{invitee.username}</Text>
-                    <TouchableOpacity
-                      onPress={() => removeInvitee(invitee.userId)}
+              {tripItem && (
+                <View>
+                  <Pressable>
+                    <Text
+                      style={[styles.titleText, styles.deleteText]}
+                      onPress={() => setShowInvitees(!showInvitees)}
                     >
-                      <Ionicons
-                        name="ios-close"
-                        size={24}
-                        color="black"
-                        style={styles.icon}
-                      />
-                    </TouchableOpacity>
-                  </View>
-                ))}
-              </View> */}
+                      {showInvitees ? "Hide" : "Delete"} Invitees
+                    </Text>
+                  </Pressable>
+                  {showInvitees && (
+                    <View style={styles.invitees}>
+                      {invitees.map((invitee) => (
+                        <View style={styles.inviteeText} key={invitee}>
+                          <Text>{invitee}</Text>
+                          <TouchableOpacity
+                            onPress={() => removeInvitee(invitee)}
+                          >
+                            <Ionicons
+                              name="ios-close"
+                              size={24}
+                              color="black"
+                              style={styles.icon}
+                            />
+                          </TouchableOpacity>
+                        </View>
+                      ))}
+                    </View>
+                  )}
+                </View>
+              )}
             </View>
           )}
 
@@ -673,8 +695,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     gap: 10,
-    marginBottom: 30,
-    marginTop: -20,
+    marginBottom: 10,
+    marginTop: 10,
   },
   inviteeText: {
     flexDirection: "row",
@@ -687,6 +709,11 @@ const styles = StyleSheet.create({
   },
   icon: {
     paddingLeft: 5,
+  },
+  deleteText: {
+    textDecorationLine: "underline",
+    paddingBottom: 25,
+    alignSelf: "flex-end",
   },
 });
 

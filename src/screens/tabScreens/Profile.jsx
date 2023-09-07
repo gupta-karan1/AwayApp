@@ -271,7 +271,7 @@ export default function Profile() {
                 style={styles.travelBoardImg}
               />
               <View style={styles.cardFooter}>
-                <Text style={GlobalStyles.bodySmallRegular} numberOfLines={2}>
+                <Text style={GlobalStyles.bodySmallRegular} numberOfLines={1}>
                   {item.title}
                 </Text>
                 <View style={styles.iconBox}>
@@ -362,8 +362,10 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
+    alignItems: "flex-end",
     marginTop: 5,
+    paddingHorizontal: 3,
+    // gap: 10,
   },
   backButton: {
     position: "absolute",

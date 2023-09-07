@@ -336,7 +336,7 @@ const SavePlaceModal = ({ placeData, onClose, modalVisible }) => {
           </View>
           <View style={styles.placeCard}>
             <View style={styles.checkTextContainer}>
-              <Text style={[styles.checklistText]} numberOfLines={3}>
+              <Text style={[styles.checklistText]} numberOfLines={1}>
                 {board.title}
               </Text>
             </View>
@@ -363,7 +363,7 @@ const SavePlaceModal = ({ placeData, onClose, modalVisible }) => {
           </View>
           <View style={styles.placeCard}>
             <View style={styles.checkTextContainer}>
-              <Text style={[styles.checklistText]} numberOfLines={3}>
+              <Text style={[styles.checklistText]} numberOfLines={1}>
                 {trip.tripTitle}
               </Text>
             </View>
@@ -435,9 +435,13 @@ const SavePlaceModal = ({ placeData, onClose, modalVisible }) => {
             showsVerticalScrollIndicator={false}
             style={styles.innerContainer}
           >
-            <Text style={GlobalStyles.titleLargeRegular}>My Travel Boards</Text>
+            {isLoading && <ActivityIndicator size={"large"} />}
+
             {travelBoards.length === 0 && !isLoading && (
               <View>
+                <Text style={GlobalStyles.titleLargeRegular}>
+                  My Travel Boards
+                </Text>
                 <Text style={styles.promptMsg}>
                   You have no Travel Boards yet. Create one in the Profile.
                 </Text>
@@ -456,6 +460,11 @@ const SavePlaceModal = ({ placeData, onClose, modalVisible }) => {
               </View>
             )}
 
+            {!isLoading && travelBoards.length > 0 && (
+              <Text style={GlobalStyles.titleLargeRegular}>
+                My Travel Boards
+              </Text>
+            )}
             {!isLoading &&
               travelBoards.length > 0 &&
               travelBoards.map((board) => (
@@ -481,9 +490,9 @@ const SavePlaceModal = ({ placeData, onClose, modalVisible }) => {
               </Pressable>
             )}
 
-            <Text style={GlobalStyles.titleLargeRegular}>My Trips</Text>
             {userTrips.length === 0 && !isLoading && (
               <View>
+                <Text style={GlobalStyles.titleLargeRegular}>My Trips</Text>
                 <Text style={styles.promptMsg}>
                   You have no Trips yet. Create one in Trips.
                 </Text>
@@ -493,7 +502,6 @@ const SavePlaceModal = ({ placeData, onClose, modalVisible }) => {
                     Navigation.navigate("TripsStackGroup", {
                       screen: "Trips",
                     });
-                    // setModalVisible(false);
                     onClose();
                   }}
                 >
@@ -502,6 +510,9 @@ const SavePlaceModal = ({ placeData, onClose, modalVisible }) => {
               </View>
             )}
 
+            {!isLoading && userTrips.length > 0 && (
+              <Text style={GlobalStyles.titleLargeRegular}>My Trips</Text>
+            )}
             {!isLoading &&
               userTrips.length > 0 &&
               userTrips.map((trip) => (
@@ -512,14 +523,14 @@ const SavePlaceModal = ({ placeData, onClose, modalVisible }) => {
                   onToggleSelectionTrip={toggleSelectionTrip}
                 />
               ))}
+
             {!isLoading && userTrips.length > 0 && (
               <Pressable
                 style={styles.secondaryAction}
                 onPress={() => {
-                  Navigation.navigate("TripStackGroup", {
+                  Navigation.navigate("TripsStackGroup", {
                     screen: "Trips",
                   });
-                  //   setModalVisible(false);
                   onClose();
                 }}
               >
@@ -557,7 +568,6 @@ const SavePlaceModal = ({ placeData, onClose, modalVisible }) => {
           <View style={styles.modalFooter}>
             <Pressable
               style={styles.submitButton}
-              title="Submit"
               onPress={() => {
                 handleSubmit();
               }}

@@ -92,6 +92,7 @@ const styles = StyleSheet.create({
   },
   cardText: {
     wordWrap: "wrap",
+    width: "80%",
   },
 });
 
