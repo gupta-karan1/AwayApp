@@ -7,6 +7,11 @@ const GlobalStyles = StyleSheet.create({
     fontSize: 22,
     lineHeight: 28,
   },
+  titleLargeBold: {
+    fontFamily: "Mulish-Bold",
+    fontSize: 24,
+    lineHeight: 28,
+  },
   // Body Text, Subtitles
   bodyMediumBold: {
     fontFamily: "Mulish-Bold",
@@ -25,6 +30,12 @@ const GlobalStyles = StyleSheet.create({
     fontSize: 12,
     fontStyle: "normal",
     lineHeight: 16,
+  },
+  labelSmallMedium: {
+    fontFamily: "Mulish-Medium",
+    fontSize: 10,
+    fontStyle: "normal",
+    lineHeight: 12,
   },
 });
 

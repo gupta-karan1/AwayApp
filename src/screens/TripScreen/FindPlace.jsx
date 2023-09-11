@@ -319,6 +319,7 @@ const styles = StyleSheet.create({
   container: {
     padding: 15,
     paddingTop: 0,
+    backgroundColor: "#fff",
   },
   image: {
     width: "100%",

@@ -21,6 +21,10 @@ const Find = () => {
 
 export default Find;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    // backgroundColor: "#fff",
+  },
+});
 
 // SUMMARY: Find section of TripTopNav. It accesses the tripLocation parameter from the route to determine the specific destination. It generates a pathId based on the tripLocation for fetching article data related to that destination. It renders the FindDestination component, passing the pathId and tripLocation as props.

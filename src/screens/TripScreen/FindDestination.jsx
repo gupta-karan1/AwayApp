@@ -126,7 +126,7 @@ const FindDestination = ({ tripLocation }) => {
   };
 
   return (
-    <View>
+    <View style={styles.container}>
       {loading ? (
         <ActivityIndicator size="large" />
       ) : (
@@ -242,6 +242,9 @@ const FindDestination = ({ tripLocation }) => {
 export default FindDestination;
 
 const styles = StyleSheet.create({
+  container: {
+    backgroundColor: "#fff",
+  },
   // image: {
   //   height: 250,
   //   // width: 365,

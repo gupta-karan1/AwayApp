@@ -377,6 +377,7 @@ const CreateTripForm = () => {
                 key: destination.destinationId,
                 value: destination.destinationName,
               }))}
+              maxHeight={100}
               setSelected={(val) => {
                 setTripLocation(val);
                 if (val) {

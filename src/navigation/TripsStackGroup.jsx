@@ -2,6 +2,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Trips from "../screens/tabScreens/Trips";
 import CreateTripForm from "../screens/TripScreen/CreateTripForm";
 import TripPlan from "../screens/TripScreen/TripPlan";
+import GlobalStyles from "../GlobalStyles";
 // TripsStackGroup is a stack navigator that contains the Trips, CreateTripForm, and TripPlan screens.
 
 const TripsStack = createNativeStackNavigator(); // The createNativeStackNavigator function is used to create a stack navigator.
@@ -14,6 +15,8 @@ const TripsStackGroup = () => {
         headerTitleAlign: "center",
         animation: "slide_from_right",
         // headerTitleStyle: { fontFamily: "Mulish-Bold" },
+        headerTintColor: "#63725A",
+        headerTitleStyle: GlobalStyles.titleLargeBold,
       }}
     >
       <TripsStack.Screen

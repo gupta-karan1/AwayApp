@@ -295,8 +295,9 @@ export default function Profile() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "flex-start",
-    borderRadius: 30,
+    // justifyContent: "flex-start",
+    // borderRadius: 30,
+    backgroundColor: "#fff",
   },
   textContainer: {
     backgroundColor: "lightgrey",

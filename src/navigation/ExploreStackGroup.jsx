@@ -4,6 +4,7 @@ import ArticleScreen from "../screens/ExploreScreen/ArticleScreen";
 import PlaceScreen from "../screens/ExploreScreen/PlaceScreen";
 import Explore from "../screens/tabScreens/Explore";
 import SavePlaceModal from "../screens/ExploreScreen/SavePlaceModal";
+import GlobalStyles from "../GlobalStyles";
 
 const ExploreStack = createNativeStackNavigator(); // The createNativeStackNavigator function is used to create a stack navigator for the Explore tab.
 
@@ -15,6 +16,8 @@ const ExploreStackGroup = () => {
       screenOptions={{
         headerTitleAlign: "center",
         animation: "slide_from_right", // The animation prop is used to set the animation for the screen transitions in the stack navigator.
+        headerTintColor: "#63725A",
+        headerTitleStyle: GlobalStyles.titleLargeBold,
       }}
     >
       <ExploreStack.Screen name="Explore" component={Explore} />

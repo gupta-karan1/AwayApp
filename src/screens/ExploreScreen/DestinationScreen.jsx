@@ -46,7 +46,7 @@ const DestinationScreen = ({ route }) => {
   };
 
   return (
-    <View>
+    <View style={styles.container}>
       {loading ? (
         <ActivityIndicator size="large" />
       ) : (
@@ -124,6 +124,9 @@ const DestinationScreen = ({ route }) => {
 export default DestinationScreen;
 
 const styles = StyleSheet.create({
+  container: {
+    backgroundColor: "#fff",
+  },
   image: {
     height: 250,
     // width: 365,

@@ -8,6 +8,7 @@ import CreateTravelBoard from "../screens/ProfileScreen/CreateTravelBoard";
 import BoardScreen from "../screens/ProfileScreen/BoardScreen";
 import ProfilePlace from "../screens/ProfileScreen/ProfilePlace";
 import EditProfile from "../screens/ProfileScreen/EditProfile";
+import GlobalStyles from "../GlobalStyles";
 // create stack navigator for profile screen group to allow for navigation between profile, login, and register screens
 const ProfileStack = createNativeStackNavigator(); // create stack navigator
 
@@ -27,6 +28,8 @@ const ProfileStackGroup = () => {
       initialRouteName="Profile"
       screenOptions={{
         headerTitleAlign: "center",
+        headerTintColor: "#63725A",
+        headerTitleStyle: GlobalStyles.titleLargeBold,
       }}
     >
       <ProfileStack.Screen

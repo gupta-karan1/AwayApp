@@ -230,9 +230,13 @@ const Trips = () => {
       <View style={styles.buttonContainer}>
         <Pressable
           onPress={() => handleTabView("all")}
-          style={[styles.button, tabView === "all" && styles.selected]}
+          style={[
+            styles.button,
+            GlobalStyles.bodySmallRegular,
+            tabView === "all" && styles.selected,
+          ]}
         >
-          <Text>All</Text>
+          <Text>All Trips</Text>
         </Pressable>
         <Pressable
           onPress={() => handleTabView("personal")}
@@ -244,7 +248,7 @@ const Trips = () => {
           onPress={() => handleTabView("invited")}
           style={[styles.button, tabView === "invited" && styles.selected]}
         >
-          <Text>Invited</Text>
+          <Text>Invited Trips</Text>
         </Pressable>
       </View>
 
@@ -284,6 +288,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 15,
     // paddingTop: 15,
+    backgroundColor: "#fff",
   },
   wrapper: {
     paddingBottom: 75,
@@ -320,15 +325,17 @@ const styles = StyleSheet.create({
   button: {
     alignItems: "flex-start",
     justifyContent: "center",
-    paddingVertical: 12,
-    paddingHorizontal: 25,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
     borderRadius: 50,
     backgroundColor: "#fff",
     marginRight: 10,
-    elevation: 2,
+    // elevation: 2,
+    borderWidth: 1,
+    borderColor: "#63725A",
   },
   selected: {
-    backgroundColor: "lightblue",
+    backgroundColor: "#E5E8E3",
   },
   emptyContainer: {
     backgroundColor: "lightgrey",

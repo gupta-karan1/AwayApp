@@ -118,7 +118,7 @@ const FeaturedArticle = () => {
 const styles = StyleSheet.create({
   container: {
     padding: 15,
-    backgroundColor: "lightgrey",
+    backgroundColor: "#E5E8E3",
     marginBottom: 30,
   },
   titleText: {

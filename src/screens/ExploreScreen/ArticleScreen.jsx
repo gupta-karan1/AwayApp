@@ -53,7 +53,7 @@ const ArticleScreen = ({ route }) => {
   }, []); // add an empty array as the second argument to useCallback to avoid re-rendering the component
 
   return (
-    <View>
+    <View style={styles.container}>
       {loading ? (
         <ActivityIndicator size="large" />
       ) : (
@@ -155,6 +155,9 @@ const ArticleScreen = ({ route }) => {
 export default ArticleScreen;
 
 const styles = StyleSheet.create({
+  container: {
+    backgroundColor: "#fff",
+  },
   image: {
     height: 250,
     marginTop: 20,

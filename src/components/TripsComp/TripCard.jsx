@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     color: "white",
   },
   textContainer: {
-    backgroundColor: "rgba(30, 144, 255, 0.6)",
+    backgroundColor: "rgba(0, 0, 0, 0.30)",
     width: "100%",
     padding: 10,
 
