@@ -9,21 +9,19 @@ const ExplorePrompt = () => {
   const navigation = useNavigation();
   return (
     <Pressable
-      style={styles.emptyContainer}
+      style={styles.promptMsg}
       onPress={() => navigation.navigate("TripsStackGroup")}
     >
-      <View style={styles.promptMsg}>
-        <Entypo name="location" size={24} color="#EFFBB7" />
-        <View>
-          <Text style={[GlobalStyles.bodyMediumBold, styles.text]}>
-            Travel on Your Mind?
-          </Text>
-          <Text style={[GlobalStyles.labelMediumMedium, styles.text]}>
-            Start planning a trip
-          </Text>
-        </View>
-        <AntDesign name="arrowright" size={24} color="#EFFBB7" />
+      <Entypo name="location" size={24} color="#EFFBB7" />
+      <View>
+        <Text style={[GlobalStyles.bodyMediumBold, styles.text]}>
+          Travel on Your Mind?
+        </Text>
+        <Text style={[GlobalStyles.labelMediumMedium, styles.text]}>
+          Start planning a trip
+        </Text>
       </View>
+      <AntDesign name="arrowright" size={24} color="#EFFBB7" />
     </Pressable>
   );
 };
@@ -31,14 +29,12 @@ const ExplorePrompt = () => {
 export default ExplorePrompt;
 
 const styles = StyleSheet.create({
-  emptyContainer: {
+  promptMsg: {
     backgroundColor: "#63725A",
     padding: 20,
     borderRadius: 10,
     marginHorizontal: 15,
-    marginTop: 15,
-  },
-  promptMsg: {
+    marginTop: 30,
     flex: 1,
     flexDirection: "row",
     justifyContent: "space-around",

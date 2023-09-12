@@ -3,6 +3,7 @@ import Trips from "../screens/tabScreens/Trips";
 import CreateTripForm from "../screens/TripScreen/CreateTripForm";
 import TripPlan from "../screens/TripScreen/TripPlan";
 import GlobalStyles from "../GlobalStyles";
+// import SavePlaceModal from "../screens/ExploreScreen/SavePlaceModal";
 // TripsStackGroup is a stack navigator that contains the Trips, CreateTripForm, and TripPlan screens.
 
 const TripsStack = createNativeStackNavigator(); // The createNativeStackNavigator function is used to create a stack navigator.
@@ -17,6 +18,7 @@ const TripsStackGroup = () => {
         // headerTitleStyle: { fontFamily: "Mulish-Bold" },
         headerTintColor: "#63725A",
         headerTitleStyle: GlobalStyles.titleLargeBold,
+        headerBackTitle: "Back",
       }}
     >
       <TripsStack.Screen
@@ -26,14 +28,24 @@ const TripsStackGroup = () => {
           headerTitle: "Trips",
         }}
       />
+
       <TripsStack.Screen
         name="CreateTripForm"
         component={CreateTripForm}
         options={{
-          headerTitle: "Trip Details",
+          headerTitle: "Create Trip",
           animation: "slide_from_bottom",
         }}
       />
+      {/* <TripsStack.Screen
+        name="SavePlaceModal"
+        component={SavePlaceModal}
+        options={{
+          title: "Save Place",
+          animation: "slide_from_bottom",
+          // backBehavior: "initialRoute",
+        }}
+      /> */}
       <TripsStack.Screen
         name="TripPlan"
         component={TripPlan}

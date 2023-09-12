@@ -29,7 +29,7 @@ const ProfilePlaceCard = ({ placeItem, path, onDelete }) => {
     <View style={styles.container}>
       <Pressable
         onPress={() =>
-          navigate("ProfilePlace", {
+          navigate("PlaceScreen", {
             pathId: path,
             placeAddress,
             placeCategory,

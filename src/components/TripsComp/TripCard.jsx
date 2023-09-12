@@ -11,6 +11,8 @@ import moment from "moment";
 import { Ionicons } from "@expo/vector-icons";
 import { useContext } from "react";
 import { AuthContext } from "../../../hooks/AuthContext";
+import { LinearGradient } from "expo-linear-gradient";
+import GlobalStyles from "../../GlobalStyles";
 
 // component that displays a trip card on the trips screen based on the tripItem and path props passed to it. It will be different for different users.
 const TripCard = ({ tripItem, path, onDelete }) => {
@@ -63,10 +65,17 @@ const TripCard = ({ tripItem, path, onDelete }) => {
         }
         style={styles.image}
       >
-        <View style={styles.textContainer}>
+        {/* <View style={styles.textContainer}> */}
+        <LinearGradient
+          colors={["transparent", "rgba(0,0,0,0.7)"]}
+          // colors={["transparent", " rgba(99,114,90,0.7)"]}
+          style={styles.textContainer} // Apply gradient to textContainer
+        >
           <View style={styles.label}>
-            <Text style={styles.title}>{tripTitle}</Text>
-            <Text style={styles.subtitle}>
+            <Text style={[styles.text, GlobalStyles.titleLargeRegular]}>
+              {tripTitle}
+            </Text>
+            <Text style={[styles.text, GlobalStyles.labelSmallMedium]}>
               {startDateTime} - {endDateTime}
             </Text>
           </View>
@@ -79,7 +88,7 @@ const TripCard = ({ tripItem, path, onDelete }) => {
               style={styles.icon}
             />
           )}
-        </View>
+        </LinearGradient>
       </ImageBackground>
     </Pressable>
   );
@@ -97,19 +106,14 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     backgroundColor: "lightgrey",
   },
-  title: {
-    fontSize: 20,
-    color: "white",
+  text: {
+    // fontSize: 20,
+    color: "#fff",
   },
-  subtitle: {
-    fontSize: 10,
-    color: "white",
-  },
+
   textContainer: {
-    backgroundColor: "rgba(0, 0, 0, 0.30)",
     width: "100%",
     padding: 10,
-
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",

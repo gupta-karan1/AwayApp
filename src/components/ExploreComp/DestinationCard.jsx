@@ -33,11 +33,11 @@ const DestinationCard = ({ destinationItem, path }) => {
 
 const styles = StyleSheet.create({
   container: {
-    width: 220,
+    width: 280,
   },
   image: {
-    height: 150,
-    width: 220,
+    height: 190,
+    width: 280,
     borderRadius: 10,
     marginBottom: 5,
     backgroundColor: "lightgrey",

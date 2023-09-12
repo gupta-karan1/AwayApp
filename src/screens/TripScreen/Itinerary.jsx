@@ -165,15 +165,15 @@ const Itinerary = ({ startDate, endDate, tripId, userId, invitees }) => {
     return (
       <TouchableOpacity onPress={toggleCheckbox}>
         <View style={styles.checklistItem}>
-          <View
+          {/* <View
             style={[
               styles.checkbox,
               isSelected ? styles.checkboxSelected : styles.checkboxUnselected,
             ]}
           >
             {isSelected ? <Text style={styles.checkmark}>✓</Text> : null}
-          </View>
-          <View style={styles.placeCard}>
+          </View> */}
+          <View style={isSelected ? styles.placeCardSelect : styles.placeCard}>
             <Image source={{ uri: place.placeImage }} style={styles.image} />
             <View style={styles.textContainer}>
               <Text
@@ -184,7 +184,7 @@ const Itinerary = ({ startDate, endDate, tripId, userId, invitees }) => {
               </Text>
               <Text
                 style={[styles.checklistText, GlobalStyles.bodyMediumBold]}
-                numberOfLines={3}
+                numberOfLines={1}
               >
                 {place.placeTitle}
               </Text>
@@ -359,6 +359,15 @@ const Itinerary = ({ startDate, endDate, tripId, userId, invitees }) => {
   };
   const Navigation = useNavigation();
 
+  // Render checklist items as a FlatList inside the modal
+  const renderChecklistItem = ({ item }) => (
+    <ChecklistItem
+      place={item}
+      isSelected={selectedPlaces.includes(item)}
+      onToggleSelection={toggleSelection}
+    />
+  );
+
   return (
     <View>
       {loading && <ActivityIndicator size={"large"} />}
@@ -443,8 +452,9 @@ const Itinerary = ({ startDate, endDate, tripId, userId, invitees }) => {
                     setMapModalVisible(true);
                   }}
                 >
-                  <Ionicons name="map-outline" size={18} color="black" />
-                  <Text>Map</Text>
+                  {/* <Ionicons name="map-outline" size={22} color="#EFFBB7" /> */}
+                  <Ionicons name="map-outline" size={22} color="#63725A" />
+                  {/* <Text style={styles.buttonText}>Map</Text> */}
                 </TouchableOpacity>
 
                 <TouchableOpacity
@@ -455,7 +465,7 @@ const Itinerary = ({ startDate, endDate, tripId, userId, invitees }) => {
                     setSelectedDate(title);
                   }}
                 >
-                  <Text>Add Place</Text>
+                  <Text style={styles.buttonText}>Add Place</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -483,7 +493,7 @@ const Itinerary = ({ startDate, endDate, tripId, userId, invitees }) => {
                   onPress={() => setModalVisible(false)}
                 />
               </View>
-              <ScrollView showsVerticalScrollIndicator={false}>
+              {/* <ScrollView showsVerticalScrollIndicator={false}>
                 {isLoading && <ActivityIndicator size={"large"} />}
                 {savedPlaces.length === 0 && !isLoading && (
                   <Pressable
@@ -510,14 +520,26 @@ const Itinerary = ({ startDate, endDate, tripId, userId, invitees }) => {
                       onToggleSelection={toggleSelection}
                     />
                   ))}
-              </ScrollView>
+              </ScrollView> */}
+              {/* // Render checklist items as a FlatList inside the modal */}
+              <FlatList
+                data={savedPlaces}
+                renderItem={renderChecklistItem}
+                keyExtractor={(item) => item.placeId}
+                showsVerticalScrollIndicator={false}
+                removeClippedSubviews={true} // Unmount components when outside of window
+                initialNumToRender={5} // Reduce initial render amount
+                maxToRenderPerBatch={5} // Reduce number in each render batch
+                updateCellsBatchingPeriod={100} // Increase time between renders
+                windowSize={2} // Reduce the window size
+              />
               <View style={styles.modalFooter}>
                 <Pressable
                   style={styles.submitButton}
-                  title="Submit"
+                  title="Save"
                   onPress={handleAddPlaceToItinerary}
                 >
-                  <Text>Submit</Text>
+                  <Text style={styles.submitText}>Save</Text>
                 </Pressable>
               </View>
             </View>
@@ -532,7 +554,7 @@ export default Itinerary;
 
 const styles = StyleSheet.create({
   contentContainer: {
-    paddingBottom: 250,
+    paddingBottom: 80,
     paddingHorizontal: 15,
   },
   checklistItem: {
@@ -566,12 +588,14 @@ const styles = StyleSheet.create({
   checklistText: {
     fontSize: 16,
     marginBottom: 2,
+    marginRight: 2,
   },
   dateTitle: {
     // fontSize: 20,
     padding: 10,
     paddingLeft: 0,
     width: "60%",
+    // color: "#63725A",
   },
   headerContainer: {
     // flex: 1,
@@ -580,38 +604,58 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     // width: "100%",
     alignItems: "center",
-    backgroundColor: "#F6F6F6",
-    padding: 10,
+    backgroundColor: "#fff",
+    paddingVertical: 5,
+    alignItems: "flex-end",
   },
   buttonContainer: {
     flexDirection: "row",
     gap: 5,
   },
   button: {
-    backgroundColor: "lightblue",
-    paddingVertical: 10,
-    paddingHorizontal: 10,
-    borderRadius: 5,
+    // backgroundColor: "#63725A",
+    backgroundColor: "#E5E8E3",
+    // paddingVertical: 5,
+    paddingHorizontal: 14,
+    borderRadius: 10,
+    justifyContent: "center",
   },
   mapButton: {
-    backgroundColor: "lightblue",
+    backgroundColor: "#E5E8E3",
     paddingVertical: 10,
     paddingHorizontal: 10,
-    borderRadius: 5,
+    borderRadius: 10,
     flexDirection: "row",
     gap: 10,
-    // justifyContent: "center",
-    // alignItems: "center",
+  },
+  buttonText: {
+    // color: "#EFFBB7",
+    color: "#63725A",
   },
   placeCard: {
     flexDirection: "row",
+    // alignItems: "flex-start",
     alignItems: "center",
-    marginVertical: 5,
-    backgroundColor: "lightgrey",
-    width: "90%",
+    marginVertical: 2,
+    backgroundColor: "#F7F5F3",
+    // width: "90%",
     justifyContent: "space-evenly",
     gap: 10,
     borderRadius: 10,
+    paddingEnd: 15,
+  },
+
+  placeCardSelect: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: 2,
+    backgroundColor: "#E5E8E3",
+    // width: "90%",
+    justifyContent: "space-evenly",
+    gap: 10,
+    borderRadius: 10,
+    paddingEnd: 15,
+    // elevation: 1,
   },
   image: {
     width: "35%",
@@ -656,12 +700,15 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
   submitButton: {
-    backgroundColor: "lightblue",
+    backgroundColor: "#63725A",
     paddingVertical: 15,
     paddingHorizontal: 15,
     borderRadius: 50,
     alignItems: "center",
     marginTop: 15,
+  },
+  submitText: {
+    color: "#EFFBB7",
   },
   modalFooter: {
     width: "100%",
@@ -674,7 +721,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   emptyContainer: {
-    backgroundColor: "lightgrey",
+    backgroundColor: "#E5E8E3",
     padding: 20,
     borderRadius: 10,
   },

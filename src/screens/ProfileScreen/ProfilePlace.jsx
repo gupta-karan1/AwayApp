@@ -59,10 +59,11 @@ const ProfilePlace = ({ route }) => {
   // State variable to toggle the full text
   const [showFullText, setShowFullText] = useState(false);
 
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
+  // const [modalVisible, setModalVisible] = useState(false);
+  // const [travelBoards, setTravelBoards] = useState([]);
+  // const [selectedBoards, setSelectedBoards] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
-  const [travelBoards, setTravelBoards] = useState([]);
-  const [selectedBoards, setSelectedBoards] = useState([]);
 
   // Function to toggle the full text
   const toggleFullText = () => {
@@ -82,147 +83,147 @@ const ProfilePlace = ({ route }) => {
 
   const { user } = useContext(AuthContext);
 
-  const getTravelBoards = async () => {
-    try {
-      setIsLoading(true); // show loading indicator
-      const q = query(
-        collection(FIREBASE_DB, "users"),
-        where("userId", "==", user.uid)
-      );
+  // const getTravelBoards = async () => {
+  //   try {
+  //     setIsLoading(true); // show loading indicator
+  //     const q = query(
+  //       collection(FIREBASE_DB, "users"),
+  //       where("userId", "==", user.uid)
+  //     );
 
-      const querySnapshot = await getDocs(q); // get user documents from user collection based on user id
-      const userRef = doc(FIREBASE_DB, "users", querySnapshot.docs[0].id); //Create a reference to this user's document
+  //     const querySnapshot = await getDocs(q); // get user documents from user collection based on user id
+  //     const userRef = doc(FIREBASE_DB, "users", querySnapshot.docs[0].id); //Create a reference to this user's document
 
-      const q2 = query(
-        collection(userRef, "boards"),
-        orderBy("createdAt", "desc")
-      ); // Create a query to get all travelBoards for this user
+  //     const q2 = query(
+  //       collection(userRef, "boards"),
+  //       orderBy("createdAt", "desc")
+  //     ); // Create a query to get all travelBoards for this user
 
-      const querySnapshot2 = await getDocs(q2); // Get the travelBoards documents
+  //     const querySnapshot2 = await getDocs(q2); // Get the travelBoards documents
 
-      const travelBoards = querySnapshot2.docs.map((doc) => doc.data()); // Get the data from each document
+  //     const travelBoards = querySnapshot2.docs.map((doc) => doc.data()); // Get the data from each document
 
-      setTravelBoards(travelBoards); // Set the travelBoards state variable
-    } catch (error) {
-      Alert.alert("Error fetching travel boards:", error.message);
-      console.log(error);
-    } finally {
-      setIsLoading(false); // hide loading indicator
-    }
-  };
+  //     setTravelBoards(travelBoards); // Set the travelBoards state variable
+  //   } catch (error) {
+  //     Alert.alert("Error fetching travel boards:", error.message);
+  //     console.log(error);
+  //   } finally {
+  //     setIsLoading(false); // hide loading indicator
+  //   }
+  // };
 
-  useFocusEffect(
-    useCallback(() => {
-      if (modalVisible) {
-        getTravelBoards();
-      }
-    }, [modalVisible]) // Function only called once
-  );
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     if (modalVisible) {
+  //       getTravelBoards();
+  //     }
+  //   }, [modalVisible]) // Function only called once
+  // );
 
-  const ChecklistItem = ({ board, isSelected, onToggleSelection }) => {
-    const toggleCheckbox = () => {
-      onToggleSelection(board);
-    };
+  // const ChecklistItem = ({ board, isSelected, onToggleSelection }) => {
+  //   const toggleCheckbox = () => {
+  //     onToggleSelection(board);
+  //   };
 
-    return (
-      <TouchableOpacity onPress={toggleCheckbox}>
-        <View style={styles.checklistItem}>
-          <View
-            style={[
-              styles.checkbox,
-              isSelected ? styles.checkboxSelected : styles.checkboxUnselected,
-            ]}
-          >
-            {isSelected ? <Text style={styles.checkmark}>✓</Text> : null}
-          </View>
-          <View style={styles.placeCard}>
-            <View style={styles.checkTextContainer}>
-              <Text style={[styles.checklistText]} numberOfLines={3}>
-                {board.title}
-              </Text>
-            </View>
-          </View>
-        </View>
-      </TouchableOpacity>
-    );
-  };
+  //   return (
+  //     <TouchableOpacity onPress={toggleCheckbox}>
+  //       <View style={styles.checklistItem}>
+  //         <View
+  //           style={[
+  //             styles.checkbox,
+  //             isSelected ? styles.checkboxSelected : styles.checkboxUnselected,
+  //           ]}
+  //         >
+  //           {isSelected ? <Text style={styles.checkmark}>✓</Text> : null}
+  //         </View>
+  //         <View style={styles.placeCard}>
+  //           <View style={styles.checkTextContainer}>
+  //             <Text style={[styles.checklistText]} numberOfLines={3}>
+  //               {board.title}
+  //             </Text>
+  //           </View>
+  //         </View>
+  //       </View>
+  //     </TouchableOpacity>
+  //   );
+  // };
 
-  // Function to toggle the selection of a place
-  const toggleSelection = (board) => {
-    // setSelectedPlaces used to update current array
-    setSelectedBoards((prevSelectedBoard) =>
-      // some method to check if place with same placeId already exists in prevSelectedPlace array
-      prevSelectedBoard.some((b) => b.boardId === board.boardId)
-        ? //If place exists removed with filter function
-          prevSelectedBoard.filter((b) => b.boardId !== board.boardId)
-        : // Otherwise adds place to array using spread operator
-          [...prevSelectedBoard, board]
-    );
-  };
+  // // Function to toggle the selection of a place
+  // const toggleSelection = (board) => {
+  //   // setSelectedPlaces used to update current array
+  //   setSelectedBoards((prevSelectedBoard) =>
+  //     // some method to check if place with same placeId already exists in prevSelectedPlace array
+  //     prevSelectedBoard.some((b) => b.boardId === board.boardId)
+  //       ? //If place exists removed with filter function
+  //         prevSelectedBoard.filter((b) => b.boardId !== board.boardId)
+  //       : // Otherwise adds place to array using spread operator
+  //         [...prevSelectedBoard, board]
+  //   );
+  // };
 
-  // create handleSubmitBoard which will save the particular place within a places array to the selected board
+  // // create handleSubmitBoard which will save the particular place within a places array to the selected board
 
-  const handleSubmitBoard = async () => {
-    try {
-      setIsLoading(true);
+  // const handleSubmitBoard = async () => {
+  //   try {
+  //     setIsLoading(true);
 
-      const q = query(
-        collection(FIREBASE_DB, "users"),
-        where("userId", "==", user.uid)
-      );
+  //     const q = query(
+  //       collection(FIREBASE_DB, "users"),
+  //       where("userId", "==", user.uid)
+  //     );
 
-      const querySnapshot = await getDocs(q); // get user documents from user collection based on user id
-      const userRef = doc(FIREBASE_DB, "users", querySnapshot.docs[0].id); //Create a reference to this user's document
+  //     const querySnapshot = await getDocs(q); // get user documents from user collection based on user id
+  //     const userRef = doc(FIREBASE_DB, "users", querySnapshot.docs[0].id); //Create a reference to this user's document
 
-      // run a for loop to add the place to the places collection within all the selected boards
-      for (let i = 0; i < selectedBoards.length; i++) {
-        const q2 = query(
-          collection(userRef, "boards"),
-          where("boardId", "==", selectedBoards[i].boardId)
-        );
-        const querySnapshot2 = await getDocs(q2); // Get the travelBoards documents
-        // check if the board already has the place saved
-        const boardRef = doc(userRef, "boards", querySnapshot2.docs[0].id); //Create a reference to this board's document
-        const q3 = query(
-          collection(boardRef, "places"),
-          where("placeId", "==", placeId)
-        );
+  //     // run a for loop to add the place to the places collection within all the selected boards
+  //     for (let i = 0; i < selectedBoards.length; i++) {
+  //       const q2 = query(
+  //         collection(userRef, "boards"),
+  //         where("boardId", "==", selectedBoards[i].boardId)
+  //       );
+  //       const querySnapshot2 = await getDocs(q2); // Get the travelBoards documents
+  //       // check if the board already has the place saved
+  //       const boardRef = doc(userRef, "boards", querySnapshot2.docs[0].id); //Create a reference to this board's document
+  //       const q3 = query(
+  //         collection(boardRef, "places"),
+  //         where("placeId", "==", placeId)
+  //       );
 
-        const singlePlaceData = {
-          placeAddress: placeAddress,
-          placeCategory: placeCategory,
-          placeContact: placeContact,
-          placeDescription: placeDescription,
-          placeGoogleMapLink: placeGoogleMapLink,
-          placeHours: placeHours,
-          placeImage: placeImage,
-          placeLatitude: placeLatitude,
-          placeLongitude: placeLongitude,
-          placeSaved: placeSaved,
-          placeTitle: placeTitle,
-          placeWebsite: placeWebsite,
-          placeId: placeId,
-        };
+  //       const singlePlaceData = {
+  //         placeAddress: placeAddress,
+  //         placeCategory: placeCategory,
+  //         placeContact: placeContact,
+  //         placeDescription: placeDescription,
+  //         placeGoogleMapLink: placeGoogleMapLink,
+  //         placeHours: placeHours,
+  //         placeImage: placeImage,
+  //         placeLatitude: placeLatitude,
+  //         placeLongitude: placeLongitude,
+  //         placeSaved: placeSaved,
+  //         placeTitle: placeTitle,
+  //         placeWebsite: placeWebsite,
+  //         placeId: placeId,
+  //       };
 
-        const querySnapshot3 = await getDocs(q3); // Get the travelBoards documents
-        if (querySnapshot3.docs.length === 0) {
-          await addDoc(collection(boardRef, "places"), singlePlaceData);
-          Alert.alert("Place saved successfully");
-        } else {
-          Alert.alert(
-            "Place already saved",
-            "This place already exists in the selected board."
-          );
-        }
-      }
-    } catch (error) {
-      console.log(error);
-      Alert.alert("Error saving place", error.message);
-    } finally {
-      setIsLoading(false);
-      setModalVisible(false);
-    }
-  };
+  //       const querySnapshot3 = await getDocs(q3); // Get the travelBoards documents
+  //       if (querySnapshot3.docs.length === 0) {
+  //         await addDoc(collection(boardRef, "places"), singlePlaceData);
+  //         Alert.alert("Place saved successfully");
+  //       } else {
+  //         Alert.alert(
+  //           "Place already saved",
+  //           "This place already exists in the selected board."
+  //         );
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //     Alert.alert("Error saving place", error.message);
+  //   } finally {
+  //     setIsLoading(false);
+  //     setModalVisible(false);
+  //   }
+  // };
 
   return (
     <View style={styles.container}>
@@ -233,17 +234,41 @@ const ProfilePlace = ({ route }) => {
             {placeCategory}
           </Text>
           <View>
-            {isLoading ? (
-              <ActivityIndicator size="large" />
-            ) : (
-              <Pressable
-                style={styles.saveButton}
-                onPress={() => {
+            <Pressable
+              style={styles.saveButton}
+              onPress={() => {
+                if (!user) {
+                  Navigation.navigate("ProfileStackGroup");
+                } else {
                   setModalVisible(true);
+                }
+              }}
+            >
+              <Text style={[GlobalStyles.bodySmallRegular, styles.buttonText]}>
+                Save Place
+              </Text>
+            </Pressable>
+            {modalVisible && (
+              <SavePlaceModal
+                onClose={() => setModalVisible(false)}
+                modalVisible={modalVisible}
+                placeData={{
+                  placeAddress,
+                  placeCategory,
+                  placeContact,
+                  placeDescription,
+                  placeGoogleMapLink,
+                  placeHours,
+                  placeImage,
+                  placeLatitude,
+                  placeLongitude,
+                  placeSaved,
+                  placeTitle,
+                  placeWebsite,
+                  pathId,
+                  placeId,
                 }}
-              >
-                <Text>Save Place</Text>
-              </Pressable>
+              />
             )}
           </View>
         </View>
@@ -373,7 +398,7 @@ const ProfilePlace = ({ route }) => {
       </ScrollView>
       {/* )} */}
 
-      <Modal
+      {/* <Modal
         animationType="slide"
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}
@@ -426,7 +451,7 @@ const ProfilePlace = ({ route }) => {
             </View>
           </View>
         </View>
-      </Modal>
+      </Modal> */}
     </View>
   );
 };

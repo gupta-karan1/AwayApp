@@ -84,7 +84,7 @@ const SavedPlaceCard = ({ placeItem, onDelete, onDrag }) => {
               onPress={onDelete}
               name="md-trash-outline"
               size={24}
-              color="black"
+              color="#63725A"
             />
           </View>
         </View>
@@ -161,7 +161,7 @@ const SavedPlaceCard = ({ placeItem, onDelete, onDrag }) => {
                         style={[styles.icon, styles.AddressIcon]}
                         name="map-marker"
                         size={20} // Smaller icon require more margin
-                        color="grey"
+                        color="#63725A"
                       />
                       <Text
                         style={[GlobalStyles.bodySmallRegular, styles.bodyText]}
@@ -184,7 +184,7 @@ const SavedPlaceCard = ({ placeItem, onDelete, onDrag }) => {
                         style={styles.icon}
                         name="phone"
                         size={18}
-                        color="grey"
+                        color="#63725A"
                       />
                       <Text
                         style={[GlobalStyles.bodySmallRegular, styles.bodyText]}
@@ -200,7 +200,7 @@ const SavedPlaceCard = ({ placeItem, onDelete, onDrag }) => {
                       style={styles.icon}
                       name="clock-o"
                       size={18}
-                      color="grey"
+                      color="#63725A"
                     />
                     <Text
                       style={[GlobalStyles.bodySmallRegular, styles.bodyText]}
@@ -216,7 +216,9 @@ const SavedPlaceCard = ({ placeItem, onDelete, onDrag }) => {
               style={[styles.button, styles.buttonClose]}
               onPress={() => setModalVisible(!modalVisible)}
             >
-              <Text style={styles.textStyle}>Cancel</Text>
+              <Text style={[styles.textStyle, GlobalStyles.bodySmallRegular]}>
+                Cancel
+              </Text>
             </Pressable>
           </View>
         </View>
@@ -228,9 +230,11 @@ const SavedPlaceCard = ({ placeItem, onDelete, onDrag }) => {
 const styles = StyleSheet.create({
   container: {
     marginBottom: 15,
+    // marginTop: 15,
   },
   card: {
-    backgroundColor: "lightgrey",
+    backgroundColor: "#F7F5F3",
+    elevation: 1,
     flex: 1,
     flexDirection: "row",
     justifyContent: "space-between",
@@ -325,13 +329,13 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   buttonClose: {
-    backgroundColor: "#2196F3",
-    padding: 10,
-    borderRadius: 10,
+    backgroundColor: "#63725A",
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 50,
   },
   textStyle: {
-    color: "white",
-    fontWeight: "bold",
+    color: "#EFFBB7",
     textAlign: "center",
   },
 });

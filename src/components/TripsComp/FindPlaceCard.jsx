@@ -171,7 +171,7 @@ const FindPlaceCard = ({ placeItem, path, tripId, userId }) => {
             <ActivityIndicator size="large" />
           ) : (
             <Pressable style={styles.saveButton} onPress={savePlace}>
-              <Feather name="plus" size={24} color="black" />
+              <Feather name="plus" size={24} color="#63725A" />
             </Pressable>
           )}
         </ImageBackground>
@@ -206,8 +206,10 @@ const styles = StyleSheet.create({
     top: 5,
     right: 5,
     padding: 5,
-    backgroundColor: "rgba(255, 255, 255, 0.8)",
+    backgroundColor: "rgba(255, 255, 255, 0.7)",
+    // backgroundColor: "rgba(99, 114, 90, .6)",
     borderRadius: 50,
+    elevation: 2,
   },
 });
 

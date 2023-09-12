@@ -178,12 +178,12 @@ const Saved = ({ tripId, userId }) => {
               <View style={styles.headerContainer}>
                 <Text style={GlobalStyles.titleLargeRegular}>Saved Places</Text>
                 <TouchableOpacity
-                  style={styles.button}
+                  style={styles.mapButton}
                   title="View Map"
                   onPress={() => setModalVisible(true)}
                 >
-                  <Ionicons name="map-outline" size={18} color="black" />
-                  <Text>Map</Text>
+                  <Ionicons name="map-outline" size={22} color="#63725A" />
+                  {/* <Text>Map</Text> */}
                 </TouchableOpacity>
                 {modalVisible && (
                   <ViewMapModal
@@ -212,17 +212,24 @@ const styles = StyleSheet.create({
   contentContainer: {
     paddingHorizontal: 15,
     paddingTop: 15,
-    paddingBottom: 60,
+    paddingBottom: 80,
   },
-  button: {
-    backgroundColor: "lightblue",
+  // button: {
+  //   paddingVertical: 10,
+  //   paddingHorizontal: 10,
+  //   borderRadius: 5,
+  //   flexDirection: "row",
+  //   gap: 10,
+  //   justifyContent: "center",
+  //   alignItems: "center",
+  // },
+  mapButton: {
+    backgroundColor: "#E5E8E3",
     paddingVertical: 10,
     paddingHorizontal: 10,
-    borderRadius: 5,
+    borderRadius: 10,
     flexDirection: "row",
     gap: 10,
-    justifyContent: "center",
-    alignItems: "center",
   },
   instructionText: {
     padding: 10,

@@ -179,7 +179,7 @@ const FindPlace = ({ route }) => {
                 <ActivityIndicator size="large" />
               ) : (
                 <Pressable style={styles.saveButton} onPress={savePlace}>
-                  <Text>Save Place</Text>
+                  <Text style={styles.buttonText}>Save Place</Text>
                 </Pressable>
               )}
             </View>
@@ -341,6 +341,7 @@ const styles = StyleSheet.create({
   },
   icon: {
     marginRight: 15,
+    color: "#63725A",
   },
   AddressIcon: {
     marginRight: 18,
@@ -358,8 +359,14 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     textDecorationLine: "underline",
   },
-  button: {
-    marginVertical: 10,
+  saveButton: {
+    backgroundColor: "#63725A",
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+  },
+  buttonText: {
+    color: "#EFFBB7",
   },
   mapContainer: {
     flex: 1,
@@ -370,12 +377,12 @@ const styles = StyleSheet.create({
     height: 200,
     width: "100%",
   },
-  saveButton: {
-    backgroundColor: "lightblue",
-    paddingVertical: 10,
-    paddingHorizontal: 10,
-    borderRadius: 5,
-  },
+  // saveButton: {
+  //   backgroundColor: "lightblue",
+  //   paddingVertical: 10,
+  //   paddingHorizontal: 10,
+  //   borderRadius: 5,
+  // },
   textContainer: {
     flex: 1,
     flexDirection: "row",

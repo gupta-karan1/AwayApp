@@ -68,13 +68,13 @@ const PlaceCard = ({ placeItem, path }) => {
             style={styles.saveButton}
             onPress={() => {
               if (!user) {
-                Navigation.navigate("ProfileStackGroup");
+                Navigation.navigate("TripsStackGroup");
               } else {
                 setModalVisible(true);
               }
             }}
           >
-            <Feather name="plus" size={24} color="black" />
+            <Feather name="plus" size={24} color="#63725A" />
           </Pressable>
         </ImageBackground>
       </View>
@@ -129,8 +129,10 @@ const styles = StyleSheet.create({
     top: 5,
     right: 5,
     padding: 5,
-    backgroundColor: "rgba(255, 255, 255, 0.8)",
+    backgroundColor: "rgba(255, 255, 255, 0.7)",
+    // backgroundColor: "rgba(99, 114, 90, .6)",
     borderRadius: 50,
+    elevation: 2,
   },
 });
 

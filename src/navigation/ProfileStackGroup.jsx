@@ -6,9 +6,12 @@ import { FIREBASE_AUTH } from "../../firebaseConfig";
 import { Pressable, Alert } from "react-native";
 import CreateTravelBoard from "../screens/ProfileScreen/CreateTravelBoard";
 import BoardScreen from "../screens/ProfileScreen/BoardScreen";
-import ProfilePlace from "../screens/ProfileScreen/ProfilePlace";
+// import ProfilePlace from "../screens/ProfileScreen/ProfilePlace";
 import EditProfile from "../screens/ProfileScreen/EditProfile";
 import GlobalStyles from "../GlobalStyles";
+// import SavePlaceModal from "../screens/ExploreScreen/SavePlaceModal";
+import PlaceScreen from "../screens/ExploreScreen/PlaceScreen";
+
 // create stack navigator for profile screen group to allow for navigation between profile, login, and register screens
 const ProfileStack = createNativeStackNavigator(); // create stack navigator
 
@@ -44,11 +47,23 @@ const ProfileStackGroup = () => {
           // headerLeft: null,
         }}
       />
+      {/* <ProfileStack.Screen
+        name="SavePlaceModal"
+        component={SavePlaceModal}
+        options={{
+          title: "Save Place",
+          animation: "slide_from_bottom",
+          // backBehavior: "initialRoute",
+        }}
+        // initialParams={{
+        //   modalVisible: true,
+        // }}
+      /> */}
       <ProfileStack.Screen
         name="CreateTravelBoard"
         component={CreateTravelBoard}
         options={{
-          headerTitle: "Travel Board Details",
+          headerTitle: "Create Board",
           animation: "slide_from_bottom",
         }}
       />
@@ -68,12 +83,21 @@ const ProfileStackGroup = () => {
           animation: "slide_from_right",
         }}
       />
-      <ProfileStack.Screen
+      {/* <ProfileStack.Screen
         name="ProfilePlace"
         component={ProfilePlace}
         options={{
           headerTitle: "Place",
           animation: "slide_from_right",
+        }}
+      /> */}
+      <ProfileStack.Screen
+        name="PlaceScreen"
+        component={PlaceScreen}
+        options={{
+          headerTitle: "Place",
+          animation: "slide_from_right",
+          // autoHideHomeIndicator: true,
         }}
       />
     </ProfileStack.Navigator>

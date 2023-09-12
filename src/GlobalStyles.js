@@ -24,6 +24,11 @@ const GlobalStyles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 20,
   },
+  bodyMediumRegular: {
+    fontFamily: "Mulish-Medium",
+    fontSize: 16,
+    lineHeight: 24,
+  },
   // Subtitles,
   labelMediumMedium: {
     fontFamily: "Mulish-Medium",

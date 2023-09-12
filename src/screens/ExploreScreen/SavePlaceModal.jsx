@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   Alert,
   TouchableOpacity,
+  TouchableWithoutFeedback,
 } from "react-native";
 import React from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -324,51 +325,46 @@ const SavePlaceModal = ({ placeData, onClose, modalVisible }) => {
     };
 
     return (
-      <TouchableOpacity onPress={toggleCheckbox}>
-        <View style={styles.checklistItem}>
-          <View
-            style={[
-              styles.checkbox,
-              isSelected ? styles.checkboxSelected : styles.checkboxUnselected,
-            ]}
-          >
-            {isSelected ? <Text style={styles.checkmark}>✓</Text> : null}
-          </View>
-          <View style={styles.placeCard}>
-            <View style={styles.checkTextContainer}>
-              <Text style={[styles.checklistText]} numberOfLines={1}>
-                {board.title}
-              </Text>
-            </View>
-          </View>
+      <TouchableOpacity onPress={toggleCheckbox} style={styles.checkContainer}>
+        <View
+          style={[
+            styles.checkbox,
+            isSelected ? styles.checkboxSelected : styles.checkboxUnselected,
+          ]}
+        >
+          {isSelected ? <Text style={styles.checkmark}>✓</Text> : null}
         </View>
+        <Text
+          style={[GlobalStyles.bodyMediumRegular, styles.checktext]}
+          numberOfLines={1}
+        >
+          {board.title}
+        </Text>
       </TouchableOpacity>
     );
   };
+
   const ChecklistTrip = ({ trip, isSelected, onToggleSelectionTrip }) => {
     const toggleCheckbox = () => {
       onToggleSelectionTrip(trip);
     };
 
     return (
-      <TouchableOpacity onPress={toggleCheckbox}>
-        <View style={styles.checklistItem}>
-          <View
-            style={[
-              styles.checkbox,
-              isSelected ? styles.checkboxSelected : styles.checkboxUnselected,
-            ]}
-          >
-            {isSelected ? <Text style={styles.checkmark}>✓</Text> : null}
-          </View>
-          <View style={styles.placeCard}>
-            <View style={styles.checkTextContainer}>
-              <Text style={[styles.checklistText]} numberOfLines={1}>
-                {trip.tripTitle}
-              </Text>
-            </View>
-          </View>
+      <TouchableOpacity onPress={toggleCheckbox} style={styles.checkContainer}>
+        <View
+          style={[
+            styles.checkbox,
+            isSelected ? styles.checkboxSelected : styles.checkboxUnselected,
+          ]}
+        >
+          {isSelected ? <Text style={styles.checkmark}>✓</Text> : null}
         </View>
+        <Text
+          style={[GlobalStyles.bodyMediumRegular, styles.checktext]}
+          numberOfLines={1}
+        >
+          {trip.tripTitle}
+        </Text>
       </TouchableOpacity>
     );
   };
@@ -410,6 +406,10 @@ const SavePlaceModal = ({ placeData, onClose, modalVisible }) => {
     }, [modalVisible]) // Function only called once
   );
 
+  const handleBackgroundPress = () => {
+    onClose();
+  };
+
   return (
     <Modal
       animationType="slide"
@@ -419,13 +419,14 @@ const SavePlaceModal = ({ placeData, onClose, modalVisible }) => {
       presentationStyle="overFullScreen"
       transparent={true}
     >
+      {/* <TouchableWithoutFeedback onPress={handleBackgroundPress}> */}
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
           <View style={styles.modalHeader}>
-            <Text style={styles.modalText}>Save to:</Text>
+            <Text style={GlobalStyles.titleLargeRegular}>Save To</Text>
             <Ionicons
               name="ios-close"
-              size={30}
+              size={28}
               color="black"
               //   onPress={() => setModalVisible(false)}
               onPress={onClose}
@@ -439,29 +440,35 @@ const SavePlaceModal = ({ placeData, onClose, modalVisible }) => {
 
             {travelBoards.length === 0 && !isLoading && (
               <View>
-                <Text style={GlobalStyles.titleLargeRegular}>
+                <Text style={GlobalStyles.bodyMediumRegular}>
                   My Travel Boards
                 </Text>
-                <Text style={styles.promptMsg}>
-                  You have no Travel Boards yet. Create one in the Profile.
-                </Text>
                 <Pressable
-                  style={styles.promptText}
+                  style={styles.emptyContainer}
+                  // style={styles.promptText}
                   onPress={() => {
                     Navigation.navigate("ProfileStackGroup", {
                       screen: "Profile",
+                      // screen: "CreateTravelBoard",
                     });
                     // setModalVisible(false);
                     onClose();
                   }}
                 >
-                  <Text>Go to Profile</Text>
+                  <Text style={GlobalStyles.bodySmallRegular}>
+                    You have no Travel Boards
+                  </Text>
+                  <Text
+                    style={[styles.buttonText, GlobalStyles.bodySmallRegular]}
+                  >
+                    Add a Board
+                  </Text>
                 </Pressable>
               </View>
             )}
 
             {!isLoading && travelBoards.length > 0 && (
-              <Text style={GlobalStyles.titleLargeRegular}>
+              <Text style={GlobalStyles.bodyMediumRegular}>
                 My Travel Boards
               </Text>
             )}
@@ -481,37 +488,48 @@ const SavePlaceModal = ({ placeData, onClose, modalVisible }) => {
                 onPress={() => {
                   Navigation.navigate("ProfileStackGroup", {
                     screen: "Profile",
+                    // screen: "CreateTravelBoard",
                   });
                   //   setModalVisible(false);
                   onClose();
                 }}
               >
-                <Text>Create New Board</Text>
+                <Text
+                  style={[styles.buttonText, GlobalStyles.bodySmallRegular]}
+                >
+                  Add a Board
+                </Text>
               </Pressable>
             )}
 
             {userTrips.length === 0 && !isLoading && (
               <View>
-                <Text style={GlobalStyles.titleLargeRegular}>My Trips</Text>
-                <Text style={styles.promptMsg}>
-                  You have no Trips yet. Create one in Trips.
-                </Text>
+                <Text style={GlobalStyles.bodyMediumRegular}>My Trips</Text>
                 <Pressable
-                  style={styles.promptText}
+                  style={styles.emptyContainer}
                   onPress={() => {
                     Navigation.navigate("TripsStackGroup", {
+                      // screen: "CreateTripForm",
                       screen: "Trips",
                     });
                     onClose();
                   }}
                 >
-                  <Text>Go to Trips</Text>
+                  <Text style={GlobalStyles.bodySmallRegular}>
+                    You have no Trips
+                  </Text>
+
+                  <Text
+                    style={[styles.buttonText, GlobalStyles.bodySmallRegular]}
+                  >
+                    Add a Trip
+                  </Text>
                 </Pressable>
               </View>
             )}
 
             {!isLoading && userTrips.length > 0 && (
-              <Text style={GlobalStyles.titleLargeRegular}>My Trips</Text>
+              <Text style={GlobalStyles.bodyMediumRegular}>My Trips</Text>
             )}
             {!isLoading &&
               userTrips.length > 0 &&
@@ -530,40 +548,18 @@ const SavePlaceModal = ({ placeData, onClose, modalVisible }) => {
                 onPress={() => {
                   Navigation.navigate("TripsStackGroup", {
                     screen: "Trips",
+                    // screen: "CreateTripForm",
                   });
                   onClose();
                 }}
               >
-                <Text>Create New Trip</Text>
+                <Text
+                  style={[styles.buttonText, GlobalStyles.bodySmallRegular]}
+                >
+                  Add a Trip
+                </Text>
               </Pressable>
             )}
-            {/* {isLoading && <ActivityIndicator size={"large"} />}
-            <Text style={styles.promptMsg}>
-              You can also save places to a trip.
-            </Text>
-            {/* {myTrips.length === 0 && !isLoading && ( */}
-            {/* <Pressable
-              style={styles.promptText}
-              onPress={() => {
-                Navigation.navigate("TripsStackGroup");
-                // setModalVisible(false);
-                onClose();
-              }}
-            >
-              <Text>Go to Trips</Text>
-            </Pressable> */}
-            {/* )} */}
-
-            {/* {!isLoading &&
-                myTrips.length > 0 &&
-                myTrips.map((trip) => (
-                  <ChecklistItem
-                    key={trip.tripId}
-                    trip={trip}
-                    isSelected={selectedBoards.includes(trip)}
-                    onToggleSelection={toggleSelection}
-                  />
-                ))} */}
           </ScrollView>
           <View style={styles.modalFooter}>
             <Pressable
@@ -572,11 +568,16 @@ const SavePlaceModal = ({ placeData, onClose, modalVisible }) => {
                 handleSubmit();
               }}
             >
-              <Text>Save</Text>
+              <Text
+                style={[styles.saveButtonText, GlobalStyles.bodySmallRegular]}
+              >
+                Save
+              </Text>
             </Pressable>
           </View>
         </View>
       </View>
+      {/* </TouchableWithoutFeedback> */}
     </Modal>
   );
 };
@@ -617,9 +618,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     marginHorizontal: 10,
   },
-  modalText: {
-    fontSize: 20,
-  },
   promptText: {
     textAlign: "center",
     paddingHorizontal: 10,
@@ -632,132 +630,99 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     marginTop: 10,
   },
-  promptMsg: {
-    marginTop: 50,
-    textAlign: "center",
-  },
   innerContainer: {
     width: "100%",
   },
-  secondaryAction: {
-    textAlign: "center",
-    paddingHorizontal: 10,
-    paddingVertical: 10,
+  emptyContainer: {
+    flex: 1,
+    justifyContent: "center",
     alignItems: "center",
-    borderColor: "lightgrey",
-    borderWidth: 1,
-    marginHorizontal: 90,
+    backgroundColor: "#E5E8E3",
+    borderRadius: 10,
+    // marginTop: 10,
+    padding: 20,
     marginVertical: 10,
-    borderRadius: 100,
+    marginBottom: 20,
+  },
+  secondaryAction: {
+    backgroundColor: "#fff",
+    marginRight: 10,
+    alignSelf: "flex-end",
+  },
+  buttonText: {
+    color: "#63725A",
+    textDecorationLine: "underline",
+    paddingTop: 10,
   },
   submitButton: {
-    backgroundColor: "lightblue",
+    backgroundColor: "#63725A",
     paddingVertical: 15,
     paddingHorizontal: 15,
     borderRadius: 50,
     alignItems: "center",
     marginTop: 15,
   },
+  saveButtonText: {
+    color: "#EFFBB7",
+  },
   modalFooter: {
     width: "100%",
   },
-  checklistItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginVertical: 5,
-  },
+  // checklistItem: {
+  //   flexDirection: "row",
+  //   alignItems: "center",
+  //   marginVertical: 5,
+  // },
   checkbox: {
-    width: 24,
-    height: 24,
-    borderWidth: 2,
-    borderColor: "#000",
-    borderRadius: 4,
+    width: 19,
+    height: 19,
+    borderWidth: 1.5,
+    borderColor: "#63725A",
+    borderRadius: 2,
     justifyContent: "center",
     alignItems: "center",
     marginRight: 10,
+    backgroundColor: "#E5E8E3",
   },
   checkboxSelected: {
-    backgroundColor: "#007bff",
+    backgroundColor: "#63725A",
   },
   checkboxUnselected: {
-    backgroundColor: "#fff",
+    backgroundColor: "#E5E8E3",
   },
   checkmark: {
     color: "#fff",
-    fontSize: 18,
+    fontSize: 12,
   },
-  checkTextContainer: {
+  checktext: {
+    color: "#63725A",
+  },
+  checkContainer: {
     flex: 1,
-    height: 40,
-  },
-  checklistText: {
-    fontSize: 16,
-    marginBottom: 2,
-    paddingLeft: 10,
-    paddingTop: 8,
-  },
-  placeCard: {
     flexDirection: "row",
+    justifyContent: "flex-start",
     alignItems: "center",
-    marginVertical: 5,
-    backgroundColor: "lightgrey",
-    width: "90%",
-    justifyContent: "space-evenly",
-    gap: 10,
+    padding: 10,
+    backgroundColor: "#E5E8E3",
     borderRadius: 10,
+    marginVertical: 5,
   },
-
-  //   image: {
-  //     height: 250,
-  //     borderRadius: 10,
-  //     marginBottom: 15,
-  //   },
-  //   subtitleText: {
-  //     marginTop: 5,
-  //     marginBottom: 10,
-  //   },
-  //   titleText: {
-  //     marginBottom: 10,
-  //     fontSize: 25,
-  //   },
-  //   headingText: {
-  //     marginTop: 10,
-  //   },
-  //   bodyText: {
-  //     overflow: "hidden",
-  //     maxWidth: 340,
-  //     marginBottom: 5,
-  //   },
-  //   icon: {
-  //     marginRight: 15,
-  //   },
-  //   AddressIcon: {
-  //     marginRight: 18,
-  //   },
-  //   iconText: {
-  //     maxWidth: 300,
-  //   },
-  //   iconContainer: {
-  //     flexDirection: "row",
-  //     alignItems: "flex-start",
-  //     marginBottom: 5,
-  //   },
-  //   para: {
-  //     marginTop: 10,
-  //     marginBottom: 30,
-  //     textDecorationLine: "underline",
-  //   },
-  //   saveButton: {
-  //     backgroundColor: "lightblue",
-  //     paddingVertical: 10,
-  //     paddingHorizontal: 10,
-  //     borderRadius: 5,
-  //   },
-  //   textContainer: {
-  //     flex: 1,
-  //     flexDirection: "row",
-  //     justifyContent: "space-between",
-  //     marginBottom: 20,
-  //     alignItems: "flex-end",
-  //   },
+  // checklistText: {
+  //   alignSelf: "flex-start",
+  //   // fontSize: 16,
+  //   marginBottom: 2,
+  //   paddingLeft: 10,
+  //   paddingTop: 8,
+  //   color: "#63725A",
+  // },
+  // card: {
+  //   flexDirection: "row",
+  //   alignItems: "center",
+  //   // marginVertical: 5,
+  //   backgroundColor: "#E5E8E3",
+  //   width: "90%",
+  //   justifyContent: "space-evenly",
+  //   gap: 10,
+  //   borderRadius: 10,
+  // },
 });

@@ -1,4 +1,10 @@
-import { StyleSheet } from "react-native";
+import {
+  KeyboardAvoidingView,
+  StyleSheet,
+  StatusBar,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from "react-native";
 import React, { useState, useCallback, useEffect, useContext } from "react";
 import { GiftedChat } from "react-native-gifted-chat";
 import { useRoute, useIsFocused } from "@react-navigation/native";
@@ -213,23 +219,42 @@ const Chat = () => {
 
   // GiftedChat library that provides a chat UI
   return (
-    <GiftedChat
-      isTyping={true}
-      showAvatarForEveryMessage={false} // show avatar for every message
-      showUserAvatar={true}
-      messages={messages} // messages to display
-      onSend={(messages) => onSend(messages)} // callback function to send messages
-      user={{
-        // user object
-        _id: user ? user.uid : "",
-        name: user ? user.displayName : "",
-        avatar: user ? user.photoURL : "",
-      }}
-      placeholder="Send a message to the group..."
-    />
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior="height"
+        keyboardVerticalOffset={200}
+      >
+        <GiftedChat
+          isTyping={true}
+          showAvatarForEveryMessage={false} // show avatar for every message
+          showUserAvatar={true}
+          messages={messages} // messages to display
+          onSend={(messages) => onSend(messages)} // callback function to send messages
+          user={{
+            // user object
+            _id: user ? user.uid : "",
+            name: user ? user.displayName : "",
+            avatar: user ? user.photoURL : "",
+          }}
+          placeholder="Send a message to the group..."
+          scrollToBottom={true}
+          alwaysShowSend={true}
+          // renderUsernameOnMessage={true}
+
+          // renderInputToolbar={}
+        />
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   );
 };
 
 export default Chat;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    marginBottom: 0,
+    backgroundColor: "#fff",
+  },
+});

@@ -8,6 +8,7 @@ import FindDestination from "./FindDestination";
 import FindArticle from "./FindArticle";
 import FindPlace from "./FindPlace";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import GlobalStyles from "../../GlobalStyles";
 
 // Create Material Top Tab Navigator instance for Trip Screen
 const Tab = createMaterialTopTabNavigator();
@@ -27,9 +28,44 @@ function TripTopNav({
     <Tab.Navigator
       screenOptions={{
         // tabBarScrollEnabled: true,
-        swipeEnabled: false,
+        // swipeEnabled: false,
+        animationEnabled: true,
+        tabBarActiveTintColor: "#63725A",
+        tabBarInactiveTintColor: "#C4C4C4",
+        tabBarIndicatorStyle: {
+          backgroundColor: "#63725A",
+        },
+        // tabBarAllowFontScaling: true,
+        // tabBarGap: 0,
+        // lazy: true,
+
+        tabBarLabelStyle: {
+          fontFamily: "Mulish-Regular",
+          fontSize: 14,
+          lineHeight: 16,
+          textTransform: "capitalize",
+        },
       }}
     >
+      <Tab.Screen
+        name="Plan"
+        component={Plan}
+        initialParams={{
+          tripId: tripId,
+          invitees: invitees,
+          startDate: startDate,
+          endDate: endDate,
+          userId: userId,
+        }}
+        options={{
+          tabBarLabel: "Plan",
+          lazy: true,
+          tabBarStyle: {
+            marginBottom: -StatusBar.currentHeight || 0,
+            // paddingBottom: StatusBar.currentHeight || 0,
+          },
+        }}
+      />
       <Tab.Screen
         name="FindStack"
         component={FindStack}
@@ -44,23 +80,8 @@ function TripTopNav({
           lazy: true,
           tabBarStyle: {
             marginBottom: -StatusBar.currentHeight || 0,
+            // paddingBottom: StatusBar.currentHeight || 0,
           },
-        }}
-      />
-
-      <Tab.Screen
-        name="Plan"
-        component={Plan}
-        initialParams={{
-          tripId: tripId,
-          invitees: invitees,
-          startDate: startDate,
-          endDate: endDate,
-          userId: userId,
-        }}
-        options={{
-          tabBarLabel: "Plan",
-          lazy: true,
         }}
       />
 
@@ -72,6 +93,13 @@ function TripTopNav({
             tripId: tripId,
             invitees: invitees,
             userId: userId,
+          }}
+          options={{
+            tabBarLabel: "Chat",
+            tabBarStyle: {
+              marginBottom: -StatusBar.currentHeight || 0,
+              // paddingBottom: StatusBar.currentHeight || 0,
+            },
           }}
         />
       )}
@@ -93,9 +121,11 @@ function FindStack() {
         headerShadowVisible: false,
         headerTitleAlign: "center",
         headerBackTitleVisible: false,
-        // headerStyle: {
-        //   fontSize: 15, // Adjust the font size according to your preference
-        // },
+        headerTitleStyle: {
+          ...GlobalStyles.titleLargeRegular,
+          color: "#63725A",
+        },
+        headerTintColor: "#63725A",
       }}
     >
       <Stack.Screen
@@ -105,6 +135,7 @@ function FindStack() {
         options={{
           headerTitle: "Destination",
           headerLeft: () => <View></View>,
+          // headerShown: false,
         }}
       />
       <Stack.Screen name="FindDestination" component={FindDestination} />

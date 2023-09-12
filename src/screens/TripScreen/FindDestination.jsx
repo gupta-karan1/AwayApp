@@ -252,7 +252,7 @@ const styles = StyleSheet.create({
   //   borderRadius: 5,
   // },
   subtitleText: {
-    marginTop: 30,
+    marginTop: 10,
     marginBottom: 10,
   },
   titleText: {

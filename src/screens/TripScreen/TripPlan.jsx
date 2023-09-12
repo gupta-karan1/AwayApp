@@ -16,6 +16,8 @@ import { useNavigation } from "@react-navigation/native";
 import { AntDesign } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { AuthContext } from "../../../hooks/AuthContext";
+import { LinearGradient } from "expo-linear-gradient";
+import GlobalStyles from "../../GlobalStyles";
 
 // Component to render Trip Plan screen
 const TripPlan = () => {
@@ -50,7 +52,7 @@ const TripPlan = () => {
             onPress={() => Navigation.navigate("Trips")}
             style={styles.backButton}
           >
-            <AntDesign name="arrowleft" size={24} color="black" />
+            <AntDesign name="arrowleft" size={24} color="#63725A" />
           </Pressable>
           {user.uid === userId && (
             <Pressable
@@ -61,16 +63,21 @@ const TripPlan = () => {
               }
               style={styles.backButton}
             >
-              <Feather name="edit-2" size={22} color="black" />
+              <Feather name="edit-2" size={22} color="#63725A" />
             </Pressable>
           )}
         </View>
-        <View style={styles.textContainer}>
-          <Text style={styles.text}>{tripTitle}</Text>
-          <Text style={styles.text}>
+        <LinearGradient
+          colors={["transparent", "rgba(0,0,0,0.7)"]}
+          style={styles.textContainer}
+        >
+          <Text style={[styles.text, GlobalStyles.titleLargeRegular]}>
+            {tripTitle}
+          </Text>
+          <Text style={[styles.text, GlobalStyles.labelMediumMedium]}>
             {startDate} - {endDate}
           </Text>
-        </View>
+        </LinearGradient>
       </ImageBackground>
 
       {/* TripTopNav, passing tripLocation as a prop */}
@@ -96,23 +103,22 @@ const styles = StyleSheet.create({
     marginTop: StatusBar.currentHeight || 0,
   },
   image: {
-    height: 180,
+    height: 150,
     justifyContent: "space-between",
     backgroundColor: "lightgrey",
   },
   textContainer: {
-    backgroundColor: "rgba(30, 144, 255, 0.6)",
+    // backgroundColor: "rgba(30, 144, 255, 0.6)",
     width: "100%",
     padding: 10,
   },
   text: {
-    fontSize: 15,
-    color: "white",
+    color: "#fff",
   },
   backButton: {
     padding: 8,
     borderRadius: 50,
-    backgroundColor: "rgba(255, 255, 255, 0.8)",
+    backgroundColor: "rgba(255, 255, 255, 0.7)",
   },
   iconContainer: {
     flexDirection: "row",

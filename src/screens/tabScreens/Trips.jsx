@@ -179,7 +179,7 @@ const Trips = () => {
       <ScrollView style={styles.myTripContainer}>
         {tripData.length > 0 && (
           <View>
-            <Text style={GlobalStyles.titleLargeRegular}>My Trips</Text>
+            {/* <Text style={GlobalStyles.titleLargeRegular}>My Trips</Text> */}
             {tripData.map((trip) => (
               <TripCard
                 key={trip.tripId}
@@ -198,7 +198,7 @@ const Trips = () => {
       <View style={styles.inviteTripContainer}>
         {invitedTrips.length > 0 && (
           <View>
-            <Text style={GlobalStyles.titleLargeRegular}>Invited Trips</Text>
+            {/* <Text style={GlobalStyles.titleLargeRegular}>Invited Trips</Text> */}
             {invitedTrips.map((trip) => (
               <TripCard
                 key={trip.tripId}
@@ -215,8 +215,34 @@ const Trips = () => {
   const AllTrips = () => {
     return (
       <ScrollView showsVerticalScrollIndicator={false} style={styles.wrapper}>
-        <MyTrips />
-        <InvitedTrips />
+        <View style={styles.myTripContainer}>
+          {tripData.length > 0 && (
+            <View>
+              <Text style={GlobalStyles.titleLargeRegular}>My Trips</Text>
+              {tripData.map((trip) => (
+                <TripCard
+                  key={trip.tripId}
+                  tripItem={trip}
+                  onDelete={() => confirmDelete(trip)}
+                />
+              ))}
+            </View>
+          )}
+        </View>
+        <View style={styles.inviteTripContainer}>
+          {invitedTrips.length > 0 && (
+            <View>
+              <Text style={GlobalStyles.titleLargeRegular}>Invited Trips</Text>
+              {invitedTrips.map((trip) => (
+                <TripCard
+                  key={trip.tripId}
+                  tripItem={trip}
+                  onDelete={() => confirmDelete(trip)}
+                />
+              ))}
+            </View>
+          )}
+        </View>
       </ScrollView>
     );
   };
@@ -236,19 +262,25 @@ const Trips = () => {
             tabView === "all" && styles.selected,
           ]}
         >
-          <Text>All Trips</Text>
+          <Text style={[styles.buttonText, GlobalStyles.bodySmallRegular]}>
+            All Trips
+          </Text>
         </Pressable>
         <Pressable
           onPress={() => handleTabView("personal")}
           style={[styles.button, tabView === "personal" && styles.selected]}
         >
-          <Text>My Trips</Text>
+          <Text style={[styles.buttonText, GlobalStyles.bodySmallRegular]}>
+            My Trips
+          </Text>
         </Pressable>
         <Pressable
           onPress={() => handleTabView("invited")}
           style={[styles.button, tabView === "invited" && styles.selected]}
         >
-          <Text>Invited Trips</Text>
+          <Text style={[styles.buttonText, GlobalStyles.bodySmallRegular]}>
+            Invited Trips
+          </Text>
         </Pressable>
       </View>
 
@@ -262,20 +294,32 @@ const Trips = () => {
       )}
       {!loading && tripData && invitedTrips && (
         <ScrollView showsVerticalScrollIndicator={false} style={styles.wrapper}>
-          {/* {tabView === "all" && <AllTrips />} */}
-          {tabView === "all" && (
+          {tabView === "all" && <AllTrips />}
+          {/* {tabView === "all" && (
             <>
               <MyTrips />
               <InvitedTrips />
             </>
+          )} */}
+          {tabView === "personal" && (
+            <View>
+              <Text style={GlobalStyles.titleLargeRegular}>My Trips</Text>
+              <MyTrips />
+            </View>
           )}
-          {tabView === "personal" && <MyTrips />}
-          {tabView === "invited" && <InvitedTrips />}
+          {tabView === "invited" && (
+            <View>
+              <Text style={GlobalStyles.titleLargeRegular}>Invited Trips</Text>
+              <InvitedTrips />
+            </View>
+          )}
         </ScrollView>
       )}
       {/* FAB to add a new trip */}
       <Pressable style={styles.fabButton} onPress={handleAddTrip}>
-        <Text style={styles.fabText}>Create Trip</Text>
+        <Text style={[styles.fabText, GlobalStyles.bodyMediumBold]}>
+          Create Trip
+        </Text>
       </Pressable>
     </View>
   );
@@ -295,25 +339,28 @@ const styles = StyleSheet.create({
     // flex: 1,
   },
   myTripContainer: {
-    // marginBottom: 50,
+    marginBottom: 20,
     // marginTop: 20,
   },
   inviteTripContainer: {
     // marginBottom: 50,
-    marginTop: 15,
+    // marginTop: 15,
+    marginBottom: 10,
   },
   fabButton: {
     position: "absolute",
     bottom: 20,
     right: 20,
-    padding: 15,
-    borderRadius: 10,
-    backgroundColor: "#0D47A1",
-    elevation: 4,
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+    borderRadius: 15,
+    backgroundColor: "#EFFBB7",
+    elevation: 2,
   },
   fabText: {
-    fontSize: 15,
-    color: "white",
+    // fontSize: 15,
+    // color: "#283003",
+    color: "#63725A",
   },
   buttonContainer: {
     flexDirection: "row", // To make the buttons appear side by side
@@ -333,6 +380,9 @@ const styles = StyleSheet.create({
     // elevation: 2,
     borderWidth: 1,
     borderColor: "#63725A",
+  },
+  buttonText: {
+    color: "#63725A",
   },
   selected: {
     backgroundColor: "#E5E8E3",

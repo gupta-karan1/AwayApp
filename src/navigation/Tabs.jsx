@@ -32,8 +32,10 @@ const Tabs = () => {
         tabBarHideOnKeyboard: true, // hide tab bar when keyboard is open
         tabBarAllowFontScaling: true, // allow font scaling for tab bar
         headerShown: false, // hide header
-        // freezeOnBlur: true, // freeze tab bar when screen is not focused
+        freezeOnBlur: true, // freeze tab bar when screen is not focused
         lazy: true, // lazy load tab screens
+        // unmountOnBlur: true,
+
         tabBarStyle: {
           // style tab bar
           // height: 500,
