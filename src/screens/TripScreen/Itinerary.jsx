@@ -493,35 +493,6 @@ const Itinerary = ({ startDate, endDate, tripId, userId, invitees }) => {
                   onPress={() => setModalVisible(false)}
                 />
               </View>
-              {/* <ScrollView showsVerticalScrollIndicator={false}>
-                {isLoading && <ActivityIndicator size={"large"} />}
-                {savedPlaces.length === 0 && !isLoading && (
-                  <Pressable
-                    style={styles.emptyContainer}
-                    onPress={() => {
-                      Navigation.navigate("FindStack");
-                      setModalVisible(false);
-                    }}
-                  >
-                    <Text>
-                      You have no saved places. Go to the Find section to add
-                      places.
-                    </Text>
-                  </Pressable>
-                )}
-
-                {!isLoading &&
-                  savedPlaces.length > 0 &&
-                  savedPlaces.map((place) => (
-                    <ChecklistItem
-                      key={place.placeId}
-                      place={place}
-                      isSelected={selectedPlaces.includes(place)}
-                      onToggleSelection={toggleSelection}
-                    />
-                  ))}
-              </ScrollView> */}
-              {/* // Render checklist items as a FlatList inside the modal */}
               <FlatList
                 data={savedPlaces}
                 renderItem={renderChecklistItem}
@@ -539,7 +510,7 @@ const Itinerary = ({ startDate, endDate, tripId, userId, invitees }) => {
                   title="Save"
                   onPress={handleAddPlaceToItinerary}
                 >
-                  <Text style={styles.submitText}>Save</Text>
+                  <Text style={styles.submitText}>Add Place</Text>
                 </Pressable>
               </View>
             </View>
