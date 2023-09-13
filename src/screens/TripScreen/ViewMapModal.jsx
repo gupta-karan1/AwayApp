@@ -2,8 +2,9 @@ import { StyleSheet, Text, View, Modal, ActivityIndicator } from "react-native";
 import React, { useState } from "react";
 import { useEffect } from "react";
 import { Ionicons } from "@expo/vector-icons";
-import MapView, { Marker } from "react-native-maps";
+import MapView, { Marker, Callout } from "react-native-maps";
 import { Dimensions } from "react-native";
+import GlobalStyles from "../../GlobalStyles";
 
 // Map Modal to view saved/itinerary by date places on a map
 const ViewMapModal = ({
@@ -38,6 +39,16 @@ const ViewMapModal = ({
     }
   }, [selectedMapDate, selectedMapPlaces, placeData]);
 
+  // const MapPopup = ({ place }) => {
+  //   return (
+  //     <View style={styles.popupContainer}>
+  //       <Text>{place.placeTitle}</Text>
+  //       <Text>{place.placeCategory}</Text>
+  //       {/* Add other content here */}
+  //     </View>
+  //   );
+  // };
+
   return (
     <Modal
       animationType="slide"
@@ -54,10 +65,10 @@ const ViewMapModal = ({
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <View style={styles.modalHeader}>
-              <Text style={styles.modalText}>
+              <Text style={GlobalStyles.titleLargeRegular}>
                 {selectedMapDate
-                  ? "Itinerary: " + selectedMapDate
-                  : "Saved Places"}
+                  ? "Map: " + selectedMapDate
+                  : "Map: Saved Places"}
               </Text>
               <Ionicons
                 name="close-outline"
@@ -101,12 +112,14 @@ const ViewMapModal = ({
                         }}
                         title={place.placeTitle}
                         description={place.placeCategory}
+                        pinColor="green"
+                        // icon={require("../../../assets/map-marker.png")}
                       />
                     ))}
                 </MapView>
               ) : (
-                <Text style={styles.promptMsg}>
-                  No places in the itinerary for this date.
+                <Text style={[styles.promptMsg, GlobalStyles.bodySmallRegular]}>
+                  No places in the Itinerary for this date
                 </Text>
               )}
             </View>
@@ -120,6 +133,15 @@ const ViewMapModal = ({
 export default ViewMapModal;
 
 const styles = StyleSheet.create({
+  // popupContainer: {
+  //   backgroundColor: "#E5E8E3", // Set the background color of the popup
+  //   padding: 10, // Add padding for content spacing
+  //   borderRadius: 10, // Set the border radius to make it rounded
+  //   shadowColor: "black", // Add shadow for depth
+  //   shadowOpacity: 0.2,
+  //   shadowOffset: { width: 0, height: 2 },
+  //   elevation: 2, // Android shadow
+  // },
   centeredView: {
     flex: 1,
     justifyContent: "flex-end",
@@ -154,9 +176,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     marginHorizontal: 10,
   },
-  modalText: {
-    fontSize: 20,
-  },
   innerContainer: {
     width: "100%",
   },
@@ -179,42 +198,7 @@ const styles = StyleSheet.create({
     width: Dimensions.get("window").width,
     height: Dimensions.get("window").height - 100,
   },
+  promptMsg: {
+    marginTop: 20,
+  },
 });
-
-/* {placeData.length === 0 ? (
-            <Text style={styles.promptMsg}>No places saved yet.</Text>
-          ) : (
-            <View style={styles.mapContainer}>
-              <MapView
-                style={styles.map}
-                provider="google"
-                // onLayout={onMapReady}
-                onMapReady={() => setMapInitialized(true)}
-                loadingEnabled={true}
-                initialRegion={{
-                  latitude: placeData[0].placeLatitude,
-                  longitude: placeData[0].placeLongitude,
-                  latitudeDelta: 0.15,
-                  longitudeDelta: 0.15,
-                }}
-              >
-                {mapInitialized &&
-                  placeData.map((place) => (
-                    <Marker
-                      key={place.placeId}
-                      coordinate={{
-                        latitude: place.placeLatitude,
-                        longitude: place.placeLongitude,
-                      }}
-                      title={place.placeTitle}
-                      description={place.placeCategory}
-                    />
-                  ))}
-              </MapView>
-            </View>
-          )}
-        </View>
-      </View>
-    </Modal>
-  );
-}; */

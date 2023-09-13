@@ -371,17 +371,20 @@ const Itinerary = ({ startDate, endDate, tripId, userId, invitees }) => {
   return (
     <View>
       {loading && <ActivityIndicator size={"large"} />}
-      {!loading && savedPlaces.length === 0 && !itineraryData && (
+      {!loading && savedPlaces.length === 0 && (
         <Pressable
-          style={styles.instructionText}
+          style={styles.emptyContainer}
           onPress={() =>
             Navigation.navigate("FindStack", {
               screen: "Find",
             })
           }
         >
-          <Text>You don't have any saved places yet.</Text>
-          <Text>Add a place from the Find Section.</Text>
+          {/* <Text>Find places to build your Itinerary</Text> */}
+          <Text style={[GlobalStyles.bodySmallRegular]}>
+            Find places to create your Itinerary
+          </Text>
+          <Text style={styles.navText}>Go to Find</Text>
         </Pressable>
       )}
       {mapModalVisible && (
@@ -401,6 +404,12 @@ const Itinerary = ({ startDate, endDate, tripId, userId, invitees }) => {
             data: itineraryData[formatDateString(date)] || [], // Use the itinerary data for each date
           }))}
           keyExtractor={(item, index) => index.toString()}
+          // Performance Settings
+          removeClippedSubviews={true} // Unmount components when outside of window
+          initialNumToRender={5} // Reduce initial render amount
+          maxToRenderPerBatch={5} // Reduce number in each render batch
+          updateCellsBatchingPeriod={100} // Increase time between renders
+          windowSize={2} // Reduce the window size
           renderItem={({ item, section }) => (
             <View style={styles.item}>
               <FlatList
@@ -412,6 +421,11 @@ const Itinerary = ({ startDate, endDate, tripId, userId, invitees }) => {
                   />
                 )}
                 keyExtractor={(item) => item.placeId}
+                removeClippedSubviews={true} // Unmount components when outside of window
+                initialNumToRender={5} // Reduce initial render amount
+                maxToRenderPerBatch={5} // Reduce number in each render batch
+                updateCellsBatchingPeriod={100} // Increase time between renders
+                windowSize={2} // Reduce the window size
               />
             </View>
             // <DraggableFlatList
@@ -465,7 +479,11 @@ const Itinerary = ({ startDate, endDate, tripId, userId, invitees }) => {
                     setSelectedDate(title);
                   }}
                 >
-                  <Text style={styles.buttonText}>Add Place</Text>
+                  <Text
+                    style={[styles.buttonText, GlobalStyles.bodySmallRegular]}
+                  >
+                    Add Place
+                  </Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -493,26 +511,56 @@ const Itinerary = ({ startDate, endDate, tripId, userId, invitees }) => {
                   onPress={() => setModalVisible(false)}
                 />
               </View>
-              <FlatList
-                data={savedPlaces}
-                renderItem={renderChecklistItem}
-                keyExtractor={(item) => item.placeId}
-                showsVerticalScrollIndicator={false}
-                removeClippedSubviews={true} // Unmount components when outside of window
-                initialNumToRender={5} // Reduce initial render amount
-                maxToRenderPerBatch={5} // Reduce number in each render batch
-                updateCellsBatchingPeriod={100} // Increase time between renders
-                windowSize={2} // Reduce the window size
-              />
-              <View style={styles.modalFooter}>
+              {savedPlaces.length === 0 && (
+                // <Pressable
+                //   style={styles.modalEmptyContainer}
+                //   onPress={() =>
+                //     Navigation.navigate("FindStack", {
+                //       screen: "Find",
+                //     })
+                //   }
+                // >
                 <Pressable
-                  style={styles.submitButton}
-                  title="Save"
-                  onPress={handleAddPlaceToItinerary}
+                  style={styles.modalEmptyContainer}
+                  onPress={() => {
+                    setModalVisible(false); // Close the modal
+                    Navigation.navigate("FindStack", {
+                      screen: "Find",
+                    });
+                  }}
                 >
-                  <Text style={styles.submitText}>Add Place</Text>
+                  <Text style={GlobalStyles.bodySmallRegular}>
+                    Find places to create your Itinerary
+                  </Text>
+                  <Text style={[GlobalStyles.bodySmallRegular, styles.navText]}>
+                    Go to Find
+                  </Text>
                 </Pressable>
-              </View>
+              )}
+              {savedPlaces.length > 0 && (
+                <View>
+                  <FlatList
+                    data={savedPlaces}
+                    renderItem={renderChecklistItem}
+                    keyExtractor={(item) => item.placeId}
+                    showsVerticalScrollIndicator={false}
+                    removeClippedSubviews={true} // Unmount components when outside of window
+                    initialNumToRender={5} // Reduce initial render amount
+                    maxToRenderPerBatch={5} // Reduce number in each render batch
+                    updateCellsBatchingPeriod={100} // Increase time between renders
+                    windowSize={2} // Reduce the window size
+                  />
+                  <View style={styles.modalFooter}>
+                    <Pressable
+                      style={styles.submitButton}
+                      title="Save"
+                      onPress={handleAddPlaceToItinerary}
+                    >
+                      <Text style={styles.submitText}>Add Place</Text>
+                    </Pressable>
+                  </View>
+                </View>
+              )}
             </View>
           </View>
         </Modal>
@@ -615,7 +663,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingEnd: 15,
   },
-
   placeCardSelect: {
     flexDirection: "row",
     alignItems: "center",
@@ -684,16 +731,25 @@ const styles = StyleSheet.create({
   modalFooter: {
     width: "100%",
   },
-  instructionText: {
-    padding: 10,
-    alignItems: "center",
-    backgroundColor: "lightgrey",
-    margin: 10,
-    borderRadius: 10,
-  },
   emptyContainer: {
+    alignItems: "center",
     backgroundColor: "#E5E8E3",
-    padding: 20,
     borderRadius: 10,
+    marginHorizontal: 10,
+    padding: 20,
+    marginBottom: 20,
+  },
+  navText: {
+    textDecorationLine: "underline",
+    color: "#63725A",
+  },
+  modalEmptyContainer: {
+    alignItems: "center",
+    backgroundColor: "#E5E8E3",
+    borderRadius: 10,
+    marginHorizontal: 10,
+    padding: 20,
+    marginBottom: 20,
+    width: "100%",
   },
 });

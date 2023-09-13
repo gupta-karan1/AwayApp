@@ -39,6 +39,12 @@ import {
   SelectList,
   MultipleSelectList,
 } from "react-native-dropdown-select-list";
+import { FontAwesome } from "expo-vector-icons";
+import { Entypo } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
+import GlobalStyles from "../../GlobalStyles";
+import { MaterialIcons } from "@expo/vector-icons";
 
 // Component to render the Trip Form
 const CreateTripForm = () => {
@@ -49,7 +55,9 @@ const CreateTripForm = () => {
   const [endDate, setEndDate] = useState(new Date());
   const [tripType, setTripType] = useState("solo");
   const [invitees, setInvitees] = useState([]);
-  const [coverImage, setCoverImage] = useState(null);
+  const [coverImage, setCoverImage] = useState(
+    "https://firebasestorage.googleapis.com/v0/b/away-app-31140.appspot.com/o/Images%2Fimage-placeholder.png?alt=media&token=5e36ae66-b8bc-47ab-af74-241d7875e43a"
+  );
   const [users, setUsers] = useState([]);
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [showInviteesPicker, setShowInviteesPicker] = useState(false);
@@ -99,11 +107,17 @@ const CreateTripForm = () => {
       delete result["cancelled"];
     } else {
       // if no cover image is selected, set the cover image to the destination.imageUrl
-      setCoverImage(
-        destinationData.filter(
-          (destination) => destination.destinationName === tripLocation
-        )[0].imageUrl
-      );
+      if (tripLocation) {
+        setCoverImage(
+          destinationData.filter(
+            (destination) => destination.destinationName === tripLocation
+          )[0].imageUrl
+        );
+      } else {
+        setCoverImage(
+          "https://firebasestorage.googleapis.com/v0/b/away-app-31140.appspot.com/o/Images%2Fimage-placeholder.png?alt=media&token=5e36ae66-b8bc-47ab-af74-241d7875e43a"
+        );
+      }
 
       setInterval(() => {
         setIsLoading(false);
@@ -329,20 +343,22 @@ const CreateTripForm = () => {
   // console.log(invitees);
 
   return (
-    <ScrollView>
+    <ScrollView style={{ backgroundColor: "#fff" }}>
       <KeyboardAvoidingView style={styles.container}>
         <View style={styles.inputContainer}>
-          <Text style={styles.titleText}>Trip Title:</Text>
+          <Text style={[styles.titleText, GlobalStyles.bodySmallRegular]}>
+            Trip Title:
+          </Text>
           <TextInput
             label="Trip Title"
             value={tripTitle}
             onChangeText={(text) => setTripTitle(text)}
-            style={styles.input}
+            style={[styles.input, GlobalStyles.bodySmallRegular]}
             placeholder="Trip Title"
           />
-          <View>
-            <Text style={styles.titleText}>Trip Location:</Text>
-            {/* <Picker
+        </View>
+
+        {/* <Picker
               // mode="dropdown"
               style={styles.picker}
               selectedValue={tripLocation}
@@ -362,7 +378,7 @@ const CreateTripForm = () => {
               }}
             >
               {/* Render list of destinations in Picker */}
-            {/* <Picker.Item label="Select a Location" value="" />
+        {/* <Picker.Item label="Select a Location" value="" />
               {destinationData.map((destination) => (
                 <Picker.Item
                   key={destination.destinationId}
@@ -372,38 +388,61 @@ const CreateTripForm = () => {
               ))}
             </Picker> */}
 
-            <SelectList
-              data={destinationData.map((destination) => ({
-                key: destination.destinationId,
-                value: destination.destinationName,
-              }))}
-              maxHeight={100}
-              setSelected={(val) => {
-                setTripLocation(val);
-                if (val) {
-                  setCoverImage(
-                    destinationData.filter(
-                      (destination) => destination.destinationName === val
-                    )[0].imageUrl
-                  );
-                } else {
-                  setCoverImage(null);
-                }
-              }}
-              save="value"
-              placeholder="Select a Location"
-              // inputStyles={{ marginBottom: 10 }}
-              // boxStyles={{ marginBottom: 10 }}
-              // inputStyles={{ paddingBottom: 10 }}
-              dropdownStyles={{ marginBottom: 10 }}
-            />
-          </View>
-          <View style={styles.dateContainer}>
+        <View style={styles.inputContainer}>
+          <Text style={[styles.titleText, GlobalStyles.bodySmallRegular]}>
+            Trip Location:
+          </Text>
+          <SelectList
+            boxStyles={styles.boxStyles}
+            inputStyles={styles.inputStyles}
+            dropdownStyles={styles.dropdownStyles}
+            fontFamily="Mulish-Regular"
+            searchicon={<Feather name="search" size={18} color="#63725A" />}
+            arrowicon={
+              <Entypo name="chevron-small-down" size={20} color="#63725A" />
+            }
+            closeicon={<AntDesign name="close" size={20} color="#63725A" />}
+            data={destinationData.map((destination) => ({
+              key: destination.destinationId,
+              value: destination.destinationName,
+            }))}
+            maxHeight={100}
+            setSelected={(val) => {
+              setTripLocation(val);
+              if (val) {
+                setCoverImage(
+                  destinationData.filter(
+                    (destination) => destination.destinationName === val
+                  )[0].imageUrl
+                );
+              } else {
+                setCoverImage(null);
+              }
+            }}
+            save="value"
+            placeholder="Search for a Location"
+            searchPlaceholder="Search"
+          />
+        </View>
+
+        <View style={styles.inputContainer}>
+          <View style={styles.dateWrapper}>
             {/* Start date picker for Android */}
             {Platform.OS === "android" && (
-              <Pressable onPress={showStartDatePicker}>
-                <Text>Start Date: </Text>
-                <Text style={styles.input}>
+              <Pressable
+                onPress={showStartDatePicker}
+                style={styles.dateContainer}
+              >
+                <Text style={[styles.titleText, GlobalStyles.bodySmallRegular]}>
+                  Start Date:{" "}
+                </Text>
+                <Text
+                  style={[
+                    styles.input,
+                    styles.datePicker,
+                    GlobalStyles.bodySmallRegular,
+                  ]}
+                >
                   {moment(startDate).format("DD MMM YYYY")}
                 </Text>
               </Pressable>
@@ -422,7 +461,9 @@ const CreateTripForm = () => {
             {/* Start date picker for iOS */}
             {Platform.OS === "ios" && (
               <View>
-                <Text>Start Date</Text>
+                <Text style={[styles.titleText, GlobalStyles.bodySmallRegular]}>
+                  Start Date
+                </Text>
                 <DateTimePicker
                   testID="dateTimePicker"
                   value={startDate}
@@ -435,9 +476,20 @@ const CreateTripForm = () => {
 
             {/* End date picker for Android */}
             {Platform.OS === "android" && (
-              <Pressable onPress={showEndDatePicker}>
-                <Text>End Date: </Text>
-                <Text style={styles.input}>
+              <Pressable
+                onPress={showEndDatePicker}
+                style={styles.dateContainer}
+              >
+                <Text style={[styles.titleText, GlobalStyles.bodySmallRegular]}>
+                  End Date:
+                </Text>
+                <Text
+                  style={[
+                    styles.input,
+                    styles.datePicker,
+                    GlobalStyles.bodySmallRegular,
+                  ]}
+                >
                   {moment(endDate).format("DD MMM YYYY")}
                 </Text>
               </Pressable>
@@ -446,7 +498,9 @@ const CreateTripForm = () => {
             {/* End Date picker for iOS */}
             {Platform.OS === "ios" && (
               <View>
-                <Text>End Date</Text>
+                <Text style={[styles.titleText, GlobalStyles.bodySmallRegular]}>
+                  End Date
+                </Text>
                 <DateTimePicker
                   testID="dateTimePicker"
                   value={endDate}
@@ -467,8 +521,13 @@ const CreateTripForm = () => {
               />
             )}
           </View>
-          {/* Radio buttons for trip type selection */}
-          <Text style={styles.titleText}>Trip Type:</Text>
+        </View>
+        {/* Radio buttons for trip type selection */}
+
+        <View style={styles.inputContainer}>
+          <Text style={[styles.titleText, GlobalStyles.bodySmallRegular]}>
+            Trip Type:
+          </Text>
           <View style={styles.radioButtonContainer}>
             <TouchableOpacity
               style={[
@@ -477,7 +536,11 @@ const CreateTripForm = () => {
               ]}
               onPress={() => handleTripTypeChange("solo")}
             >
-              <Text style={styles.radioButtonText}>Solo Trip</Text>
+              <Text
+                style={[styles.radioButtonText, GlobalStyles.bodySmallRegular]}
+              >
+                Solo Trip
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={[
@@ -486,13 +549,20 @@ const CreateTripForm = () => {
               ]}
               onPress={() => handleTripTypeChange("group")}
             >
-              <Text style={styles.radioButtonText}>Group Trip</Text>
+              <Text
+                style={[styles.radioButtonText, GlobalStyles.bodySmallRegular]}
+              >
+                Group Trip
+              </Text>
             </TouchableOpacity>
           </View>
-          {showInviteesPicker && tripType === "group" && (
-            <View>
-              <Text style={styles.titleText}>Invite a Tripmate:</Text>
-              {/* <Picker
+        </View>
+        {showInviteesPicker && tripType === "group" && (
+          <View style={styles.inputContainer}>
+            <Text style={[styles.titleText, GlobalStyles.bodySmallRegular]}>
+              Invite a Tripmate:
+            </Text>
+            {/* <Picker
                 style={styles.picker}
                 selectedValue={selectedUser}
                 onValueChange={(itemValue, itemIndex) => {
@@ -518,7 +588,7 @@ const CreateTripForm = () => {
                 ))}
               </Picker> */}
 
-              {/* <MultipleSelectList
+            {/* <MultipleSelectList
                 data={users.map((user) => ({
                   key: user.userId,
                   value: `${user.email}`,
@@ -540,92 +610,123 @@ const CreateTripForm = () => {
                 placeholder="Select invitees"
               /> */}
 
-              <MultipleSelectList
-                data={users.map((user) => ({
-                  key: user.userId,
-                  value: user.email,
-                  disabled: invitees.some((invitee) => invitee === user.email),
-                }))}
-                setSelected={(val) => {
-                  setInvitees(val);
+            <MultipleSelectList
+              boxStyles={styles.boxStyles}
+              inputStyles={styles.inputStyles}
+              dropdownStyles={styles.dropdownStyles}
+              disabledItemStyles={{ color: "#63725A" }}
+              disabledTextStyles={{}}
+              // checkBoxStyles={{ backgroundColor: "#E5E8E3" }}
+              // disabledCheckBoxStyles={{
+              //   backgroundColor: "#E5E8E3",
+              // }}
+              badgeStyles={{ backgroundColor: "#63725A" }}
+              badgeTextStyles={{ color: "#E5E8E3" }}
+              labelStyles={{ paddingLeft: 8 }}
+              fontFamily="Mulish-Regular"
+              searchicon={<Feather name="search" size={18} color="#63725A" />}
+              arrowicon={
+                <Entypo name="chevron-small-down" size={20} color="#63725A" />
+              }
+              closeicon={<AntDesign name="close" size={20} color="#63725A" />}
+              data={users.map((user) => ({
+                key: user.userId,
+                value: user.email,
+                // disabled: invitees.some((invitee) => invitee === user.email),
+                disabled: tripItem
+                  ? invitees.some((invitee) => invitee === user.email)
+                  : false,
+              }))}
+              setSelected={(val) => {
+                setInvitees(val);
 
-                  // if the selected user is not already in the invitees array, add the selected user to the invitees array
-                  // if (
-                  //   val &&
-                  //   !invitees.some((invitee) => invitee.userId === val.key)
-                  // ) {
-                  //   setInvitees([...invitees, val]);
-                  // }
-                }}
-                save="value"
-                placeholder="Select a user"
-                label="Selected Users"
-                notFoundText="No users found"
-                searchPlaceholder="Search"
-                // maxHeight={200}
-                dropdownStyles={{ marginBottom: 20 }}
-              />
-
-              {tripItem && (
-                <View>
-                  <Pressable>
-                    <Text
-                      style={[styles.titleText, styles.deleteText]}
-                      onPress={() => setShowInvitees(!showInvitees)}
-                    >
-                      {showInvitees ? "Hide" : "Delete"} Invitees
-                    </Text>
-                  </Pressable>
-                  {showInvitees && (
-                    <View style={styles.invitees}>
-                      {invitees.map((invitee) => (
-                        <View style={styles.inviteeText} key={invitee}>
-                          <Text>{invitee}</Text>
-                          <TouchableOpacity
-                            onPress={() => removeInvitee(invitee)}
-                          >
-                            <Ionicons
-                              name="ios-close"
-                              size={24}
-                              color="black"
-                              style={styles.icon}
-                            />
-                          </TouchableOpacity>
-                        </View>
-                      ))}
-                    </View>
-                  )}
-                </View>
-              )}
-            </View>
-          )}
-
-          {isLoading ? (
-            <ActivityIndicator />
-          ) : (
-            <View>
-              <Button title="Upload Cover Image" onPress={pickImage} />
-
-              <Image
-                source={
-                  coverImage
-                    ? { uri: coverImage }
-                    : require("../../../assets/image-placeholder.png")
-                }
-                style={styles.image}
-              />
-            </View>
-          )}
-          {loading ? (
-            <ActivityIndicator size="large" color="#0000ff" />
-          ) : (
-            <Button
-              title={tripItem ? "Update Trip" : "Create Trip"}
-              onPress={tripItem ? handleUpdate : handleSubmit}
-              style={styles.button}
+                // if the selected user is not already in the invitees array, add the selected user to the invitees array
+                // if (
+                //   val &&
+                //   !invitees.some((invitee) => invitee.userId === val.key)
+                // ) {
+                //   setInvitees([...invitees, val]);
+                // }
+              }}
+              save="value"
+              placeholder="Search for a user"
+              label="Selected Users"
+              notFoundText="No users found"
+              searchPlaceholder="Search"
+              // maxHeight={200}
             />
-          )}
-        </View>
+
+            {tripItem && (
+              <View>
+                <Pressable>
+                  <Text
+                    style={[styles.titleText, styles.deleteText]}
+                    onPress={() => setShowInvitees(!showInvitees)}
+                  >
+                    {showInvitees ? "Hide" : "Delete"} Invitees
+                  </Text>
+                </Pressable>
+                {showInvitees && (
+                  <View style={styles.invitees}>
+                    {invitees.map((invitee) => (
+                      <View style={styles.inviteeText} key={invitee}>
+                        <Text>{invitee}</Text>
+                        <TouchableOpacity
+                          onPress={() => removeInvitee(invitee)}
+                        >
+                          <Ionicons
+                            name="ios-close"
+                            size={24}
+                            color="black"
+                            style={styles.icon}
+                          />
+                        </TouchableOpacity>
+                      </View>
+                    ))}
+                  </View>
+                )}
+              </View>
+            )}
+          </View>
+        )}
+
+        {isLoading ? (
+          <ActivityIndicator size="large" color="#63725A" />
+        ) : (
+          <View style={styles.inputContainer}>
+            {/* <Button title="Upload Cover Image" onPress={pickImage} /> */}
+            <Pressable onPress={pickImage} style={styles.imgContainer}>
+              <Text style={[styles.titleText, GlobalStyles.bodySmallRegular]}>
+                Cover Image:
+              </Text>
+              <MaterialIcons
+                name="add-photo-alternate"
+                size={32}
+                color="#63725A"
+              />
+              {/* <Ionicons name="md-images-outline" size={24} color="#63725A" /> */}
+            </Pressable>
+            <Image source={{ uri: coverImage }} style={styles.image} />
+          </View>
+        )}
+        {loading ? (
+          <ActivityIndicator size="large" color="#63725A" />
+        ) : (
+          <Pressable
+            style={styles.submitButton}
+            onPress={() => {
+              {
+                tripItem ? handleUpdate : handleSubmit;
+              }
+            }}
+          >
+            <Text
+              style={[styles.saveButtonText, GlobalStyles.bodySmallRegular]}
+            >
+              {tripItem ? "Update Trip" : "Create Trip"}
+            </Text>
+          </Pressable>
+        )}
       </KeyboardAvoidingView>
     </ScrollView>
   );
@@ -634,62 +735,83 @@ const CreateTripForm = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "flex-start",
-    alignItems: "center",
-    paddingBottom: 30,
+    backgroundColor: "#fff",
+    paddingHorizontal: 20,
+    paddingVertical: 20,
   },
   inputContainer: {
-    width: "85%",
-    paddingTop: 25,
+    marginBottom: 20,
+    // borderWidth: 1,
+    width: "100%",
   },
   input: {
-    backgroundColor: "white",
+    // backgroundColor: "#E5E8E3",
     paddingHorizontal: 15,
     paddingVertical: 10,
     borderRadius: 10,
-    marginTop: 5,
-    marginBottom: 30,
+    // marginTop: 5,
+    // marginBottom: 30,
+    borderWidth: 1,
+    // width: "100%",
+    borderColor: "#63725A",
   },
   dateContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    // flexDirection: "row",
+    alignItems: "flex-start",
     justifyContent: "space-between",
-    marginTop: 10,
+    // marginTop: 10,
+    width: "48%",
   },
   radioButtonContainer: {
     flexDirection: "row",
-    justifyContent: "space-around",
-    marginBottom: 16,
-    marginTop: 5,
+    justifyContent: "space-between",
+    // marginBottom: 16,
+    // marginTop: 5,
   },
-  button: {
-    marginTop: 16,
+  submitButton: {
+    backgroundColor: "#63725A",
+    paddingVertical: 15,
+    paddingHorizontal: 15,
+    borderRadius: 50,
+    alignItems: "center",
+    // marginTop: 15,
   },
-  picker: {
-    marginBottom: 30,
-    backgroundColor: "#fff",
-    borderRadius: 10,
+  saveButtonText: {
+    color: "#EFFBB7",
+  },
+  // picker: {
+  //   marginBottom: 30,
+  //   backgroundColor: "#fff",
+  //   borderRadius: 10,
+  // },
+  imgContainer: {
+    flexDirection: "row",
+    alignItems: "flex-end",
+    justifyContent: "space-between",
   },
 
   radioButton: {
     flexDirection: "row",
     alignItems: "center",
     borderWidth: 1,
-    borderColor: "gray",
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderRadius: 8,
+    borderColor: "#63725A",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    width: "48%",
+    justifyContent: "center",
+    marginTop: 5,
   },
   radioButtonActive: {
-    backgroundColor: "lightblue",
+    backgroundColor: "#E5E8E3",
   },
   radioButtonText: {
-    color: "black",
-    fontWeight: "bold",
+    color: "#63725A",
+    // fontWeight: "bold",
   },
   image: {
     width: "100%",
-    height: 200,
+    height: 170,
     backgroundColor: "lightgrey",
     borderRadius: 10,
     marginVertical: 10,
@@ -705,7 +827,7 @@ const styles = StyleSheet.create({
   },
   inviteeText: {
     flexDirection: "row",
-    backgroundColor: "lightblue",
+    backgroundColor: "#E5E8E3",
     paddingVertical: 5,
     paddingHorizontal: 10,
     borderRadius: 10,
@@ -719,6 +841,34 @@ const styles = StyleSheet.create({
     textDecorationLine: "underline",
     paddingBottom: 25,
     alignSelf: "flex-end",
+  },
+  titleText: {
+    color: "#63725A",
+    marginBottom: 5,
+  },
+  boxStyles: {
+    color: "#63725A",
+    borderColor: "#63725A",
+    paddingHorizontal: 8,
+  },
+  inputStyles: {
+    color: "#000",
+    paddingLeft: 8,
+  },
+  dropdownStyles: {
+    color: "#63725A",
+    // marginBottom: 10,
+  },
+  datePicker: {
+    width: "100%",
+    alignItems: "center",
+    // paddingHorizontal: 44,
+    // color: "#63725A",
+  },
+  dateWrapper: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
 });
 

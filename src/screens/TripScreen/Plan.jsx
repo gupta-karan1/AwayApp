@@ -4,6 +4,7 @@ import { useRoute } from "@react-navigation/native";
 import Itinerary from "./Itinerary";
 import Saved from "./Saved";
 import { useState } from "react";
+import GlobalStyles from "../../GlobalStyles";
 
 // Component to render Plan section
 const Plan = () => {
@@ -32,13 +33,15 @@ const Plan = () => {
               selectedItem === "Itinerary" && styles.selected,
             ]}
           >
-            <Text style={styles.text}>Itinerary</Text>
+            <Text style={[styles.text, GlobalStyles.bodySmallRegular]}>
+              Itinerary
+            </Text>
           </Pressable>
           <Pressable
             onPress={goToSaved}
             style={[styles.button, selectedItem === "Saved" && styles.selected]}
           >
-            <Text style={styles.text}>Saved</Text>
+            <Text style={[styles.text, GlobalStyles.body]}>Saved</Text>
           </Pressable>
         </View>
       </View>
@@ -70,7 +73,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: "row", // To make the buttons appear side by side
-    padding: 15,
+    padding: 10,
     justifyContent: "flex-start",
     alignItems: "center",
   },

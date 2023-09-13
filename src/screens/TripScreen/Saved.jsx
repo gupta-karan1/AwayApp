@@ -146,20 +146,21 @@ const Saved = ({ tripId, userId }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <View>
       <View>
         {isLoading && <ActivityIndicator size="large" />}
         {savedPlaces.length === 0 && !isLoading && (
           <Pressable
-            style={styles.instructionText}
+            style={styles.emptyContainer}
             onPress={() => {
               Navigation.navigate("FindStack");
               setModalVisible(false);
             }}
           >
-            <Text>
-              You have no saved places. Go to the Find Section to add places.
+            <Text style={GlobalStyles.bodySmallRegular}>
+              You have no Saved places
             </Text>
+            <Text style={styles.navText}>Go to Find</Text>
           </Pressable>
         )}
         {!isLoading && savedPlaces.length > 0 && (
@@ -237,5 +238,20 @@ const styles = StyleSheet.create({
     backgroundColor: "lightgrey",
     margin: 10,
     borderRadius: 10,
+  },
+  emptyContainer: {
+    // flex: 1,
+    // justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#E5E8E3",
+    borderRadius: 10,
+    marginHorizontal: 10,
+    // marginTop: 10,
+    padding: 20,
+    marginBottom: 20,
+  },
+  navText: {
+    textDecorationLine: "underline",
+    color: "#63725A",
   },
 });

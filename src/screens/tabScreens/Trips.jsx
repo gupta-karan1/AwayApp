@@ -287,9 +287,10 @@ const Trips = () => {
       {loading && <ActivityIndicator size="large" />}
       {!loading && tripData.length === 0 && invitedTrips.length === 0 && (
         <Pressable style={styles.emptyContainer} onPress={handleAddTrip}>
-          <Text style={{ textAlign: "center" }}>
-            You don't have any trips yet. Start planning your first trip now!
+          <Text style={GlobalStyles.bodySmallRegular}>
+            Start planning your next trip!
           </Text>
+          <Text style={styles.navText}>Create a New Trip</Text>
         </Pressable>
       )}
       {!loading && tripData && invitedTrips && (
@@ -388,10 +389,19 @@ const styles = StyleSheet.create({
     backgroundColor: "#E5E8E3",
   },
   emptyContainer: {
-    backgroundColor: "lightgrey",
+    backgroundColor: "#E5E8E3",
     padding: 20,
     borderRadius: 10,
     elevation: 2,
+    alignItems: "center",
+    // marginHorizontal: 10,
+    // marginTop: 10,
+    padding: 20,
+    marginBottom: 20,
+  },
+  navText: {
+    textDecorationLine: "underline",
+    color: "#63725A",
   },
 });
 
