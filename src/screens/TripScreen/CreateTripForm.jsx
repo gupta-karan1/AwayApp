@@ -714,11 +714,7 @@ const CreateTripForm = () => {
         ) : (
           <Pressable
             style={styles.submitButton}
-            onPress={() => {
-              {
-                tripItem ? handleUpdate : handleSubmit;
-              }
-            }}
+            onPress={tripItem ? handleUpdate : handleSubmit}
           >
             <Text
               style={[styles.saveButtonText, GlobalStyles.bodySmallRegular]}

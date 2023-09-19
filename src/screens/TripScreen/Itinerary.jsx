@@ -550,7 +550,7 @@ const Itinerary = ({ startDate, endDate, tripId, userId, invitees }) => {
                     updateCellsBatchingPeriod={100} // Increase time between renders
                     windowSize={2} // Reduce the window size
                   />
-                  <View style={styles.modalFooter}>
+                  <View>
                     <Pressable
                       style={styles.submitButton}
                       title="Save"
@@ -686,7 +686,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     alignItems: "center",
     backgroundColor: "rgba(0,0,0,0.6)",
-    width: "100%",
+    // width: "100%",
   },
   modalView: {
     backgroundColor: "#fff",
@@ -724,12 +724,11 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     alignItems: "center",
     marginTop: 15,
+    marginBottom: 40,
+    // width: "100%",
   },
   submitText: {
     color: "#EFFBB7",
-  },
-  modalFooter: {
-    width: "100%",
   },
   emptyContainer: {
     alignItems: "center",
