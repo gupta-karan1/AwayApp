@@ -9,6 +9,9 @@ import {
   Text,
   Image,
   Pressable,
+  ScrollView,
+  Modal,
+  Keyboard,
 } from "react-native";
 import React, { useState } from "react";
 import { useAuth } from "../../../hooks/useAuth";
@@ -18,6 +21,9 @@ import * as ImagePicker from "expo-image-picker";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { FIREBASE_STORAGE } from "../../../firebaseConfig";
 import { MaterialIcons } from "@expo/vector-icons";
+import GlobalStyles from "../../GlobalStyles";
+import { Ionicons } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 
 const Register = () => {
   // State variables to store user input
@@ -26,6 +32,7 @@ const Register = () => {
   const [userName, setUserName] = useState("");
   const [coverImage, setCoverImage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
 
   // Custom hook to register user
   const { register, loading, addDisplayName, addPhotoURL } = useAuth();
@@ -152,75 +159,134 @@ const Register = () => {
 
   return (
     <KeyboardAvoidingView style={styles.container} keyboardVerticalOffset={40}>
-      {isLoading ? (
-        <ActivityIndicator />
-      ) : (
-        <View>
-          <View style={styles.profileContainer}>
-            <Image
-              source={
-                coverImage
-                  ? { uri: coverImage }
-                  : require("../../../assets/profileDefault.png")
-              }
-              style={styles.profileImg}
-            />
-            <View style={styles.iconContainer}>
-              <Pressable onPress={pickImage}>
-                <MaterialIcons
-                  name="add-photo-alternate"
-                  size={30}
-                  color="grey"
-                />
-              </Pressable>
-              <Pressable onPress={clickImage}>
-                <MaterialIcons name="add-a-photo" size={28} color="grey" />
-              </Pressable>
+      <ScrollView
+        contentContainerStyle={styles.scrollViewContent}
+        showsVerticalScrollIndicator={false}
+      >
+        {isLoading ? (
+          <ActivityIndicator />
+        ) : (
+          <Pressable onPress={() => setModalVisible(true)}>
+            <View style={styles.profileContainer}>
+              {/* <Text style={[styles.profileText, GlobalStyles.bodySmallRegular]}>
+                Add Profile Image:
+              </Text> */}
+              <Image
+                source={
+                  coverImage
+                    ? { uri: coverImage }
+                    : require("../../../assets/profileDefault.png")
+                }
+                style={styles.profileImg}
+              />
+
+              <Feather
+                name="plus"
+                size={24}
+                color="#F7F5F3"
+                style={styles.saveButton}
+              />
             </View>
-          </View>
-        </View>
-      )}
-      <View style={styles.inputContainer}>
-        <Text style={styles.label}>Username:</Text>
-        <TextInput
-          placeholder="Username"
-          value={userName}
-          onChangeText={(text) => setUserName(text)}
-          style={styles.input}
-        />
-      </View>
-
-      <View style={styles.inputContainer}>
-        <Text style={styles.label}>Email:</Text>
-        <TextInput
-          placeholder="Email"
-          value={email}
-          onChangeText={(text) => setEmail(text)}
-          style={styles.input}
-          autoCapitalize="none"
-          inputMode="email"
-        />
-        <Text style={styles.label}>Password:</Text>
-        <TextInput
-          placeholder="Password"
-          value={password}
-          onChangeText={(text) => setPassword(text)}
-          style={styles.input}
-          secureTextEntry
-        />
-      </View>
-
-      {loading ? (
-        <ActivityIndicator size="large" color="#0782F9" />
-      ) : (
-        <View style={styles.buttonContainer}>
-          <Button
-            title={"Register"}
-            onPress={handleRegister}
-            style={styles.button}
+          </Pressable>
+        )}
+        <View style={styles.inputContainer}>
+          <Text style={[styles.label, GlobalStyles.bodySmallRegular]}>
+            Name:
+          </Text>
+          <TextInput
+            placeholder="John Doe"
+            value={userName}
+            onChangeText={(text) => setUserName(text)}
+            style={styles.input}
+            placeholderTextColor="#A6A6A6"
           />
         </View>
-      )}
+
+        <View style={styles.inputContainer}>
+          <Text style={[styles.label, GlobalStyles.bodySmallRegular]}>
+            Email:
+          </Text>
+          <TextInput
+            placeholder="johnDoe@gmail.com"
+            value={email}
+            onChangeText={(text) => setEmail(text)}
+            style={styles.input}
+            autoCapitalize="none"
+            inputMode="email"
+            placeholderTextColor="#A6A6A6"
+          />
+        </View>
+        <View style={styles.inputContainer}>
+          <Text style={[styles.label, GlobalStyles.bodySmallRegular]}>
+            Password:
+          </Text>
+          <TextInput
+            placeholder=""
+            value={password}
+            onChangeText={(text) => setPassword(text)}
+            style={styles.input}
+            secureTextEntry
+            placeholderTextColor="#A6A6A6"
+          />
+        </View>
+
+        {loading ? (
+          <ActivityIndicator size="large" />
+        ) : (
+          <Pressable style={styles.submitButton} onPress={handleRegister}>
+            <Text
+              style={[styles.saveButtonText, GlobalStyles.bodySmallRegular]}
+            >
+              Sign Up
+            </Text>
+          </Pressable>
+        )}
+
+        <Modal
+          animationType="slide"
+          visible={modalVisible}
+          onRequestClose={() => setModalVisible(false)}
+          //   style={styles.modal}
+          presentationStyle="overFullScreen"
+          transparent={true}
+        >
+          <View
+            style={styles.centeredView}
+            onTouchEnd={() => Keyboard.dismiss()}
+          >
+            <View style={styles.modalView}>
+              <View style={styles.modalHeader}>
+                <Text style={GlobalStyles.titleLargeRegular}>Select Image</Text>
+                <Ionicons
+                  name="ios-close"
+                  size={30}
+                  color="black"
+                  onPress={() => setModalVisible(false)}
+                />
+              </View>
+
+              <View style={styles.modalContent}>
+                <Pressable onPress={clickImage} style={styles.modalOption}>
+                  <MaterialIcons name="add-a-photo" size={28} color="#63725A" />
+                  <Text style={GlobalStyles.bodySmallRegular}>
+                    Take a Photo
+                  </Text>
+                </Pressable>
+                <Pressable onPress={pickImage} style={styles.modalOption}>
+                  <MaterialIcons
+                    name="add-photo-alternate"
+                    size={30}
+                    color="#63725A"
+                  />
+                  <Text style={GlobalStyles.bodySmallRegular}>
+                    Upload from Gallery
+                  </Text>
+                </Pressable>
+              </View>
+            </View>
+          </View>
+        </Modal>
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 };
@@ -230,27 +296,46 @@ export default Register;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    paddingHorizontal: 30,
+    backgroundColor: "#fff",
   },
+
   inputContainer: {
     width: "100%",
+    marginBottom: 20,
   },
   input: {
-    backgroundColor: "white",
+    width: "100%",
     paddingHorizontal: 15,
     paddingVertical: 10,
     borderRadius: 10,
-    marginBottom: 20,
-    width: "100%",
+    borderWidth: 1,
+    borderColor: "#63725A",
+  },
+  scrollViewContent: {
+    flexGrow: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 20,
+    paddingVertical: 20,
   },
   buttonContainer: {
     width: "100%",
     marginTop: 15,
   },
+  submitButton: {
+    backgroundColor: "#63725A",
+    paddingVertical: 15,
+    borderRadius: 50,
+    alignItems: "center",
+    marginTop: 15,
+    width: "100%",
+  },
+  saveButtonText: {
+    color: "#EFFBB7",
+  },
   label: {
     marginBottom: 5,
+    color: "#63725A",
   },
   profileImg: {
     borderRadius: 120,
@@ -264,13 +349,7 @@ const styles = StyleSheet.create({
     marginVertical: 15,
   },
   profileContainer: {
-    flexDirection: "row",
-    gap: -20,
-    marginBottom: 15,
-  },
-  iconContainer: {
-    justifyContent: "space-between",
-    paddingVertical: 5,
+    alignSelf: "center",
   },
   image: {
     height: 180,
@@ -284,6 +363,60 @@ const styles = StyleSheet.create({
     objectFit: "cover",
     borderRadius: 10,
     marginBottom: 10,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "flex-end",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.6)",
+  },
+  modalView: {
+    backgroundColor: "#fff",
+    height: "30%",
+    width: "100%",
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    padding: 15,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+    overflow: "hidden",
+  },
+  modalHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+    alignItems: "center",
+    marginBottom: 10,
+    marginHorizontal: 10,
+  },
+  modalContent: {
+    width: "100%",
+  },
+  modalOption: {
+    flexDirection: "row",
+    width: "100%",
+    gap: 10,
+    justifyContent: "flex-start",
+    alignItems: "center",
+    padding: 15,
+    backgroundColor: "#E5E8E3",
+    borderRadius: 20,
+    marginVertical: 10,
+  },
+  saveButton: {
+    position: "absolute",
+    top: 1,
+    right: 1,
+    padding: 5,
+    backgroundColor: "rgba(99, 114, 90, 0.7)",
+    borderRadius: 50,
   },
 });
 

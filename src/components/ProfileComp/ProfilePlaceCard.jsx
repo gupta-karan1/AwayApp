@@ -60,8 +60,8 @@ const ProfilePlaceCard = ({ placeItem, path, onDelete }) => {
           <Ionicons
             onPress={onDelete}
             name="md-trash-outline"
-            size={22}
-            color="black"
+            size={20}
+            color="#000"
           />
         </View>
       </View>
@@ -80,9 +80,9 @@ const styles = StyleSheet.create({
     // marginBottom: 5,
     backgroundColor: "lightgrey",
   },
-  iconBox: {
-    paddingRight: 4,
-  },
+  // iconBox: {
+  //   paddingRight: 4,
+  // },
   cardFooter: {
     flex: 1,
     flexDirection: "row",

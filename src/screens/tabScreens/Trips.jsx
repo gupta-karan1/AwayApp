@@ -290,7 +290,7 @@ const Trips = () => {
           <Text style={GlobalStyles.bodySmallRegular}>
             Start planning your next trip!
           </Text>
-          <Text style={styles.navText}>Create a New Trip</Text>
+          <Text style={styles.navText}>Create a Trip</Text>
         </Pressable>
       )}
       {!loading && tripData && invitedTrips && (

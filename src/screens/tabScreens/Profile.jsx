@@ -181,7 +181,7 @@ export default function Profile() {
           }
           style={styles.backButton}
         >
-          <Feather name="edit-2" size={22} color="black" />
+          <Feather name="edit-2" size={22} color="#000" />
         </Pressable>
       </ImageBackground>
       <View style={styles.textContainer}>
@@ -204,28 +204,39 @@ export default function Profile() {
         />
       )}
 
+      <View style={styles.headerContainer}>
+        <Text style={GlobalStyles.bodyMediumRegular}>My Travel Boards</Text>
+        <Pressable onPress={handleCreateTravelBoard} style={styles.fabButton}>
+          {/* <Feather name="plus" size={20} color="#EFFBB7" /> */}
+          <Text style={[GlobalStyles.bodySmallRegular, styles.fabText]}>
+            Add Board
+          </Text>
+        </Pressable>
+      </View>
+
       {isLoading && <ActivityIndicator size="large" />}
       {travelBoards.length === 0 && !isLoading && (
         <View>
-          <View style={styles.headerContainer}>
-            <Text style={GlobalStyles.bodyMediumBold}>My Travel Boards</Text>
+          {/* <View style={styles.headerContainer}>
+            <Text style={GlobalStyles.bodyMediumRegular}>My Travel Boards</Text>
             <Pressable
               onPress={handleCreateTravelBoard}
               style={styles.fabButton}
             >
-              <Feather name="plus" size={24} color="black" />
-              <Text style={styles.fabText}> Travel Board</Text>
+              <Feather name="plus" size={24} color="#63725A" />
+              <Text style={styles.fabText}> Add Board</Text>
             </Pressable>
-          </View>
+          </View> */}
           <Pressable
             onPress={() =>
               Navigation.navigate("CreateTravelBoard", {
                 userId: user.uid,
               })
             }
-            style={styles.promptText}
+            style={styles.emptyContainer}
           >
-            <Text>Create your first Travel Board for inspiration!</Text>
+            <Text>Create a travel board for inspiration</Text>
+            <Text style={styles.navText}>Add a Board</Text>
           </Pressable>
         </View>
       )}
@@ -244,19 +255,23 @@ export default function Profile() {
             justifyContent: "space-between", // add space between columns
           }}
           showsVerticalScrollIndicator={false} // hide scroll bar
-          contentContainerStyle={{ paddingHorizontal: 15, paddingBottom: 60 }} // add padding to left and right
-          ListHeaderComponent={
-            <View style={styles.headerContainer}>
-              <Text style={GlobalStyles.bodyMediumBold}>My Travel Boards</Text>
-              <Pressable
-                onPress={handleCreateTravelBoard}
-                style={styles.fabButton}
-              >
-                <Feather name="plus" size={24} color="black" />
-                <Text style={styles.fabText}> Travel Board</Text>
-              </Pressable>
-            </View>
-          }
+          contentContainerStyle={{ paddingHorizontal: 15, paddingBottom: 15 }} // add padding to left and right
+          // ListHeaderComponent={
+          //   <View style={styles.headerContainer}>
+          //     <Text style={GlobalStyles.bodyMediumRegular}>
+          //       My Travel Boards
+          //     </Text>
+          //     <Pressable
+          //       onPress={handleCreateTravelBoard}
+          //       style={styles.fabButton}
+          //     >
+          //       {/* <Feather name="plus" size={20} color="#EFFBB7" /> */}
+          //       <Text style={[GlobalStyles.bodySmallRegular, styles.fabText]}>
+          //         Add Board
+          //       </Text>
+          //     </Pressable>
+          //   </View>
+          // }
           renderItem={({ item }) => (
             <Pressable
               style={styles.travelBoard}
@@ -272,15 +287,18 @@ export default function Profile() {
                 style={styles.travelBoardImg}
               />
               <View style={styles.cardFooter}>
-                <Text style={GlobalStyles.bodySmallRegular} numberOfLines={1}>
+                <Text
+                  style={[GlobalStyles.bodyMediumBold, styles.title]}
+                  numberOfLines={1}
+                >
                   {item.title}
                 </Text>
                 <View style={styles.iconBox}>
                   <Ionicons
                     onPress={() => confirmDelete(item.boardId)}
                     name="md-trash-outline"
-                    size={22}
-                    color="black"
+                    size={20}
+                    color="#000"
                   />
                 </View>
               </View>
@@ -300,14 +318,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   textContainer: {
-    backgroundColor: "lightgrey",
+    backgroundColor: "#E5E8E3",
     height: 80,
     alignItems: "flex-start",
     justifyContent: "center",
     paddingLeft: 155,
   },
   headerImage: {
-    height: 140,
+    height: 120,
     width: "100%",
   },
   profileImg: {
@@ -315,15 +333,19 @@ const styles = StyleSheet.create({
     height: 120,
     width: 120,
     position: "absolute",
-    top: 80,
+    top: 65,
     left: 20,
     objectFit: "cover",
+    borderWidth: 5,
+    borderColor: "#E5E8E3",
   },
   headerContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
-    padding: 15,
+    alignItems: "flex-end",
+    // padding: 10,
+    paddingVertical: 15,
+    paddingHorizontal: 15,
   },
   fabButton: {
     flexDirection: "row",
@@ -331,16 +353,24 @@ const styles = StyleSheet.create({
     // position: "absolute",
     padding: 10,
     borderRadius: 10,
-    backgroundColor: "lightblue",
+    backgroundColor: "#63725A",
+    paddingVertical: 12,
+    paddingHorizontal: 20,
     // elevation: 2,
   },
+  saveButton: {
+    backgroundColor: "#63725A",
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+  },
   fabText: {
-    fontSize: 15,
-    color: "black",
+    // fontSize: 15,
+    color: "#EFFBB7",
   },
   travelBoard: {
     width: "48%",
-    marginBottom: 15,
+    marginBottom: 30,
   },
   travelBoardImg: {
     height: 130,
@@ -357,8 +387,11 @@ const styles = StyleSheet.create({
     margin: 10,
     borderRadius: 10,
   },
-  iconBox: {
-    paddingRight: 4,
+  // iconBox: {
+  //   paddingLeft: 4,
+  // },
+  title: {
+    width: "80%",
   },
   cardFooter: {
     flex: 1,
@@ -376,6 +409,25 @@ const styles = StyleSheet.create({
     padding: 8,
     borderRadius: 50,
     backgroundColor: "rgba(255, 255, 255, 0.5)",
+  },
+  emptyContainer: {
+    backgroundColor: "#E5E8E3",
+    padding: 20,
+    borderRadius: 10,
+    elevation: 2,
+    alignItems: "center",
+    // marginHorizontal: 10,
+    // marginTop: 10,
+    padding: 20,
+    marginBottom: 20,
+    marginHorizontal: 15,
+  },
+  navText: {
+    textDecorationLine: "underline",
+    color: "#63725A",
+  },
+  text: {
+    color: "#63725A",
   },
 });
 

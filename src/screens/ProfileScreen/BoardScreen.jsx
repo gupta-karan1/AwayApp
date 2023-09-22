@@ -170,11 +170,10 @@ const BoardScreen = () => {
           ListEmptyComponent={
             <Pressable
               onPress={() => Navigation.navigate("ExploreStackGroup")}
-              style={styles.promptText}
+              style={styles.emptyContainer}
             >
-              <Text>
-                Go to the Explore page to save a place to your travel board!
-              </Text>
+              <Text>Save places in the Explore section</Text>
+              <Text style={styles.navText}>Go to Explore</Text>
             </Pressable>
           }
           ListHeaderComponent={
@@ -327,5 +326,20 @@ const styles = StyleSheet.create({
     padding: 8,
     borderRadius: 50,
     backgroundColor: "rgba(255, 255, 255, 0.5)",
+  },
+  emptyContainer: {
+    backgroundColor: "#E5E8E3",
+    padding: 20,
+    borderRadius: 10,
+    elevation: 2,
+    alignItems: "center",
+    // marginHorizontal: 10,
+    // marginTop: 10,
+    padding: 20,
+    marginBottom: 20,
+  },
+  navText: {
+    textDecorationLine: "underline",
+    color: "#63725A",
   },
 });

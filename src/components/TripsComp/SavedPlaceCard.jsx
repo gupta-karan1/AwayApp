@@ -83,8 +83,8 @@ const SavedPlaceCard = ({ placeItem, onDelete, onDrag }) => {
             <Ionicons
               onPress={onDelete}
               name="md-trash-outline"
-              size={24}
-              color="#63725A"
+              size={20}
+              color="#000"
             />
           </View>
         </View>
