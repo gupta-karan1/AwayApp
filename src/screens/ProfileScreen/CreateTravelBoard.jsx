@@ -119,6 +119,10 @@ const CreateTravelBoard = () => {
       setBoardTitle(title);
       setBoardDescription(description);
       setBoardImage(image);
+
+      Navigation.setOptions({
+        headerTitle: "Edit Board",
+      });
     }
   }, [boardId]);
 
@@ -173,134 +177,133 @@ const CreateTravelBoard = () => {
   };
 
   return (
-    <ScrollView style={styles.outerContainer}>
-      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-        <KeyboardAvoidingView style={styles.container}>
-          <View style={styles.inputContainer}>
-            <Text style={[styles.titleText, GlobalStyles.bodySmallRegular]}>
-              Title:
-            </Text>
+    <KeyboardAvoidingView style={styles.container}>
+      <ScrollView
+        contentContainerStyle={styles.outerContainer}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.inputContainer}>
+          <Text style={[styles.titleText, GlobalStyles.bodySmallRegular]}>
+            Title:
+          </Text>
+          <TextInput
+            label="Travel Board Title"
+            value={boardTitle}
+            onChangeText={(text) => setBoardTitle(text)}
+            style={styles.input}
+            placeholder="My Travel Wishlist"
+            placeholderTextColor="#A6A6A6"
+            allowFontScaling={true}
+          />
+        </View>
+
+        <View style={styles.inputContainer}>
+          <Text style={[styles.titleText, GlobalStyles.bodySmallRegular]}>
+            Description:
+          </Text>
+          <TextInput
+            label="Description"
+            value={boardDescription}
+            onChangeText={(text) => setBoardDescription(text)}
+            style={[styles.descriptionInput, styles.input]}
+            placeholder="Places I would like to visit..."
+            multiline={true}
+            numberOfLines={3}
+            maxwidth={50}
+            maxHeight={110} // Stop submit button from going of screen
+            // returnKeyType="done"
+            placeholderTextColor="#A6A6A6"
+            allowFontScaling={true}
+          />
+        </View>
+
+        <View style={styles.inputContainer}>
+          <Text style={[styles.titleText, GlobalStyles.bodySmallRegular]}>
+            Cover Image:
+          </Text>
+          <View style={styles.searchContainer}>
             <TextInput
-              label="Travel Board Title"
-              value={boardTitle}
-              onChangeText={(text) => setBoardTitle(text)}
-              style={styles.input}
-              placeholder="My Travel Wishlist"
-              placeholderTextColor="#A6A6A6"
+              label="Search for a cover image"
+              value={searchImage}
+              onChangeText={(text) => setSearchImage(text)}
+              onSubmitEditing={fetchImages}
+              style={[styles.searchInput, styles.input]}
+              reg
+              placeholder="Search with a keyword"
               allowFontScaling={true}
+              placeholderTextColor="#A6A6A6"
+            />
+
+            <EvilIcons
+              name="search"
+              size={27}
+              color="#63725A"
+              style={styles.searchIcon}
+              onPress={() => {
+                fetchImages();
+                // Keyboard.dismiss();
+              }}
             />
           </View>
 
-          <View style={styles.inputContainer}>
-            <Text style={[styles.titleText, GlobalStyles.bodySmallRegular]}>
-              Description:
-            </Text>
-            <TextInput
-              label="Description"
-              value={boardDescription}
-              onChangeText={(text) => setBoardDescription(text)}
-              style={[styles.descriptionInput, styles.input]}
-              placeholder="Places I would like to visit..."
-              multiline={true}
-              numberOfLines={3}
-              maxwidth={50}
-              maxHeight={110} // Stop submit button from going of screen
-              // returnKeyType="done"
-              placeholderTextColor="#A6A6A6"
-              allowFontScaling={true}
-            />
-          </View>
-
-          <View style={styles.inputContainer}>
-            <Text style={[styles.titleText, GlobalStyles.bodySmallRegular]}>
-              Cover Image:
-            </Text>
-            <View style={styles.searchContainer}>
-              <TextInput
-                label="Search for a cover image"
-                value={searchImage}
-                onChangeText={(text) => setSearchImage(text)}
-                onSubmitEditing={fetchImages}
-                style={[styles.searchInput, styles.input]}
-                reg
-                placeholder="Search with a keyword"
-                allowFontScaling={true}
-                placeholderTextColor="#A6A6A6"
-              />
-
-              <EvilIcons
-                name="search"
-                size={27}
-                color="black"
-                style={styles.searchIcon}
-                onPress={() => {
-                  fetchImages();
-                  Keyboard.dismiss();
-                }}
-              />
-            </View>
-
-            {searchResultsLoading && <ActivityIndicator />}
-            {searchResults && !searchResultsLoading && (
-              <>
-                {searchResults.length > 1 && (
-                  <FlatList
-                    data={searchResults}
-                    renderItem={({ item }) => (
-                      <Pressable
-                        onPress={() => handleImageSelection(item)}
-                        key={item.urls.small}
-                        style={styles.imageWrapper}
-                      >
-                        <Image
-                          source={{ uri: item.urls.small }}
-                          style={styles.image}
-                        />
-                      </Pressable>
-                    )}
-                    keyExtractor={(item) => item.id}
-                    horizontal
-                    ItemSeparatorComponent={() => (
-                      <View style={{ width: 10 }} />
-                    )}
-                    showsHorizontalScrollIndicator={false}
-                  />
-                )}
-                {searchResults.length === 1 && (
-                  <Image
-                    source={{ uri: selectedImage.urls.small }}
-                    style={styles.selectedImage}
-                  />
-                )}
-                {searchResults.length === 0 && boardImage !== "" && boardId && (
-                  <Image
-                    source={{ uri: boardImage }}
-                    style={styles.selectedImage}
-                  />
-                )}
-              </>
-            )}
-          </View>
-          {loading && <ActivityIndicator />}
-          {!loading && (
-            // <Button
-            //   title={boardId ? "Update Board" : "Save Board"}
-            //   onPress={boardId ? handleUpdateBoard : handleSubmit}
-            // />
-            <Pressable
-              style={styles.submitButton}
-              onPress={boardId ? handleUpdateBoard : handleSubmit}
-            >
-              <Text
-                style={[styles.saveButtonText, GlobalStyles.bodySmallRegular]}
-              >
-                {boardId ? "Update Board" : "Create Board"}
-              </Text>
-            </Pressable>
+          {searchResultsLoading && <ActivityIndicator />}
+          {searchResults && !searchResultsLoading && (
+            <>
+              {searchResults.length > 1 && (
+                <FlatList
+                  data={searchResults}
+                  renderItem={({ item }) => (
+                    <Pressable
+                      onPress={() => handleImageSelection(item)}
+                      key={item.urls.small}
+                      style={styles.imageWrapper}
+                    >
+                      <Image
+                        source={{ uri: item.urls.small }}
+                        style={styles.image}
+                      />
+                    </Pressable>
+                  )}
+                  keyExtractor={(item) => item.id}
+                  horizontal
+                  ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
+                  showsHorizontalScrollIndicator={false}
+                />
+              )}
+              {searchResults.length === 1 && (
+                <Image
+                  source={{ uri: selectedImage.urls.small }}
+                  style={styles.selectedImage}
+                />
+              )}
+              {searchResults.length === 0 && boardImage !== "" && boardId && (
+                <Image
+                  source={{ uri: boardImage }}
+                  style={styles.selectedImage}
+                />
+              )}
+            </>
           )}
-        </KeyboardAvoidingView>
-      </TouchableWithoutFeedback>
-    </ScrollView>
+        </View>
+        {loading && <ActivityIndicator />}
+        {!loading && (
+          // <Button
+          //   title={boardId ? "Update Board" : "Save Board"}
+          //   onPress={boardId ? handleUpdateBoard : handleSubmit}
+          // />
+          <Pressable
+            style={styles.submitButton}
+            onPress={boardId ? handleUpdateBoard : handleSubmit}
+          >
+            <Text
+              style={[styles.saveButtonText, GlobalStyles.bodySmallRegular]}
+            >
+              {boardId ? "Update Board" : "Create Board"}
+            </Text>
+          </Pressable>
+        )}
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -308,14 +311,16 @@ export default CreateTravelBoard;
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: "#fff",
     flex: 1,
-    justifyContent: "flex-start",
-    alignItems: "center",
-    paddingHorizontal: 20,
-    paddingVertical: 20,
   },
   outerContainer: {
-    backgroundColor: "#fff",
+    paddingHorizontal: 20,
+    paddingVertical: 20,
+    justifyContent: "flex-start",
+    alignItems: "center",
+    width: "100%",
+    flexGrow: 1,
   },
   inputContainer: {
     width: "100%",
@@ -340,8 +345,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     alignItems: "center",
-    marginBottom: 10,
-    marginTop: 20,
+    // marginBottom: 10,
+    marginTop: 15,
     justifyContent: "center",
   },
   image: {
@@ -357,7 +362,7 @@ const styles = StyleSheet.create({
     objectFit: "cover",
     borderRadius: 10,
     marginBottom: 10,
-    marginTop: 30,
+    marginTop: 15,
   },
   submitButton: {
     backgroundColor: "#63725A",

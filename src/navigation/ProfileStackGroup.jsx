@@ -17,6 +17,24 @@ const ProfileStack = createNativeStackNavigator(); // create stack navigator
 
 // create profile stack group
 const ProfileStackGroup = () => {
+  const signOutConfirm = () => {
+    // Create a confirmation alert
+    Alert.alert(
+      "Sign-out",
+      "Are you sure you want to sign-out?",
+      [
+        {
+          text: "Cancel",
+          // onPress: () => console.log("Cancel Pressed"),
+          style: "cancel",
+        },
+        // If the user confirms, sign out the user
+        { text: "OK", onPress: () => handleLogout() },
+      ],
+      { cancelable: false }
+    );
+  };
+
   const handleLogout = async () => {
     try {
       await signOut(FIREBASE_AUTH);
@@ -40,32 +58,22 @@ const ProfileStackGroup = () => {
         component={Profile}
         options={{
           headerRight: () => (
-            <Pressable onPress={handleLogout}>
-              <MaterialIcons name="logout" size={24} color="black" />
+            <Pressable onPress={signOutConfirm}>
+              <MaterialIcons name="logout" size={24} color="#63725A" />
             </Pressable>
           ),
           // headerLeft: null,
         }}
       />
-      {/* <ProfileStack.Screen
-        name="SavePlaceModal"
-        component={SavePlaceModal}
-        options={{
-          title: "Save Place",
-          animation: "slide_from_bottom",
-          // backBehavior: "initialRoute",
-        }}
-        // initialParams={{
-        //   modalVisible: true,
-        // }}
-      /> */}
+
       <ProfileStack.Screen
         name="CreateTravelBoard"
         component={CreateTravelBoard}
         options={{
-          headerTitle: "Create Board",
+          headerTitle: "Add Board",
           animation: "slide_from_bottom",
         }}
+        // options={({ route }) => ({ title: route.params.name })}
       />
       <ProfileStack.Screen
         name="EditProfile"

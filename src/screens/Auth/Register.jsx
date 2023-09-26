@@ -356,14 +356,14 @@ const styles = StyleSheet.create({
     width: 250,
     borderRadius: 10,
   },
-  selectedImage: {
-    alignSelf: "center",
-    height: 180,
-    width: 250,
-    objectFit: "cover",
-    borderRadius: 10,
-    marginBottom: 10,
-  },
+  // selectedImage: {
+  //   alignSelf: "center",
+  //   height: 180,
+  //   width: 250,
+  //   objectFit: "cover",
+  //   borderRadius: 10,
+  //   marginBottom: 10,
+  // },
   centeredView: {
     flex: 1,
     justifyContent: "flex-end",

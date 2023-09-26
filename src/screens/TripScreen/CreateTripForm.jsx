@@ -332,6 +332,10 @@ const CreateTripForm = () => {
       setTripType(tripItem.tripType);
       setInvitees(tripItem.invitees);
       setCoverImage(tripItem.coverImage);
+
+      navigation.setOptions({
+        headerTitle: "Edit Trip",
+      });
     }
   }, [tripItem]);
 
@@ -719,7 +723,7 @@ const CreateTripForm = () => {
             <Text
               style={[styles.saveButtonText, GlobalStyles.bodySmallRegular]}
             >
-              {tripItem ? "Update Trip" : "Create Trip"}
+              {tripItem ? "Edit Trip" : "Add Trip"}
             </Text>
           </Pressable>
         )}

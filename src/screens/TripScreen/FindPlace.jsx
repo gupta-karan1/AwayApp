@@ -96,19 +96,19 @@ const FindPlace = ({ route }) => {
       await addDoc(collection(tripRef, "saved"), placeData);
 
       Alert.alert(
-        "Saved to Plan Section",
-        "Plan your trip or continue exploring!",
+        "Added to Wishlist",
+        // "",
         [
-          {
-            text: "Continue",
-            onPress: () => {},
-            style: "cancel",
-            text: "Plan",
-            onPress: () => {
-              //navigate to the saved places screen
-              navigation.navigate("Plan");
-            },
-          },
+          // {
+          //   text: "Continue",
+          //   onPress: () => {},
+          //   style: "cancel",
+          //   text: "Plan",
+          //   onPress: () => {
+          //     //navigate to the saved places screen
+          //     navigation.navigate("Plan");
+          //   },
+          // },
           {
             text: "Continue",
             onPress: () => {},
@@ -179,7 +179,11 @@ const FindPlace = ({ route }) => {
                 <ActivityIndicator size="large" />
               ) : (
                 <Pressable style={styles.saveButton} onPress={savePlace}>
-                  <Text style={styles.buttonText}>Save Place</Text>
+                  <Text
+                    style={[styles.buttonText, GlobalStyles.bodySmallRegular]}
+                  >
+                    Add Place
+                  </Text>
                 </Pressable>
               )}
             </View>
@@ -325,6 +329,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 250,
     marginBottom: 15,
+    marginTop: 20,
   },
   subtitleText: {
     marginTop: 5,

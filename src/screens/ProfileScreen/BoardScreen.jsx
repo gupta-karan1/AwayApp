@@ -8,6 +8,8 @@ import {
   ImageBackground,
   TouchableOpacity,
   Pressable,
+  ScrollView,
+  KeyboardAvoidingView,
 } from "react-native";
 import React, { useState, useCallback } from "react";
 import { useFocusEffect, useRoute } from "@react-navigation/native";
@@ -148,7 +150,7 @@ const BoardScreen = () => {
   const Navigation = useNavigation();
 
   return (
-    <View>
+    <KeyboardAvoidingView style={styles.screen}>
       {loading && <ActivityIndicator size="large" />}
       {!loading && (
         <FlatList
@@ -165,7 +167,10 @@ const BoardScreen = () => {
             justifyContent: "space-between", // add space between columns
           }}
           showsVerticalScrollIndicator={false} // hide scroll bar
-          contentContainerStyle={{ paddingHorizontal: 15 }} // add padding to left and right
+          contentContainerStyle={{
+            paddingHorizontal: 15,
+            backgroundColor: "#fff",
+          }} // add padding to left and right
           // List header component to display the article details
           ListEmptyComponent={
             <Pressable
@@ -188,15 +193,15 @@ const BoardScreen = () => {
                   style={styles.image}
                 >
                   <Pressable
-                    onPress={() =>
+                    onPress={() => {
                       Navigation.navigate("CreateTravelBoard", {
                         boardId: boardId,
                         title: title,
                         description: description,
                         image: image,
                         userId: userId,
-                      })
-                    }
+                      });
+                    }}
                     style={styles.backButton}
                   >
                     <Feather name="edit-2" size={22} color="black" />
@@ -206,34 +211,6 @@ const BoardScreen = () => {
               <Text style={[GlobalStyles.titleLargeRegular, styles.titleText]}>
                 {title}
               </Text>
-              {/* {showFullText ? (
-                <View>
-                  <Text
-                    style={[GlobalStyles.bodySmallRegular, styles.bodyText]}
-                  >
-                    {description}
-                  </Text>
-                  <TouchableOpacity onPress={toggleFullText}>
-                    <Text style={[styles.para, GlobalStyles.bodySmallRegular]}>
-                      Read Less
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              ) : (
-                <View>
-                  <Text
-                    style={[GlobalStyles.bodySmallRegular, styles.bodyText]}
-                  >
-                    {description.slice(0, 50)}
-                    {"... "}
-                  </Text>
-                  <TouchableOpacity onPress={toggleFullText}>
-                    <Text style={[GlobalStyles.bodySmallRegular, styles.para]}>
-                      Read More
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              )} */}
               {description ? (
                 showFullText ? (
                   <View>
@@ -272,13 +249,18 @@ const BoardScreen = () => {
           }
         />
       )}
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
 export default BoardScreen;
 
 const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+    flexGrow: 1,
+    backgroundColor: "#fff",
+  },
   container: {
     flex: 1,
     paddingVertical: 20,

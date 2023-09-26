@@ -41,7 +41,9 @@ const Plan = () => {
             onPress={goToSaved}
             style={[styles.button, selectedItem === "Saved" && styles.selected]}
           >
-            <Text style={[styles.text, GlobalStyles.body]}>Saved</Text>
+            <Text style={[styles.text, GlobalStyles.bodySmallRegular]}>
+              Wishlist
+            </Text>
           </Pressable>
         </View>
       </View>

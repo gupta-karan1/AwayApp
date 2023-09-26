@@ -66,19 +66,19 @@ const FindPlaceCard = ({ placeItem, path, tripId, userId }) => {
       await addDoc(collection(tripRef, "saved"), placeData);
 
       Alert.alert(
-        "Saved to Plan Section",
-        "Plan your trip or continue exploring!",
+        "Added to Wishlist",
+        "You can view the wishlist in Plan",
         [
-          {
-            text: "Continue",
-            onPress: () => {},
-            style: "cancel",
-            text: "Plan",
-            onPress: () => {
-              //navigate to the saved places screen
-              navigation.navigate("Plan");
-            },
-          },
+          // {
+          //   text: "Continue",
+          //   onPress: () => {},
+          //   style: "cancel",
+          //   text: "Plan",
+          //   onPress: () => {
+          //     //navigate to the saved places screen
+          //     navigation.navigate("Plan");
+          //   },
+          // },
           {
             text: "Continue",
             onPress: () => {},

@@ -290,7 +290,7 @@ const Trips = () => {
           <Text style={GlobalStyles.bodySmallRegular}>
             Start planning your next trip!
           </Text>
-          <Text style={styles.navText}>Create a Trip</Text>
+          <Text style={styles.navText}>Add a Trip</Text>
         </Pressable>
       )}
       {!loading && tripData && invitedTrips && (
@@ -319,7 +319,7 @@ const Trips = () => {
       {/* FAB to add a new trip */}
       <Pressable style={styles.fabButton} onPress={handleAddTrip}>
         <Text style={[styles.fabText, GlobalStyles.bodyMediumBold]}>
-          Create Trip
+          Add Trip
         </Text>
       </Pressable>
     </View>

@@ -44,8 +44,8 @@ const Tabs = () => {
           // alignContent: "center",
           // paddingBottom: 10,
           // backgroundColor: "#F2F2F2",
-          borderTopWidth: 1,
-          elevation: 5,
+          // borderTopWidth: 1,
+          // elevation: 2,
         },
         tabBarLabelStyle: {
           // style tab bar label

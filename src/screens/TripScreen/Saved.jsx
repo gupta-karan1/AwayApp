@@ -177,7 +177,9 @@ const Saved = ({ tripId, userId }) => {
             windowSize={3}
             ListHeaderComponent={
               <View style={styles.headerContainer}>
-                <Text style={GlobalStyles.titleLargeRegular}>Saved Places</Text>
+                <Text style={GlobalStyles.titleLargeRegular}>
+                  Places to Visit
+                </Text>
                 <TouchableOpacity
                   style={styles.mapButton}
                   title="View Map"

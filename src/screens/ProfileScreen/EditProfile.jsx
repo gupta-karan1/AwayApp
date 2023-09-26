@@ -10,6 +10,9 @@ import {
   Image,
   Pressable,
   FlatList,
+  Modal,
+  ScrollView,
+  Keyboard,
 } from "react-native";
 import React, { useState, useEffect, useContext } from "react";
 import {
@@ -29,6 +32,11 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { updateProfile } from "firebase/auth";
 import { AuthContext } from "../../../hooks/AuthContext";
 import { UNSPLASH_ACCESS_KEY } from "@env";
+import GlobalStyles from "../../GlobalStyles";
+import { Feather } from "@expo/vector-icons";
+
+import { Ionicons } from "@expo/vector-icons";
+import { EvilIcons } from "@expo/vector-icons";
 
 const EditProfile = () => {
   const [userName, setUserName] = useState("");
@@ -40,6 +48,7 @@ const EditProfile = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [searchResultsLoading, setSearchResultsLoading] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
 
   const { user } = useContext(AuthContext);
 
@@ -206,9 +215,10 @@ const EditProfile = () => {
       const images = await data.json();
       setSearchResults(images.results);
     } catch (error) {
-      console.log(error);
+      Alert.alert("No images found", error.message);
     } finally {
       setSearchResultsLoading(false);
+      Keyboard.dismiss();
     }
   };
 
@@ -221,110 +231,207 @@ const EditProfile = () => {
 
   return (
     <KeyboardAvoidingView style={styles.container} keyboardVerticalOffset={40}>
-      {isLoading ? (
-        <ActivityIndicator />
-      ) : (
-        <View>
-          <View style={styles.profileContainer}>
-            <Image
-              source={
-                coverImage
-                  ? { uri: coverImage }
-                  : require("../../../assets/profileDefault.png")
-              }
-              style={styles.profileImg}
-            />
-            <View style={styles.iconContainer}>
-              <Pressable onPress={pickImage}>
-                <MaterialIcons
-                  name="add-photo-alternate"
-                  size={30}
-                  color="grey"
-                />
-              </Pressable>
-              <Pressable onPress={clickImage}>
-                <MaterialIcons name="add-a-photo" size={28} color="grey" />
-              </Pressable>
+      <ScrollView
+        contentContainerStyle={styles.scrollViewContent}
+        showsVerticalScrollIndicator={false}
+      >
+        {isLoading ? (
+          <ActivityIndicator />
+        ) : (
+          <Pressable onPress={() => setModalVisible(true)}>
+            <View style={styles.profileContainer}>
+              {/* <Text style={[styles.profileText, GlobalStyles.bodySmallRegular]}>
+            Add Profile Image:
+          </Text> */}
+              <Image
+                source={
+                  coverImage
+                    ? { uri: coverImage }
+                    : require("../../../assets/profileDefault.png")
+                }
+                style={styles.profileImg}
+              />
+
+              <Feather
+                name="plus"
+                size={24}
+                color="#EFFBB7"
+                style={styles.saveButton}
+              />
+            </View>
+          </Pressable>
+          // <View>
+          //   <View style={styles.profileContainer}>
+          //     <Image
+          //       source={
+          //         coverImage
+          //           ? { uri: coverImage }
+          //           : require("../../../assets/profileDefault.png")
+          //       }
+          //       style={styles.profileImg}
+          //     />
+          //     <View style={styles.iconContainer}>
+          //       <Pressable onPress={pickImage}>
+          //         <MaterialIcons
+          //           name="add-photo-alternate"
+          //           size={30}
+          //           color="grey"
+          //         />
+          //       </Pressable>
+          //       <Pressable onPress={clickImage}>
+          //         <MaterialIcons name="add-a-photo" size={28} color="grey" />
+          //       </Pressable>
+          //     </View>
+          //   </View>
+          // </View>
+        )}
+        <View style={styles.inputContainer}>
+          <Text style={[styles.label, GlobalStyles.bodySmallRegular]}>
+            Name:
+          </Text>
+          <TextInput
+            placeholder="John Doe"
+            value={userName}
+            onChangeText={(text) => setUserName(text)}
+            style={styles.input}
+            placeholderTextColor="#A6A6A6"
+          />
+        </View>
+
+        <View style={styles.inputContainer}>
+          <View>
+            <Text style={[styles.label, GlobalStyles.bodySmallRegular]}>
+              Cover Image:
+            </Text>
+            <View style={styles.searchContainer}>
+              <TextInput
+                label="Search for a cover image"
+                value={searchImage}
+                onChangeText={(text) => setSearchImage(text)}
+                onSubmitEditing={fetchImages}
+                style={[styles.searchInput, styles.input]}
+                reg
+                placeholder="Search for a cover image"
+                placeholderTextColor="#A6A6A6"
+              />
+
+              <EvilIcons
+                name="search"
+                size={27}
+                color="#63725A"
+                onPress={() => {
+                  fetchImages();
+                }}
+                style={styles.searchIcon}
+              />
             </View>
           </View>
+
+          {searchResultsLoading && <ActivityIndicator />}
+          {searchResults.length > 1 && (
+            <FlatList
+              data={searchResults}
+              renderItem={({ item }) => (
+                <Pressable
+                  onPress={() => handleImageSelection(item)}
+                  key={item.urls.small}
+                  style={styles.imageWrapper}
+                >
+                  <Image
+                    source={{ uri: item.urls.small }}
+                    style={styles.image}
+                  />
+                </Pressable>
+              )}
+              contentContainerStyle={{ alignItems: "center" }}
+              keyExtractor={(item) => item.id}
+              horizontal
+              ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
+              showsHorizontalScrollIndicator={false}
+            />
+          )}
+          {searchResults.length === 1 && (
+            <Image
+              source={{ uri: selectedImage.urls.small }}
+              style={styles.selectedImage}
+            />
+          )}
+
+          {searchResults.length === 0 && (
+            <Image
+              source={
+                boardImage
+                  ? { uri: boardImage }
+                  : require("../../../assets/headerDefault.jpg")
+              }
+              style={styles.selectedImage}
+            />
+          )}
         </View>
-      )}
-      <View style={styles.inputContainer}>
-        <Text style={styles.label}>Username:</Text>
-        <TextInput
-          placeholder="Username"
-          value={userName}
-          onChangeText={(text) => setUserName(text)}
-          style={styles.input}
-        />
-      </View>
 
-      <View style={styles.inputContainer}>
-        <View>
-          <Text style={styles.titleText}>Cover Image:</Text>
-
-          <TextInput
-            label="Search for a cover image"
-            value={searchImage}
-            onChangeText={(text) => setSearchImage(text)}
-            onSubmitEditing={fetchImages}
-            style={[styles.input, styles.inputStyle]}
-            reg
-            placeholder="Search with a keyword"
-          />
-        </View>
-        {/* {userId && searchResults?.length === 0 && (
-          <Text>Nothing found. Try a different query</Text>
-        )} */}
-        {searchResultsLoading && <ActivityIndicator />}
-        {searchResults.length > 1 && (
-          <FlatList
-            data={searchResults}
-            renderItem={({ item }) => (
-              <Pressable
-                onPress={() => handleImageSelection(item)}
-                key={item.urls.small}
-              >
-                <Image source={{ uri: item.urls.small }} style={styles.image} />
-              </Pressable>
-            )}
-            contentContainerStyle={{ alignItems: "center" }}
-            keyExtractor={(item) => item.id}
-            horizontal
-            ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
-            showsHorizontalScrollIndicator={false}
-          />
+        {loading ? (
+          <ActivityIndicator size="large" />
+        ) : (
+          <Pressable style={styles.submitButton} onPress={handleUpdateProfile}>
+            <Text
+              style={[styles.saveButtonText, GlobalStyles.bodySmallRegular]}
+            >
+              Edit Profile
+            </Text>
+          </Pressable>
+          //  <View style={styles.buttonContainer}>
+          //  <Button
+          //     title={"Update Profile"}
+          //     onPress={handleUpdateProfile}
+          //     style={styles.button}
+          //   /> */}
+          // </View>
         )}
-        {searchResults.length === 1 && (
-          <Image
-            source={{ uri: selectedImage.urls.small }}
-            style={styles.selectedImage}
-          />
-        )}
+        <Modal
+          animationType="slide"
+          visible={modalVisible}
+          onRequestClose={() => setModalVisible(false)}
+          //   style={styles.modal}
+          presentationStyle="overFullScreen"
+          transparent={true}
+        >
+          <View
+            style={styles.centeredView}
+            onTouchEnd={() => Keyboard.dismiss()}
+          >
+            <View style={styles.modalView}>
+              <View style={styles.modalHeader}>
+                <Text style={GlobalStyles.titleLargeRegular}>Select Image</Text>
+                <Ionicons
+                  name="ios-close"
+                  size={30}
+                  color="black"
+                  onPress={() => setModalVisible(false)}
+                />
+              </View>
 
-        {searchResults.length === 0 && (
-          <Image
-            source={
-              boardImage
-                ? { uri: boardImage }
-                : require("../../../assets/headerDefault.jpg")
-            }
-            style={styles.selectedImage}
-          />
-        )}
-      </View>
-
-      {loading ? (
-        <ActivityIndicator size="large" color="#0782F9" />
-      ) : (
-        <View style={styles.buttonContainer}>
-          <Button
-            title={"Update Profile"}
-            onPress={handleUpdateProfile}
-            style={styles.button}
-          />
-        </View>
-      )}
+              <View style={styles.modalContent}>
+                <Pressable onPress={clickImage} style={styles.modalOption}>
+                  <MaterialIcons name="add-a-photo" size={28} color="#63725A" />
+                  <Text style={GlobalStyles.bodySmallRegular}>
+                    Take a Photo
+                  </Text>
+                </Pressable>
+                <Pressable onPress={pickImage} style={styles.modalOption}>
+                  <MaterialIcons
+                    name="add-photo-alternate"
+                    size={30}
+                    color="#63725A"
+                  />
+                  <Text style={GlobalStyles.bodySmallRegular}>
+                    Upload from Gallery
+                  </Text>
+                </Pressable>
+              </View>
+            </View>
+          </View>
+        </Modal>
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 };
@@ -334,20 +441,26 @@ export default EditProfile;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    paddingHorizontal: 30,
+    backgroundColor: "#fff",
   },
   inputContainer: {
     width: "100%",
+    marginBottom: 20,
   },
   input: {
-    backgroundColor: "white",
+    width: "100%",
     paddingHorizontal: 15,
     paddingVertical: 10,
     borderRadius: 10,
-    marginBottom: 20,
-    width: "100%",
+    borderWidth: 1,
+    borderColor: "#63725A",
+  },
+  scrollViewContent: {
+    flexGrow: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 20,
+    paddingVertical: 20,
   },
   buttonContainer: {
     width: "100%",
@@ -355,6 +468,7 @@ const styles = StyleSheet.create({
   },
   label: {
     marginBottom: 5,
+    color: "#63725A",
   },
   profileImg: {
     borderRadius: 120,
@@ -367,10 +481,13 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginVertical: 15,
   },
+  // profileContainer: {
+  //   flexDirection: "row",
+  //   gap: -20,
+  //   marginBottom: 15,
+  // },
   profileContainer: {
-    flexDirection: "row",
-    gap: -20,
-    marginBottom: 15,
+    alignSelf: "center",
   },
   iconContainer: {
     justifyContent: "space-between",
@@ -380,6 +497,18 @@ const styles = StyleSheet.create({
     height: 180,
     width: 250,
     borderRadius: 10,
+    objectFit: "cover",
+  },
+  imageWrapper: {
+    // flex: 1,
+    flexDirection: "row",
+    flexWrap: "wrap",
+    alignItems: "center",
+    // marginBottom: 10,
+    // marginTop: 20,
+    // marginBottom: 5,
+    marginTop: 15,
+    justifyContent: "center",
   },
   selectedImage: {
     alignSelf: "center",
@@ -387,7 +516,95 @@ const styles = StyleSheet.create({
     width: 250,
     objectFit: "cover",
     borderRadius: 10,
+    // marginBottom: 5,
+    marginTop: 15,
+  },
+  searchContainer: {
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+    gap: 10,
+  },
+  searchInput: {
+    flex: 1,
+  },
+  searchIcon: {
+    paddingHorizontal: 9,
+    paddingTop: 13,
+    borderRadius: 10,
+    height: "100%",
+    color: "#63725A",
+    borderWidth: 1,
+    borderColor: "#63725A",
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "flex-end",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.6)",
+  },
+  modalView: {
+    backgroundColor: "#fff",
+    height: "30%",
+    width: "100%",
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    padding: 15,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+    overflow: "hidden",
+  },
+  modalHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+    alignItems: "center",
     marginBottom: 10,
+    marginHorizontal: 10,
+  },
+  modalContent: {
+    width: "100%",
+  },
+  modalOption: {
+    flexDirection: "row",
+    width: "100%",
+    gap: 10,
+    justifyContent: "flex-start",
+    alignItems: "center",
+    padding: 15,
+    backgroundColor: "#E5E8E3",
+    borderRadius: 20,
+    marginVertical: 10,
+  },
+  saveButton: {
+    position: "absolute",
+    top: 1,
+    right: 1,
+    padding: 5,
+    backgroundColor: "rgba(99, 114, 90, 0.7)",
+    // backgroundColor: "#F7F5F3",
+    borderRadius: 50,
+    // borderWidth: 1,
+    // borderColor: "#63725A",
+  },
+  submitButton: {
+    backgroundColor: "#63725A",
+    paddingVertical: 15,
+    borderRadius: 50,
+    alignItems: "center",
+    // marginTop: 15,
+    width: "100%",
+  },
+  saveButtonText: {
+    color: "#EFFBB7",
   },
 });
 
