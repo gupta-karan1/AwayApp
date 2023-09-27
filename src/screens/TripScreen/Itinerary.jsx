@@ -32,6 +32,7 @@ import GlobalStyles from "../../GlobalStyles";
 import { useNavigation } from "@react-navigation/native";
 import ViewMapModal from "./ViewMapModal";
 import { useEffect } from "react";
+import { useRoute } from "@react-navigation/native";
 
 // import DraggableFlatList from "react-native-draggable-flatlist";
 // import {
@@ -39,8 +40,11 @@ import { useEffect } from "react";
 //   NestableDraggableFlatList,
 // } from "react-native-draggable-flatlist";
 
-const Itinerary = ({ startDate, endDate, tripId, userId, invitees }) => {
+const Itinerary = () => {
   // State variables for modal visibility and selected place
+  const route = useRoute();
+  const { startDate, endDate, tripId, userId, invitees } = route.params;
+
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedPlaces, setSelectedPlaces] = useState([]);
@@ -275,8 +279,6 @@ const Itinerary = ({ startDate, endDate, tripId, userId, invitees }) => {
           places: selectedPlaces, // Convert selectedPlace to an array
         };
         await addDoc(itineraryRef, itineraryData);
-        // console.log(itineraryData);
-
         Alert.alert("Success", "Place added to the itinerary successfully!");
       }
 
@@ -369,9 +371,9 @@ const Itinerary = ({ startDate, endDate, tripId, userId, invitees }) => {
   );
 
   return (
-    <View>
+    <View style={styles.container}>
       {loading && <ActivityIndicator size={"large"} />}
-      {!loading && savedPlaces.length === 0 && (
+      {!loading && !itineraryData && (
         <Pressable
           style={styles.emptyContainer}
           onPress={() =>
@@ -406,10 +408,12 @@ const Itinerary = ({ startDate, endDate, tripId, userId, invitees }) => {
           keyExtractor={(item, index) => index.toString()}
           // Performance Settings
           removeClippedSubviews={true} // Unmount components when outside of window
-          initialNumToRender={5} // Reduce initial render amount
-          maxToRenderPerBatch={5} // Reduce number in each render batch
-          updateCellsBatchingPeriod={100} // Increase time between renders
+          initialNumToRender={3} // Reduce initial render amount
+          maxToRenderPerBatch={3} // Reduce number in each render batch
+          updateCellsBatchingPeriod={50} // Increase time between renders
           windowSize={2} // Reduce the window size
+          // performance settings for section list
+
           renderItem={({ item, section }) => (
             <View style={styles.item}>
               <FlatList
@@ -454,22 +458,23 @@ const Itinerary = ({ startDate, endDate, tripId, userId, invitees }) => {
               <Text style={[styles.dateTitle, GlobalStyles.titleLargeRegular]}>
                 {title}
               </Text>
-
               <View style={styles.buttonContainer}>
-                <TouchableOpacity
-                  style={styles.mapButton}
-                  title="Map"
-                  onPress={() => {
-                    setSelectedMapDate(title);
-                    const selectedPlaces = data.map((item) => item.places);
-                    setSelectedMapPlaces(selectedPlaces);
-                    setMapModalVisible(true);
-                  }}
-                >
-                  {/* <Ionicons name="map-outline" size={22} color="#EFFBB7" /> */}
-                  <Ionicons name="map-outline" size={22} color="#63725A" />
-                  {/* <Text style={styles.buttonText}>Map</Text> */}
-                </TouchableOpacity>
+                {data.length > 0 && (
+                  <TouchableOpacity
+                    style={styles.mapButton}
+                    title="Map"
+                    onPress={() => {
+                      setSelectedMapDate(title);
+                      const selectedPlaces = data.map((item) => item.places);
+                      setSelectedMapPlaces(selectedPlaces);
+                      setMapModalVisible(true);
+                    }}
+                  >
+                    {/* <Ionicons name="map-outline" size={22} color="#EFFBB7" /> */}
+                    <Ionicons name="map-outline" size={22} color="#63725A" />
+                    {/* <Text style={styles.buttonText}>Map</Text> */}
+                  </TouchableOpacity>
+                )}
 
                 <TouchableOpacity
                   style={styles.button}
@@ -572,9 +577,16 @@ const Itinerary = ({ startDate, endDate, tripId, userId, invitees }) => {
 export default Itinerary;
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    // marginTop: 30,
+    backgroundColor: "#fff",
+    paddingTop: 40,
+  },
   contentContainer: {
     paddingBottom: 80,
     paddingHorizontal: 15,
+    backgroundColor: "#fff",
   },
   checklistItem: {
     flexDirection: "row",
@@ -619,10 +631,11 @@ const styles = StyleSheet.create({
   headerContainer: {
     // flex: 1,
     flexDirection: "row",
-    justifyContent: "space-around",
+    justifyContent: "space-between",
     paddingBottom: 10,
     // width: "100%",
-    alignItems: "center",
+    alignItems: "flex-end",
+    // alignItems: "center",
     backgroundColor: "#fff",
     paddingVertical: 5,
     alignItems: "flex-end",
@@ -634,7 +647,7 @@ const styles = StyleSheet.create({
   button: {
     // backgroundColor: "#63725A",
     backgroundColor: "#E5E8E3",
-    // paddingVertical: 5,
+    paddingVertical: 10,
     paddingHorizontal: 14,
     borderRadius: 10,
     justifyContent: "center",

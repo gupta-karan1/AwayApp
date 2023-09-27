@@ -65,7 +65,7 @@ const SavePlaceModal = ({ placeData, onClose, modalVisible }) => {
   //   } = route.params;
   const { user } = useContext(AuthContext);
 
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   //   const [modalVisible, setModalVisible] = useState(true);
   const [travelBoards, setTravelBoards] = useState([]);
   const [selectedBoards, setSelectedBoards] = useState([]);
@@ -160,7 +160,7 @@ const SavePlaceModal = ({ placeData, onClose, modalVisible }) => {
       setTravelBoards(travelBoards); // Set the travelBoards state variable
     } catch (error) {
       Alert.alert("Error fetching travel boards:", error.message);
-      console.log(error);
+      // console.log(error);
     } finally {
       setIsLoading(false); // hide loading indicator
     }
@@ -304,7 +304,7 @@ const SavePlaceModal = ({ placeData, onClose, modalVisible }) => {
       const q2 = query(
         collection(userRef, "trips"),
         orderBy("createdAt", "desc")
-      ); // Create a query to get all travelBoards for this user
+      );
 
       const querySnapshot2 = await getDocs(q2); // Get the travelBoards documents
 

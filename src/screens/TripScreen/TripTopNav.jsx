@@ -9,6 +9,8 @@ import FindArticle from "./FindArticle";
 import FindPlace from "./FindPlace";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import GlobalStyles from "../../GlobalStyles";
+import Saved from "./Saved";
+import Itinerary from "./Itinerary";
 
 // Create Material Top Tab Navigator instance for Trip Screen
 const Tab = createMaterialTopTabNavigator();
@@ -48,8 +50,8 @@ function TripTopNav({
       }}
     >
       <Tab.Screen
-        name="Plan"
-        component={Plan}
+        name="Itinerary"
+        component={Itinerary}
         initialParams={{
           tripId: tripId,
           invitees: invitees,
@@ -58,7 +60,26 @@ function TripTopNav({
           userId: userId,
         }}
         options={{
-          tabBarLabel: "Plan",
+          tabBarLabel: "Itinerary",
+          lazy: true,
+          tabBarStyle: {
+            marginBottom: -StatusBar.currentHeight || 0,
+            // paddingBottom: StatusBar.currentHeight || 0,
+          },
+        }}
+      />
+
+      <Tab.Screen
+        name="Saved"
+        component={Saved}
+        // tripLocation prop as initial parameter
+        initialParams={{
+          // tripLocation: tripLocation,
+          tripId: tripId,
+          userId: userId,
+        }}
+        options={{
+          tabBarLabel: "Wishlist",
           lazy: true,
           tabBarStyle: {
             marginBottom: -StatusBar.currentHeight || 0,
@@ -74,9 +95,11 @@ function TripTopNav({
           tripLocation: tripLocation,
           tripId: tripId,
           userId: userId,
+          startDate: startDate,
+          endDate: endDate,
         }}
         options={{
-          tabBarLabel: "Find",
+          tabBarLabel: "Explore",
           lazy: true,
           tabBarStyle: {
             marginBottom: -StatusBar.currentHeight || 0,
@@ -110,7 +133,7 @@ function TripTopNav({
 // stack navigator for Find screen and its components like FindDestination and FindArticle and FindPlace
 function FindStack() {
   const route = useRoute();
-  const { tripLocation, tripId, userId } = route.params;
+  const { tripLocation, tripId, userId, startDate, endDate } = route.params;
   return (
     <Stack.Navigator
       screenOptions={{
@@ -145,7 +168,12 @@ function FindStack() {
         options={{
           headerTitle: "Article",
         }}
-        initialParams={{ tripId: tripId, userId: userId }}
+        initialParams={{
+          tripId: tripId,
+          userId: userId,
+          startDate: startDate,
+          endDate: endDate,
+        }}
       />
       <Stack.Screen
         name="FindPlace"
@@ -153,7 +181,12 @@ function FindStack() {
         options={{
           headerTitle: "Place",
         }}
-        initialParams={{ tripId: tripId, userId: userId }}
+        initialParams={{
+          tripId: tripId,
+          userId: userId,
+          startDate: startDate,
+          endDate: endDate,
+        }}
       />
     </Stack.Navigator>
   );

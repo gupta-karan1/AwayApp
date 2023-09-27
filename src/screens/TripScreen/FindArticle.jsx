@@ -34,6 +34,8 @@ const FindArticle = ({ route }) => {
     articleUrl,
     tripId,
     userId,
+    startDate,
+    endDate,
   } = route.params;
 
   // Custom hook to fetch the loading state and place data based on the pathId
@@ -56,6 +58,8 @@ const FindArticle = ({ route }) => {
         path={`${pathId}/${item.placeId}`} // path prop to navigate to the place screen using placeId
         tripId={tripId}
         userId={userId}
+        startDate={startDate}
+        endDate={endDate}
       />
     );
   }, []); // add an empty array as the second argument to useCallback to avoid re-rendering the component

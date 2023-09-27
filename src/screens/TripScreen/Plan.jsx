@@ -25,8 +25,8 @@ const Plan = () => {
   return (
     <View style={styles.container}>
       <View>
-        <View style={styles.buttonContainer}>
-          <Pressable
+        {/* <View style={styles.buttonContainer}> */}
+        {/* <Pressable
             onPress={goToPlan}
             style={[
               styles.button,
@@ -36,16 +36,16 @@ const Plan = () => {
             <Text style={[styles.text, GlobalStyles.bodySmallRegular]}>
               Itinerary
             </Text>
-          </Pressable>
-          <Pressable
+          </Pressable> */}
+        {/* <Pressable
             onPress={goToSaved}
             style={[styles.button, selectedItem === "Saved" && styles.selected]}
           >
             <Text style={[styles.text, GlobalStyles.bodySmallRegular]}>
               Wishlist
             </Text>
-          </Pressable>
-        </View>
+          </Pressable> */}
+        {/* </View> */}
       </View>
       <View>
         {selectedItem === "Itinerary" && (

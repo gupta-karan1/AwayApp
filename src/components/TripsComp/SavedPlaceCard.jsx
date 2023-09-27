@@ -15,6 +15,8 @@ import React from "react";
 import { useState } from "react";
 import { FontAwesome } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
+import { useContext } from "react";
+import { AuthContext } from "../../../hooks/AuthContext";
 
 // display places on the destination screen based on the pathId prop passed to it.
 const SavedPlaceCard = ({ placeItem, onDelete, onDrag }) => {
@@ -39,6 +41,7 @@ const SavedPlaceCard = ({ placeItem, onDelete, onDrag }) => {
   } = placeItem;
 
   // const { loading, singlePlaceData } = usePlaceScreen(pathId);
+  const { user } = useContext(AuthContext);
 
   // State variable to toggle the full text
   const [showFullText, setShowFullText] = useState(false);
@@ -80,12 +83,14 @@ const SavedPlaceCard = ({ placeItem, onDelete, onDrag }) => {
             </View>
           </View>
           <View style={styles.iconBox}>
-            <Ionicons
-              onPress={onDelete}
-              name="md-trash-outline"
-              size={20}
-              color="#000"
-            />
+            {userId === user.uid && (
+              <Ionicons
+                onPress={onDelete}
+                name="md-trash-outline"
+                size={20}
+                color="#000"
+              />
+            )}
           </View>
         </View>
       </Pressable>

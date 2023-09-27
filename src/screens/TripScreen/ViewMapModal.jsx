@@ -112,7 +112,7 @@ const ViewMapModal = ({
                         }}
                         title={place.placeTitle}
                         description={place.placeCategory}
-                        pinColor="green"
+                        pinColor="red"
                         // icon={require("../../../assets/map-marker.png")}
                       />
                     ))}

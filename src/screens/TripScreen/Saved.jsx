@@ -28,8 +28,11 @@ import { Feather } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import ViewMapModal from "./ViewMapModal";
 import { useNavigation } from "@react-navigation/native";
+import { useRoute } from "@react-navigation/native";
 
-const Saved = ({ tripId, userId }) => {
+const Saved = () => {
+  const route = useRoute();
+  const { tripId, userId } = route.params;
   const [savedPlaces, setSavedPlaces] = useState([]); // State to store saved places
   const [isLoading, setIsLoading] = useState(false); // State to show loading indicator
   const [deleteLoading, setDeleteLoading] = useState(false);
@@ -146,7 +149,7 @@ const Saved = ({ tripId, userId }) => {
   };
 
   return (
-    <View>
+    <View style={styles.container}>
       <View>
         {isLoading && <ActivityIndicator size="large" />}
         {savedPlaces.length === 0 && !isLoading && (
@@ -177,9 +180,7 @@ const Saved = ({ tripId, userId }) => {
             windowSize={3}
             ListHeaderComponent={
               <View style={styles.headerContainer}>
-                <Text style={GlobalStyles.titleLargeRegular}>
-                  Places to Visit
-                </Text>
+                <Text style={GlobalStyles.titleLargeRegular}>Wishlist</Text>
                 <TouchableOpacity
                   style={styles.mapButton}
                   title="View Map"
@@ -207,10 +208,17 @@ const Saved = ({ tripId, userId }) => {
 export default Saved;
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingTop: 40,
+    backgroundColor: "#fff",
+  },
   headerContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "flex-end",
     marginBottom: 15,
+    marginTop: -10,
   },
   contentContainer: {
     paddingHorizontal: 15,
