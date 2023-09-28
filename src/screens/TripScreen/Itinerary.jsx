@@ -463,6 +463,9 @@ const Itinerary = () => {
                 {title}
               </Text>
               <View style={styles.buttonContainer}>
+                {/* {Object.keys(data).every(
+                  (title) => data[title].length !== 0 */}
+                {/* {itineraryData[title] && itineraryData[title].length > 0 && ( */}
                 {data.length > 0 && (
                   <TouchableOpacity
                     style={styles.mapButton}
@@ -542,7 +545,7 @@ const Itinerary = () => {
                     Find places to create your Itinerary
                   </Text>
                   <Text style={[GlobalStyles.bodySmallRegular, styles.navText]}>
-                    Go to Find
+                    Go to Explore
                   </Text>
                 </Pressable>
               )}

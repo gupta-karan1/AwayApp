@@ -66,9 +66,7 @@ const ViewMapModal = ({
           <View style={styles.modalView}>
             <View style={styles.modalHeader}>
               <Text style={GlobalStyles.titleLargeRegular}>
-                {selectedMapDate
-                  ? "Map: " + selectedMapDate
-                  : "Map: Saved Places"}
+                {selectedMapDate ? "Map: " + selectedMapDate : "Map: Wishlist"}
               </Text>
               <Ionicons
                 name="close-outline"
