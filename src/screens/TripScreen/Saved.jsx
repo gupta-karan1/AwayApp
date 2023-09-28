@@ -161,9 +161,9 @@ const Saved = () => {
             }}
           >
             <Text style={GlobalStyles.bodySmallRegular}>
-              You have no Saved places
+              You have no places in your Wishlist
             </Text>
-            <Text style={styles.navText}>Go to Find</Text>
+            <Text style={styles.navText}>Go to Explore</Text>
           </Pressable>
         )}
         {!isLoading && savedPlaces.length > 0 && (

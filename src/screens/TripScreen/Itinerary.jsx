@@ -373,22 +373,26 @@ const Itinerary = () => {
   return (
     <View style={styles.container}>
       {loading && <ActivityIndicator size={"large"} />}
-      {!loading && !itineraryData && (
-        <Pressable
-          style={styles.emptyContainer}
-          onPress={() =>
-            Navigation.navigate("FindStack", {
-              screen: "Find",
-            })
-          }
-        >
-          {/* <Text>Find places to build your Itinerary</Text> */}
-          <Text style={[GlobalStyles.bodySmallRegular]}>
-            Find places to create your Itinerary
-          </Text>
-          <Text style={styles.navText}>Go to Find</Text>
-        </Pressable>
-      )}
+      {/* {!loading && !itineraryData && ( */}
+      {!loading &&
+        Object.keys(itineraryData).every(
+          (date) => itineraryData[date].length === 0
+        ) && (
+          <Pressable
+            style={styles.emptyContainer}
+            onPress={() =>
+              Navigation.navigate("FindStack", {
+                screen: "Find",
+              })
+            }
+          >
+            {/* <Text>Find places to build your Itinerary</Text> */}
+            <Text style={[GlobalStyles.bodySmallRegular]}>
+              Find places to create your Itinerary
+            </Text>
+            <Text style={styles.navText}>Go to Explore</Text>
+          </Pressable>
+        )}
       {mapModalVisible && (
         <ViewMapModal
           onClose={() => setMapModalVisible(false)}
