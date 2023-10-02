@@ -236,7 +236,7 @@ export default function Profile() {
             style={styles.emptyContainer}
           >
             <Text>Create a travel board for inspiration</Text>
-            <Text style={styles.navText}>Add a Board</Text>
+            {/* <Text style={styles.navText}>Add a Board</Text> */}
           </Pressable>
         </View>
       )}

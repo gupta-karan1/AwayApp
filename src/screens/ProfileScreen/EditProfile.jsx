@@ -34,9 +34,9 @@ import { AuthContext } from "../../../hooks/AuthContext";
 import { UNSPLASH_ACCESS_KEY } from "@env";
 import GlobalStyles from "../../GlobalStyles";
 import { Feather } from "@expo/vector-icons";
-
 import { Ionicons } from "@expo/vector-icons";
 import { EvilIcons } from "@expo/vector-icons";
+// import { Camera } from "expo-camera";
 
 const EditProfile = () => {
   const [userName, setUserName] = useState("");
@@ -85,7 +85,7 @@ const EditProfile = () => {
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [1, 1],
-      // quality: 1,
+      // cameraType: Camera.Constants.Type.front,
     });
 
     // Check if image is selected
@@ -93,6 +93,7 @@ const EditProfile = () => {
       // Upload slected image to Firebase Storage
       const uploadURL = await uploadImageAsync(result.assets[0].uri);
       setCoverImage(uploadURL); // Set coverImage state to uploaded image URL
+      setModalVisible(false);
       setInterval(() => {
         setIsLoading(false);
       }, 1000); // 1 second delay before hiding loading indicator
@@ -121,6 +122,7 @@ const EditProfile = () => {
       // Upload slected image to Firebase Storage
       const uploadURL = await uploadImageAsync(result.assets[0].uri);
       setCoverImage(uploadURL); // Set coverImage state to uploaded image URL
+      setModalVisible(false);
       setInterval(() => {
         setIsLoading(false);
       }, 1000); // 1 second delay before hiding loading indicator
@@ -290,7 +292,7 @@ const EditProfile = () => {
             Name:
           </Text>
           <TextInput
-            placeholder="John Doe"
+            // placeholder="John Doe"
             value={userName}
             onChangeText={(text) => setUserName(text)}
             style={styles.input}
@@ -376,7 +378,7 @@ const EditProfile = () => {
             <Text
               style={[styles.saveButtonText, GlobalStyles.bodySmallRegular]}
             >
-              Edit Profile
+              Save Profile
             </Text>
           </Pressable>
           //  <View style={styles.buttonContainer}>
@@ -401,7 +403,7 @@ const EditProfile = () => {
           >
             <View style={styles.modalView}>
               <View style={styles.modalHeader}>
-                <Text style={GlobalStyles.titleLargeRegular}>Select Image</Text>
+                <Text style={GlobalStyles.titleLargeRegular}>Add Image</Text>
                 <Ionicons
                   name="ios-close"
                   size={30}
@@ -413,9 +415,7 @@ const EditProfile = () => {
               <View style={styles.modalContent}>
                 <Pressable onPress={clickImage} style={styles.modalOption}>
                   <MaterialIcons name="add-a-photo" size={28} color="#63725A" />
-                  <Text style={GlobalStyles.bodySmallRegular}>
-                    Take a Photo
-                  </Text>
+                  <Text style={GlobalStyles.bodySmallRegular}>Camera</Text>
                 </Pressable>
                 <Pressable onPress={pickImage} style={styles.modalOption}>
                   <MaterialIcons
@@ -423,9 +423,7 @@ const EditProfile = () => {
                     size={30}
                     color="#63725A"
                   />
-                  <Text style={GlobalStyles.bodySmallRegular}>
-                    Upload from Gallery
-                  </Text>
+                  <Text style={GlobalStyles.bodySmallRegular}>Gallery</Text>
                 </Pressable>
               </View>
             </View>
@@ -582,7 +580,7 @@ const styles = StyleSheet.create({
     padding: 15,
     backgroundColor: "#E5E8E3",
     borderRadius: 20,
-    marginVertical: 10,
+    marginVertical: 5,
   },
   saveButton: {
     position: "absolute",

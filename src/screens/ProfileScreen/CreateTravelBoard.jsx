@@ -191,7 +191,7 @@ const CreateTravelBoard = () => {
             value={boardTitle}
             onChangeText={(text) => setBoardTitle(text)}
             style={styles.input}
-            placeholder="My Travel Wishlist"
+            placeholder="Travel Inspiration"
             placeholderTextColor="#A6A6A6"
             allowFontScaling={true}
           />
@@ -298,7 +298,7 @@ const CreateTravelBoard = () => {
             <Text
               style={[styles.saveButtonText, GlobalStyles.bodySmallRegular]}
             >
-              {boardId ? "Update Board" : "Create Board"}
+              {boardId ? "Update Board" : "Submit Board"}
             </Text>
           </Pressable>
         )}
