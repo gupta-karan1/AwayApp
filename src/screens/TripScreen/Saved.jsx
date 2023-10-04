@@ -150,57 +150,55 @@ const Saved = () => {
 
   return (
     <View style={styles.container}>
-      <View>
-        {isLoading && <ActivityIndicator size="large" />}
-        {savedPlaces.length === 0 && !isLoading && (
-          <Pressable
-            style={styles.emptyContainer}
-            onPress={() => {
-              Navigation.navigate("FindStack");
-              setModalVisible(false);
-            }}
-          >
-            <Text style={GlobalStyles.bodySmallRegular}>
-              You have no places in your Wishlist
-            </Text>
-            <Text style={styles.navText}>Go to Explore</Text>
-          </Pressable>
-        )}
-        {!isLoading && savedPlaces.length > 0 && (
-          <FlatList
-            data={savedPlaces}
-            renderItem={renderPlaceCard}
-            keyExtractor={(item) => item.placeId}
-            showsVerticalScrollIndicator={false} // hide scroll bar
-            contentContainerStyle={styles.contentContainer}
-            removeClippedSubviews={true}
-            initialNumToRender={3}
-            maxToRenderPerBatch={3}
-            updateCellsBatchingPeriod={100}
-            windowSize={3}
-            ListHeaderComponent={
-              <View style={styles.headerContainer}>
-                <Text style={GlobalStyles.titleLargeRegular}>Wishlist</Text>
-                <TouchableOpacity
-                  style={styles.mapButton}
-                  title="View Map"
-                  onPress={() => setModalVisible(true)}
-                >
-                  <Ionicons name="map-outline" size={22} color="#63725A" />
-                  {/* <Text>Map</Text> */}
-                </TouchableOpacity>
-                {modalVisible && (
-                  <ViewMapModal
-                    onClose={() => setModalVisible(false)}
-                    modalVisible={modalVisible}
-                    placeData={savedPlaces}
-                  />
-                )}
-              </View>
-            }
-          />
-        )}
-      </View>
+      {isLoading && <ActivityIndicator size="large" />}
+      {savedPlaces.length === 0 && !isLoading && (
+        <Pressable
+          style={styles.emptyContainer}
+          onPress={() => {
+            Navigation.navigate("FindStack");
+            setModalVisible(false);
+          }}
+        >
+          <Text style={GlobalStyles.bodySmallRegular}>
+            You have no places in your Wishlist
+          </Text>
+          <Text style={styles.navText}>Go to Explore</Text>
+        </Pressable>
+      )}
+      {!isLoading && savedPlaces.length > 0 && (
+        <FlatList
+          data={savedPlaces}
+          renderItem={renderPlaceCard}
+          keyExtractor={(item) => item.placeId}
+          showsVerticalScrollIndicator={false} // hide scroll bar
+          contentContainerStyle={styles.contentContainer}
+          removeClippedSubviews={true}
+          initialNumToRender={3}
+          maxToRenderPerBatch={3}
+          updateCellsBatchingPeriod={100}
+          windowSize={3}
+          ListHeaderComponent={
+            <View style={styles.headerContainer}>
+              <Text style={GlobalStyles.titleLargeRegular}>Wishlist</Text>
+              <TouchableOpacity
+                style={styles.mapButton}
+                title="View Map"
+                onPress={() => setModalVisible(true)}
+              >
+                <Ionicons name="map-outline" size={22} color="#63725A" />
+                {/* <Text>Map</Text> */}
+              </TouchableOpacity>
+              {modalVisible && (
+                <ViewMapModal
+                  onClose={() => setModalVisible(false)}
+                  modalVisible={modalVisible}
+                  placeData={savedPlaces}
+                />
+              )}
+            </View>
+          }
+        />
+      )}
     </View>
   );
 };
@@ -209,7 +207,7 @@ export default Saved;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
     paddingTop: 40,
     backgroundColor: "#fff",
   },

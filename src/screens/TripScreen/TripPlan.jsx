@@ -18,6 +18,7 @@ import { Feather } from "@expo/vector-icons";
 import { AuthContext } from "../../../hooks/AuthContext";
 import { LinearGradient } from "expo-linear-gradient";
 import GlobalStyles from "../../GlobalStyles";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 // Component to render Trip Plan screen
 const TripPlan = () => {

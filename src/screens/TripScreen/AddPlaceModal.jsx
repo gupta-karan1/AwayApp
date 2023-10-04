@@ -44,6 +44,11 @@ const AddPlaceModal = ({
   const [selectedDates, setSelectedDates] = useState([]);
   const [wishlistSelected, setWishlistSelected] = useState(false);
 
+  const [datesDisabled, setDatesDisabled] = useState(false); // New state to disable selected dates
+  const [wishlistDisabled, setWishlistDisabled] = useState(false); // New state to disable wishlist
+
+  const [disabledDates, setDisabledDates] = useState([]);
+
   const Navigation = useNavigation();
 
   const startDateObj = moment(startDate, "DD-MMM-YYYY").toDate();
@@ -197,15 +202,16 @@ const AddPlaceModal = ({
           query(collection(tripRef, "saved"), where("placeId", "==", placeId))
         );
 
-        if (!existingPlacesSnapshot.empty) {
-          // Place with the same placeId already exists, throw an error
-          throw new Error("Place is already in the wishlist.");
-        }
+        // if (!existingPlacesSnapshot.empty) {
+        //   // Place with the same placeId already exists, throw an error
+        //   throw new Error("Place is already in the wishlist.");
+        // }
 
         // If placeId is unique, add the place data to the "saved" sub-collection
-        await addDoc(collection(tripRef, "saved"), placeData);
-
-        Alert.alert("Success", "Place added to the wishlist successfully!");
+        if (existingPlacesSnapshot.empty) {
+          await addDoc(collection(tripRef, "saved"), placeData);
+          Alert.alert("Success", "Place added to the wishlist successfully!");
+        }
       }
 
       if (selectedDates.length > 0) {
@@ -235,7 +241,10 @@ const AddPlaceModal = ({
             });
 
             if (existingPlaceIds.includes(placeId)) {
-              throw new Error("Place is already in the itinerary.");
+              // don't add the place to the itinerary if it already exists
+              // don't throw an error
+              // simply continue to the next iteration
+              continue;
             }
 
             const updatedData = {
@@ -268,13 +277,30 @@ const AddPlaceModal = ({
     setWishlistSelected(!wishlistSelected);
   };
 
-  const ChecklistDate = ({ date, isSelected, onToggleSelectionDate }) => {
+  const ChecklistDate = ({
+    date,
+    // isSelected,
+    onToggleSelectionDate,
+    // isDisabled,
+    isSelected,
+  }) => {
     const toggleCheckbox = () => {
       onToggleSelectionDate(date);
     };
+    // const toggleCheckbox = () => {
+    //   // if (!isDisabled) {
+    //     onToggleSelectionDate(date);
+    //   // }
+    // };
+
+    // const isSelected = selectedDates.includes(date);
 
     return (
-      <TouchableOpacity onPress={toggleCheckbox} style={styles.checkContainer}>
+      <TouchableOpacity
+        onPress={toggleCheckbox}
+        style={styles.checkContainer}
+        // disabled={isDisabled} // Disable the date if disabled is true
+      >
         <View
           style={[
             styles.checkbox,
@@ -299,50 +325,41 @@ const AddPlaceModal = ({
     });
   };
 
-  //   // Function to toggle the selection of a place
-  //   const toggleSelectionDate = (date) => {
-  //     setSelectedDates((prevDates) => {
-  //       if (prevDates.includes(date)) {
-  //         // If the date is already selected, remove it
-  //         return prevDates.filter((d) => d !== date);
-  //       } else {
-  //         // If the date is not selected, add it
-  //         const updatedDates = [...prevDates, date];
+  // Function to toggle the selection of a place
+  // const toggleSelectionDate = (date) => {
+  //   setSelectedDates((prevSelectedDates) => {
+  //     if (prevSelectedDates.includes(date)) {
+  //       // If date is already selected, remove it
+  //       return prevSelectedDates.filter((d) => d !== date);
+  //     } else {
+  //       // If date is not selected, add it
+  //       return [...prevSelectedDates, date];
+  //     }
+  //   });
+  // };
 
-  //         // Check if the place is already in the itinerary for the selected date
-  //         const placeId = placeData.placeId;
-  //         const selectedDateString = formatDateString(date);
-  //         const isPlaceAlreadyInItinerary = selectedDates.some((d) => {
-  //           return (
-  //             formatDateString(d) === selectedDateString &&
-  //             existingPlacesSnapshot.docs.some((doc) =>
-  //               doc.data().places.some((place) => place.placeId === placeId)
-  //             )
-  //           );
-  //         });
+  // Function to toggle the selection of a place
+  // const toggleSelectionDate = (date) => {
+  //   setSelectedDates((prevSelectedDates) => {
+  //     if (prevSelectedDates.includes(date)) {
+  //       // If date is already selected, remove it
+  //       return prevSelectedDates.filter((d) => d !== date);
+  //     } else {
+  //       // If date is not selected, add it
+  //       return [...prevSelectedDates, date];
+  //     }
+  //   });
 
-  //         if (isPlaceAlreadyInItinerary) {
-  //           // If the place is already in the itinerary for this date, set isSelected to true
-  //           return updatedDates.map((d) => (d === date ? `${d}-selected` : d));
-  //         } else {
-  //           // If the place is not in the itinerary, add the date normally
-  //           return updatedDates;
-  //         }
-  //       }
-  //     });
-  //   };
-
-  //   useFocusEffect(
-  //     useCallback(() => {
-  //       if (modalVisible) {
-  //         // getTravelBoards();
-  //         // getUserTrips();
-  //         // getItineraryDates();
-  //         // // getMyTrips();
-  //       }
-  //     }, [modalVisible]) // Function only called once
-  //   );
-  // Use the useFocusEffect hook to check if the place is in the itinerary when the component loads
+  //   setDisabledDates((prevDisabledDates) => {
+  //     if (prevDisabledDates.includes(date)) {
+  //       // If date is already disabled, remove it
+  //       return prevDisabledDates.filter((d) => d !== date);
+  //     } else {
+  //       // If date is not disabled, add it
+  //       return [...prevDisabledDates, date];
+  //     }
+  //   });
+  // };
 
   useEffect(() => {
     const checkIfPlaceIsInItinerary = async () => {
@@ -384,6 +401,9 @@ const AddPlaceModal = ({
         if (isPlaceAlreadyInWishlist) {
           // If the place is already in the wishlist, set wishlistSelected to true
           setWishlistSelected(true);
+
+          // Disable the wishlist option
+          setWishlistDisabled(true);
         }
 
         // Check if the place is already in the itinerary for the selected dates
@@ -414,8 +434,12 @@ const AddPlaceModal = ({
 
         // Update the selectedDates state with the dates where the place is in the itinerary
         setSelectedDates(datesWithPlaceInItinerary);
+
+        if (datesWithPlaceInItinerary.length > 0) {
+          setDatesDisabled(true); // Disable the date selection
+        }
       } catch (error) {
-        console.error("Error checking itinerary:", error);
+        Alert.alert("Error checking itinerary:", error.message);
       }
     };
 
@@ -458,6 +482,7 @@ const AddPlaceModal = ({
                 styles.checkContainer,
                 wishlistSelected ? styles.selectedContainer : null,
               ]}
+              // disabled={wishlistDisabled} // Disable the wishlist option if wishlistDisabled is true
             >
               <View
                 style={[
@@ -485,6 +510,8 @@ const AddPlaceModal = ({
                   date={date.toISOString()}
                   isSelected={selectedDates.includes(date.toISOString())}
                   onToggleSelectionDate={toggleSelectionDate}
+                  // disabled={datesDisabled} // Disable the date if datesDisabled is true
+                  // isDisabled={disabledDates.includes(date.toISOString())} // Check if the date is in disabledDates
                 />
               ))}
           </ScrollView>

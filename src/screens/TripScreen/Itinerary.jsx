@@ -24,6 +24,7 @@ import {
   orderBy,
   addDoc,
   setDoc,
+  onSnapshot,
 } from "firebase/firestore";
 import { FlatList, ScrollView } from "react-native-gesture-handler";
 import SavedPlaceCard from "../../components/TripsComp/SavedPlaceCard";
@@ -32,13 +33,11 @@ import GlobalStyles from "../../GlobalStyles";
 import { useNavigation } from "@react-navigation/native";
 import ViewMapModal from "./ViewMapModal";
 import { useEffect } from "react";
-import { useRoute } from "@react-navigation/native";
-
-// import DraggableFlatList from "react-native-draggable-flatlist";
-// import {
-//   NestableScrollContainer,
-//   NestableDraggableFlatList,
-// } from "react-native-draggable-flatlist";
+import { useRoute, useIsFocused } from "@react-navigation/native";
+import DraggableFlatList, {
+  ScaleDecorator,
+} from "react-native-draggable-flatlist";
+import PlaceDetailModal from "../../components/TripsComp/PlaceDetailModal";
 
 const Itinerary = () => {
   // State variables for modal visibility and selected place
@@ -57,6 +56,9 @@ const Itinerary = () => {
   const [mapModalVisible, setMapModalVisible] = useState(false);
   const [selectedMapDate, setSelectedMapDate] = useState("");
   const [selectedMapPlaces, setSelectedMapPlaces] = useState([]);
+  const [placeModalVisible, setPlaceModalVisible] = useState(false);
+
+  const isFocused = useIsFocused();
 
   const startDateObj = moment(startDate, "DD-MMM-YYYY").toDate();
   const endDateObj = moment(endDate, "DD-MMM-YYYY").toDate();
@@ -118,48 +120,48 @@ const Itinerary = () => {
     }
   };
 
-  const getItineraryData = async () => {
-    try {
-      setLoading(true);
-      const q = query(
-        collection(FIREBASE_DB, "users"),
-        where("userId", "==", userId)
-      );
+  // const getItineraryData = async () => {
+  //   try {
+  //     setLoading(true);
+  //     const q = query(
+  //       collection(FIREBASE_DB, "users"),
+  //       where("userId", "==", userId)
+  //     );
 
-      const querySnapshot = await getDocs(q); // get user documents from user collection based on user id
-      const userRef = doc(FIREBASE_DB, "users", querySnapshot.docs[0].id); //Create a reference to this user's document
+  //     const querySnapshot = await getDocs(q); // get user documents from user collection based on user id
+  //     const userRef = doc(FIREBASE_DB, "users", querySnapshot.docs[0].id); //Create a reference to this user's document
 
-      // create a trip reference to the trip document
-      const q2 = query(
-        collection(userRef, "trips"),
-        where("tripId", "==", tripId)
-      );
-      const querySnapshot2 = await getDocs(q2);
-      const tripRef = doc(userRef, "trips", querySnapshot2.docs[0].id);
+  //     // create a trip reference to the trip document
+  //     const q2 = query(
+  //       collection(userRef, "trips"),
+  //       where("tripId", "==", tripId)
+  //     );
+  //     const querySnapshot2 = await getDocs(q2);
+  //     const tripRef = doc(userRef, "trips", querySnapshot2.docs[0].id);
 
-      const itineraryData = {}; // Create an object to store the itinerary data for each date
+  //     const itineraryData = {}; // Create an object to store the itinerary data for each date
 
-      // Loop through each date in the date range and fetch the itinerary data for that date
-      for (const date of dateRange) {
-        const formattedDate = formatDateString(date);
+  //     // Loop through each date in the date range and fetch the itinerary data for that date
+  //     for (const date of dateRange) {
+  //       const formattedDate = formatDateString(date);
 
-        const q4 = query(
-          collection(tripRef, "itinerary"),
-          where("date", "==", formattedDate)
-        );
-        const querySnapshot4 = await getDocs(q4);
-        const itineraryForDate = querySnapshot4.docs.map((doc) => doc.data());
+  //       const q4 = query(
+  //         collection(tripRef, "itinerary"),
+  //         where("date", "==", formattedDate)
+  //       );
+  //       const querySnapshot4 = await getDocs(q4);
+  //       const itineraryForDate = querySnapshot4.docs.map((doc) => doc.data());
 
-        itineraryData[formattedDate] = itineraryForDate;
-      }
+  //       itineraryData[formattedDate] = itineraryForDate;
+  //     }
 
-      setItineraryData(itineraryData);
-    } catch (error) {
-      Alert.alert("Error getting places:", error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+  //     setItineraryData(itineraryData);
+  //   } catch (error) {
+  //     Alert.alert("Error getting places:", error.message);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   const ChecklistItem = ({ place, isSelected, onToggleSelection }) => {
     const toggleCheckbox = () => {
@@ -297,10 +299,63 @@ const Itinerary = () => {
         getSavedPlaces();
       }
       if (!deleteLoading) {
-        getItineraryData();
+        // getItineraryData();
       }
     }, [modalVisible, deleteLoading]) // Function only called once
   );
+
+  useEffect(() => {
+    // Create an onSnapshot listener to listen for changes to the itinerary data
+
+    let unsubscribe;
+
+    const setupItineraryListener = async () => {
+      if (!tripReference) {
+        return;
+      }
+
+      const q = query(
+        collection(FIREBASE_DB, "users"),
+        where("userId", "==", userId)
+      );
+
+      const querySnapshot = await getDocs(q); // get user documents from user collection based on user id
+      const userRef = doc(FIREBASE_DB, "users", querySnapshot.docs[0].id); //Create a reference to this user's document
+
+      // create a trip reference to the trip document
+      const q2 = query(
+        collection(userRef, "trips"),
+        where("tripId", "==", tripId)
+      );
+      const querySnapshot2 = await getDocs(q2);
+      const tripRef = doc(userRef, "trips", querySnapshot2.docs[0].id);
+
+      const q3 = query(collection(tripRef, "itinerary"));
+      unsubscribe = onSnapshot(q3, (querySnapshot) => {
+        const itineraryData = {};
+
+        // Loop through each date in the date range and fetch the itinerary data for that date
+        for (const date of dateRange) {
+          const formattedDate = formatDateString(date);
+
+          const itineraryForDate = querySnapshot.docs
+            .map((doc) => doc.data())
+            .filter((item) => item.date === formattedDate);
+
+          itineraryData[formattedDate] = itineraryForDate;
+        }
+
+        setItineraryData(itineraryData);
+      });
+    };
+
+    if (isFocused) {
+      setupItineraryListener();
+    }
+    return () => {
+      unsubscribe && unsubscribe();
+    };
+  }, [itineraryData, isFocused]);
 
   const confirmDelete = (item, section) => {
     Alert.alert(
@@ -370,29 +425,82 @@ const Itinerary = () => {
     />
   );
 
+  const updateItineraryInFirebase = async (updatedData, date) => {
+    try {
+      if (!tripReference) {
+        Alert.alert("Trip reference not available.");
+        return;
+      }
+      const q = query(
+        collection(FIREBASE_DB, "users"),
+        where("userId", "==", userId)
+      );
+
+      const querySnapshot = await getDocs(q); // get user documents from user collection based on user id
+      const userRef = doc(FIREBASE_DB, "users", querySnapshot.docs[0].id); //Create a reference to this user's document
+
+      // create a trip reference to the trip document
+      const q2 = query(
+        collection(userRef, "trips"),
+        where("tripId", "==", tripId)
+      );
+      const querySnapshot2 = await getDocs(q2);
+      const tripRef = doc(userRef, "trips", querySnapshot2.docs[0].id);
+
+      // Create a reference to the specific date within the itinerary
+      const collect = collection(tripRef, "itinerary");
+      const q4 = query(collect, where("date", "==", date));
+      const querySnapshot4 = await getDocs(q4);
+      const itineraryForDate = querySnapshot4.docs.map((doc) => doc.data());
+      // console.log(itineraryForDate);
+
+      if (itineraryForDate.length > 0) {
+        // If the itinerary data exists for the specific date
+        const existingData = itineraryForDate[0];
+        // console.log(existingData);
+
+        // Update the places array with the filtered array
+        const updatedNewData = {
+          ...existingData,
+          places: updatedData,
+        };
+
+        // Set the updated itinerary data back to the document
+        await setDoc(querySnapshot4.docs[0].ref, updatedNewData);
+
+        // console.log("Itinerary updated successfully!");
+      }
+    } catch (error) {
+      Alert.alert("Error updating itinerary:", error.message);
+      // console.error("Error updating itinerary:", error.message);
+      // console.error("Date:", date);
+      // console.error("Updated Data:", updatedData);
+      // console.error("Query Snapshot:", querySnapshot4.docs[0].data());
+    }
+  };
+
   return (
     <View style={styles.container}>
-      {loading && <ActivityIndicator size={"large"} />}
+      {/* {loading && <ActivityIndicator size={"large"} />} */}
       {/* {!loading && !itineraryData && ( */}
-      {!loading &&
-        Object.keys(itineraryData).every(
-          (date) => itineraryData[date].length === 0
-        ) && (
-          <Pressable
-            style={styles.emptyContainer}
-            onPress={() =>
-              Navigation.navigate("FindStack", {
-                screen: "Find",
-              })
-            }
-          >
-            {/* <Text>Find places to build your Itinerary</Text> */}
-            <Text style={[GlobalStyles.bodySmallRegular]}>
-              Find places to create your Itinerary
-            </Text>
-            <Text style={styles.navText}>Go to Explore</Text>
-          </Pressable>
-        )}
+      {Object.keys(itineraryData).every(
+        (date) => itineraryData[date].length === 0
+      ) && (
+        <Pressable
+          style={styles.emptyContainer}
+          onPress={() =>
+            Navigation.navigate("FindStack", {
+              screen: "Find",
+            })
+          }
+        >
+          {/* <Text>Find places to build your Itinerary</Text> */}
+          <Text style={[GlobalStyles.bodySmallRegular]}>
+            Find places to create your Itinerary
+          </Text>
+          <Text style={styles.navText}>Go to Explore</Text>
+        </Pressable>
+      )}
       {mapModalVisible && (
         <ViewMapModal
           onClose={() => setMapModalVisible(false)}
@@ -401,107 +509,141 @@ const Itinerary = () => {
           selectedMapPlaces={selectedMapPlaces}
         />
       )}
-      {!loading && (
-        <SectionList
-          contentContainerStyle={styles.contentContainer}
-          scrollEnabled={true}
-          sections={dateRange.map((date) => ({
-            title: formatDateString(date),
-            data: itineraryData[formatDateString(date)] || [], // Use the itinerary data for each date
-          }))}
-          keyExtractor={(item, index) => index.toString()}
-          // Performance Settings
-          removeClippedSubviews={true} // Unmount components when outside of window
-          initialNumToRender={3} // Reduce initial render amount
-          maxToRenderPerBatch={3} // Reduce number in each render batch
-          updateCellsBatchingPeriod={50} // Increase time between renders
-          windowSize={2} // Reduce the window size
-          // performance settings for section list
 
-          renderItem={({ item, section }) => (
-            <View style={styles.item}>
-              <FlatList
-                data={item["places"] || []}
-                renderItem={({ item }) => (
-                  <SavedPlaceCard
-                    placeItem={item}
-                    onDelete={() => confirmDelete(item, section)}
-                  />
-                )}
-                keyExtractor={(item) => item.placeId}
-                removeClippedSubviews={true} // Unmount components when outside of window
-                initialNumToRender={5} // Reduce initial render amount
-                maxToRenderPerBatch={5} // Reduce number in each render batch
-                updateCellsBatchingPeriod={100} // Increase time between renders
-                windowSize={2} // Reduce the window size
-              />
-            </View>
-            // <DraggableFlatList
-            //   data={item["places"] || []}
-            //   renderItem={({ item, drag }) => (
-            //     <SavedPlaceCard
-            //       placeItem={item}
-            //       onDelete={() => confirmDelete(item.placeId, section)}
-            //       onDrag={drag} // Attach the drag function to the SavedPlaceCard component
-            //     />
-            //   )}
-            //   keyExtractor={(item) => item.placeId}
-            //   onDragEnd={({ data }) => {
-            //     // Update the order of places in the state or Firebase here
-            //     const updatedItineraryData = {
-            //       ...itineraryData,
-            //       [formatDateString(section.title)]: data, // Update the data for the specific date
-            //     };
-            //     setItineraryData(updatedItineraryData);
-            //   }}
-            // />
-          )}
-          stickySectionHeadersEnabled={true}
-          renderSectionHeader={({ section: { title, data } }) => (
-            <View style={styles.headerContainer}>
-              <Text style={[styles.dateTitle, GlobalStyles.titleLargeRegular]}>
-                {title}
-              </Text>
-              <View style={styles.buttonContainer}>
-                {/* {Object.keys(data).every(
-                  (title) => data[title].length !== 0 */}
-                {/* {itineraryData[title] && itineraryData[title].length > 0 && ( */}
-                {data.length > 0 && (
-                  <TouchableOpacity
-                    style={styles.mapButton}
-                    title="Map"
-                    onPress={() => {
-                      setSelectedMapDate(title);
-                      const selectedPlaces = data.map((item) => item.places);
-                      setSelectedMapPlaces(selectedPlaces);
-                      setMapModalVisible(true);
-                    }}
-                  >
-                    {/* <Ionicons name="map-outline" size={22} color="#EFFBB7" /> */}
-                    <Ionicons name="map-outline" size={22} color="#63725A" />
-                    {/* <Text style={styles.buttonText}>Map</Text> */}
-                  </TouchableOpacity>
-                )}
+      <SectionList
+        contentContainerStyle={styles.contentContainer}
+        scrollEnabled={true}
+        sections={dateRange.map((date) => ({
+          title: formatDateString(date),
+          data: itineraryData[formatDateString(date)] || [], // Use the itinerary data for each date
+        }))}
+        keyExtractor={(item, index) => index.toString()}
+        // Performance Settings
+        removeClippedSubviews={true} // Unmount components when outside of window
+        initialNumToRender={3} // Reduce initial render amount
+        maxToRenderPerBatch={3} // Reduce number in each render batch
+        updateCellsBatchingPeriod={50} // Increase time between renders
+        windowSize={2} // Reduce the window size
+        // performance settings for section list
 
+        renderItem={({ item, section }) => (
+          <DraggableFlatList
+            data={item["places"] || []}
+            renderItem={({ item, drag, isActive }) => (
+              <ScaleDecorator>
                 <TouchableOpacity
-                  style={styles.button}
-                  title="Add Place"
+                  onLongPress={drag}
+                  disabled={isActive}
                   onPress={() => {
-                    setModalVisible(true);
-                    setSelectedDate(title);
+                    setPlaceModalVisible(true);
                   }}
                 >
-                  <Text
-                    style={[styles.buttonText, GlobalStyles.bodySmallRegular]}
+                  {/* <SavedPlaceCard
+                      placeItem={item}
+                      onDelete={() => confirmDelete(item, section)}
+                      key={item.placeId}
+                    /> */}
+
+                  <View
+                    style={isActive ? styles.placeCardSelect : styles.placeCard}
                   >
-                    Add Place
-                  </Text>
+                    <Image
+                      source={{ uri: item.placeImage }}
+                      style={styles.image}
+                    />
+                    <View style={styles.textContainer}>
+                      <Text
+                        style={GlobalStyles.labelMediumMedium}
+                        numberOfLines={1}
+                      >
+                        {item.placeCategory}
+                      </Text>
+                      <Text
+                        style={GlobalStyles.bodyMediumBold}
+                        numberOfLines={1}
+                      >
+                        {item.placeTitle}
+                      </Text>
+                    </View>
+                    <TouchableOpacity
+                      onPress={() => confirmDelete(item, section)}
+                    >
+                      <Ionicons
+                        name="trash-outline"
+                        size={22}
+                        color="#63725A"
+                      />
+                    </TouchableOpacity>
+                  </View>
                 </TouchableOpacity>
-              </View>
+                {/* {placeModalVisible && (
+                    <PlaceDetailModal
+                      onClose={() => setPlaceModalVisible(false)}
+                      modalVisible={placeModalVisible}
+                      placeItem={item}
+                      setModalVisible={setPlaceModalVisible}
+                    />
+                  )} */}
+              </ScaleDecorator>
+            )}
+            keyExtractor={(item) => item.placeId}
+            removeClippedSubviews={true} // Unmount components when outside of window
+            initialNumToRender={5} // Reduce initial render amount
+            maxToRenderPerBatch={5} // Reduce number in each render batch
+            updateCellsBatchingPeriod={100} // Increase time between renders
+            windowSize={2} // Reduce the window size
+            onDragEnd={({ data }) => {
+              const updatedData = data.map((item) => item);
+              // Update the state with the updated data
+              // setItineraryData((prevItineraryData) => ({
+              //   ...prevItineraryData,
+              //   [section.title]: updatedData,
+              // }));
+
+              // Update the itinerary in Firebase
+              updateItineraryInFirebase(updatedData, section.title);
+            }}
+          />
+        )}
+        stickySectionHeadersEnabled={true}
+        renderSectionHeader={({ section: { title, data } }) => (
+          <View style={styles.headerContainer}>
+            <Text style={[styles.dateTitle, GlobalStyles.titleLargeRegular]}>
+              {title}
+            </Text>
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={styles.mapButton}
+                title="Map"
+                onPress={() => {
+                  setSelectedMapDate(title);
+                  const selectedPlaces = data.map((item) => item.places);
+                  setSelectedMapPlaces(selectedPlaces);
+                  setMapModalVisible(true);
+                }}
+              >
+                <Ionicons name="map-outline" size={22} color="#63725A" />
+              </TouchableOpacity>
+              {/* )} */}
+
+              <TouchableOpacity
+                style={styles.button}
+                title="Add Place"
+                onPress={() => {
+                  setModalVisible(true);
+                  setSelectedDate(title);
+                }}
+              >
+                <Text
+                  style={[styles.buttonText, GlobalStyles.bodySmallRegular]}
+                >
+                  Add Place
+                </Text>
+              </TouchableOpacity>
             </View>
-          )}
-        />
-      )}
+          </View>
+        )}
+      />
 
       {tripReference && ( // Show the modal content only when tripReference is available
         <Modal
@@ -524,14 +666,6 @@ const Itinerary = () => {
                 />
               </View>
               {savedPlaces.length === 0 && (
-                // <Pressable
-                //   style={styles.modalEmptyContainer}
-                //   onPress={() =>
-                //     Navigation.navigate("FindStack", {
-                //       screen: "Find",
-                //     })
-                //   }
-                // >
                 <Pressable
                   style={styles.modalEmptyContainer}
                   onPress={() => {
@@ -675,7 +809,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     // alignItems: "flex-start",
     alignItems: "center",
-    marginVertical: 2,
+    marginVertical: 5,
     backgroundColor: "#F7F5F3",
     // width: "90%",
     justifyContent: "space-evenly",
@@ -686,7 +820,7 @@ const styles = StyleSheet.create({
   placeCardSelect: {
     flexDirection: "row",
     alignItems: "center",
-    marginVertical: 2,
+    marginVertical: 5,
     backgroundColor: "#E5E8E3",
     // width: "90%",
     justifyContent: "space-evenly",
