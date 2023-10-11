@@ -29,6 +29,7 @@ import { Ionicons } from "@expo/vector-icons";
 import ViewMapModal from "./ViewMapModal";
 import { useNavigation } from "@react-navigation/native";
 import { useRoute } from "@react-navigation/native";
+import Toast from "react-native-root-toast";
 
 const Saved = () => {
   const route = useRoute();
@@ -141,6 +142,15 @@ const Saved = () => {
       const placeRef = doc(tripRef, "saved", querySnapshot3.docs[0].id);
 
       await deleteDoc(placeRef);
+      Toast.show(`Place removed from Wishlist`, {
+        duration: Toast.durations.SHORT,
+        position: Toast.positions.BOTTOM - 50,
+        shadow: true,
+        animation: true,
+        hideOnPress: true,
+        delay: 0,
+        backgroundColor: "#63725A",
+      });
     } catch (error) {
       Alert.alert("Error deleting place:", error.message);
     } finally {
@@ -207,7 +217,7 @@ export default Saved;
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
+    flex: 1,
     paddingTop: 40,
     backgroundColor: "#fff",
   },

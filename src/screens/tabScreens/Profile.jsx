@@ -26,6 +26,7 @@ import { ActivityIndicator } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
+import Toast from "react-native-root-toast";
 
 export default function Profile() {
   const [travelBoards, setTravelBoards] = useState([]);
@@ -142,7 +143,16 @@ export default function Profile() {
 
       await deleteDoc(boardRef);
 
-      Alert.alert("Board deleted successfully");
+      // Alert.alert("Board deleted successfully");
+      Toast.show(`Board Removed Successfully`, {
+        duration: Toast.durations.SHORT,
+        position: Toast.positions.BOTTOM - 50,
+        shadow: true,
+        animation: true,
+        hideOnPress: true,
+        delay: 0,
+        backgroundColor: "#63725A",
+      });
     } catch (error) {
       Alert.alert("Error deleting board:", error.message);
     } finally {

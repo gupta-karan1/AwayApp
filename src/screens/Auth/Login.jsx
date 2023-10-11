@@ -13,6 +13,7 @@ import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../../../hooks/useAuth";
 import GlobalStyles from "../../GlobalStyles";
+import Toast from "react-native-root-toast";
 
 // Login component
 const Login = () => {
@@ -31,7 +32,16 @@ const Login = () => {
     try {
       // Call the login function to authenticate the user with the provided email and password
       await login(email, password);
-      Alert.alert("Login Successful");
+      // Alert.alert("Login Successful");
+      Toast.show(`Login Successful`, {
+        duration: Toast.durations.SHORT,
+        position: Toast.positions.BOTTOM - 50,
+        shadow: true,
+        animation: true,
+        hideOnPress: true,
+        delay: 0,
+        backgroundColor: "#63725A",
+      });
     } catch (error) {
       // error alert
       // console.log(error);

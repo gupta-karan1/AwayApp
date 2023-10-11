@@ -225,40 +225,40 @@ const ProfilePlace = ({ route }) => {
   //   }
   // };
 
-  const clickImage = async () => {
-    setIsLoading(true); // Show loading image
+  // const clickImage = async () => {
+  //   setIsLoading(true); // Show loading image
 
-    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+  //   const { status } = await ImagePicker.requestCameraPermissionsAsync();
 
-    if (status !== "granted") {
-      Alert.alert("Sorry, we need camera roll permissions to make this work!");
-      return;
-    }
+  //   if (status !== "granted") {
+  //     Alert.alert("Sorry, we need camera roll permissions to make this work!");
+  //     return;
+  //   }
 
-    // launch image picker and camera with the following options
-    let result = await ImagePicker.launchCameraAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [1, 1],
-      // quality: 1,
-    });
+  //   // launch image picker and camera with the following options
+  //   let result = await ImagePicker.launchCameraAsync({
+  //     mediaTypes: ImagePicker.MediaTypeOptions.Images,
+  //     allowsEditing: true,
+  //     aspect: [1, 1],
+  //     // quality: 1,
+  //   });
 
-    // Check if image is selected
-    if (!result.canceled) {
-      // Upload slected image to Firebase Storage
-      const uploadURL = await uploadImageAsync(result.assets[0].uri);
-      setCoverImage(uploadURL); // Set coverImage state to uploaded image URL
-      setInterval(() => {
-        setIsLoading(false);
-      }, 1000); // 1 second delay before hiding loading indicator
+  //   // Check if image is selected
+  //   if (!result.canceled) {
+  //     // Upload slected image to Firebase Storage
+  //     const uploadURL = await uploadImageAsync(result.assets[0].uri);
+  //     setCoverImage(uploadURL); // Set coverImage state to uploaded image URL
+  //     setInterval(() => {
+  //       setIsLoading(false);
+  //     }, 1000); // 1 second delay before hiding loading indicator
 
-      delete result["cancelled"];
-    } else {
-      setCoverImage(null); // If no image selected set coverImage to null
-      setIsLoading(false);
-      return;
-    }
-  };
+  //     delete result["cancelled"];
+  //   } else {
+  //     setCoverImage(null); // If no image selected set coverImage to null
+  //     setIsLoading(false);
+  //     return;
+  //   }
+  // };
 
   return (
     <View style={styles.container}>

@@ -27,6 +27,7 @@ import GlobalStyles from "../../GlobalStyles";
 import ProfilePlaceCard from "../../components/ProfileComp/ProfilePlaceCard";
 import { useNavigation } from "@react-navigation/native";
 import { Feather } from "@expo/vector-icons";
+import Toast from "react-native-root-toast";
 
 const BoardScreen = () => {
   const route = useRoute();
@@ -140,7 +141,16 @@ const BoardScreen = () => {
 
       await deleteDoc(placeRef);
 
-      Alert.alert("Place deleted successfully");
+      // Alert.alert("Place deleted successfully");
+      Toast.show(`Place removed from Travel Board`, {
+        duration: Toast.durations.SHORT,
+        position: Toast.positions.BOTTOM - 50,
+        shadow: true,
+        animation: true,
+        hideOnPress: true,
+        delay: 0,
+        backgroundColor: "#63725A",
+      });
     } catch (error) {
       Alert.alert("Error deleting place:", error.message);
     } finally {

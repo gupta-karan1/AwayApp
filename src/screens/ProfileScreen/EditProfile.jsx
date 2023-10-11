@@ -36,6 +36,7 @@ import GlobalStyles from "../../GlobalStyles";
 import { Feather } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { EvilIcons } from "@expo/vector-icons";
+import Toast from "react-native-root-toast";
 // import { Camera } from "expo-camera";
 
 const EditProfile = () => {
@@ -199,7 +200,16 @@ const EditProfile = () => {
       });
 
       // User registration and 'users' collection creation successful
-      Alert.alert("User profile updated successfully!");
+      // Alert.alert("User profile updated successfully!");
+      Toast.show(`Profile Updated Successfully`, {
+        duration: Toast.durations.SHORT,
+        position: Toast.positions.BOTTOM - 50,
+        shadow: true,
+        animation: true,
+        hideOnPress: true,
+        delay: 0,
+        backgroundColor: "#63725A",
+      });
       navigation.navigate("Profile");
     } catch (error) {
       Alert.alert("Update failed: ", error.message);

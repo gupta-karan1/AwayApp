@@ -45,6 +45,7 @@ import { Feather } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import GlobalStyles from "../../GlobalStyles";
 import { MaterialIcons } from "@expo/vector-icons";
+import Toast from "react-native-root-toast";
 
 // Component to render the Trip Form
 const CreateTripForm = () => {
@@ -215,7 +216,16 @@ const CreateTripForm = () => {
       // Save the trip details to Firebase using the saveTripDetails function
       await saveTripDetails(user.uid, tripData);
 
-      Alert.alert("Trip details saved successfully!");
+      // Alert.alert("Trip details saved successfully!");
+      Toast.show(`New Trip Created Successfully`, {
+        duration: Toast.durations.SHORT,
+        position: Toast.positions.BOTTOM - 50,
+        shadow: true,
+        animation: true,
+        hideOnPress: true,
+        delay: 0,
+        backgroundColor: "#63725A",
+      });
 
       navigation.navigate("Trips"); // navigate to trips screen after submitting form
     } catch (error) {
@@ -278,7 +288,16 @@ const CreateTripForm = () => {
 
       await updateDoc(tripRef, newTripData);
 
-      Alert.alert("Trip details updated successfully!");
+      // Alert.alert("Trip details updated successfully!");
+      Toast.show(`Trip details updated successfully`, {
+        duration: Toast.durations.SHORT,
+        position: Toast.positions.BOTTOM - 50,
+        shadow: true,
+        animation: true,
+        hideOnPress: true,
+        delay: 0,
+        backgroundColor: "#63725A",
+      });
 
       navigation.navigate("Trips"); // navigate to trips screen after submitting form
     } catch (error) {
@@ -458,7 +477,8 @@ const CreateTripForm = () => {
                 value={startDate}
                 mode={"date"}
                 onChange={onStartChange}
-                minimumDate={startDate}
+                // minimumDate={startDate}
+                // maximumDate={endDate}
               />
             )}
 
@@ -473,7 +493,7 @@ const CreateTripForm = () => {
                   value={startDate}
                   mode={"date"}
                   onChange={onStartChange}
-                  minimumDate={startDate}
+                  // minimumDate={startDate}
                 />
               </View>
             )}

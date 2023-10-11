@@ -24,6 +24,9 @@ import { MaterialIcons } from "@expo/vector-icons";
 import GlobalStyles from "../../GlobalStyles";
 import { Ionicons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
+import Toast from "react-native-root-toast";
+
+// Register component
 
 const Register = () => {
   // State variables to store user input
@@ -58,7 +61,16 @@ const Register = () => {
       const usersCollectionRef = collection(FIREBASE_DB, "users");
       await addDoc(usersCollectionRef, userData);
 
-      Alert.alert("New user registered successfully!");
+      // Alert.alert("New user registered successfully!");
+      Toast.show(`Registration Successful. Welcome!`, {
+        duration: Toast.durations.SHORT,
+        position: Toast.positions.BOTTOM - 50,
+        shadow: true,
+        animation: true,
+        hideOnPress: true,
+        delay: 0,
+        backgroundColor: "#63725A",
+      });
     } catch (error) {
       // error alert
       // console.log(error);

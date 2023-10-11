@@ -24,6 +24,7 @@ import { FIREBASE_DB } from "../../../firebaseConfig";
 import TripCard from "../../components/TripsComp/TripCard";
 import { useFocusEffect } from "@react-navigation/native";
 import GlobalStyles from "../../GlobalStyles";
+import Toast from "react-native-root-toast";
 
 const Trips = () => {
   // Navigation object from useNavigation hook
@@ -129,7 +130,16 @@ const Trips = () => {
       });
 
       await deleteDoc(tripRef);
-      Alert.alert("Trip deleted successfully!");
+      // Alert.alert("Trip deleted successfully!");
+      Toast.show(`Trip Deleted Successfully`, {
+        duration: Toast.durations.SHORT,
+        position: Toast.positions.BOTTOM - 50,
+        shadow: true,
+        animation: true,
+        hideOnPress: true,
+        delay: 0,
+        backgroundColor: "#63725A",
+      });
     } catch (error) {
       Alert.alert("Error deleting trip:", error.message);
     } finally {

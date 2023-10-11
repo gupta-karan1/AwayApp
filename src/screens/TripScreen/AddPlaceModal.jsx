@@ -29,6 +29,7 @@ import { useContext, useCallback, useEffect, useState } from "react";
 import { AuthContext } from "../../../hooks/AuthContext";
 import { useFocusEffect } from "@react-navigation/native";
 import moment from "moment";
+import Toast from "react-native-root-toast";
 
 const AddPlaceModal = ({
   placeData,
@@ -210,7 +211,16 @@ const AddPlaceModal = ({
         // If placeId is unique, add the place data to the "saved" sub-collection
         if (existingPlacesSnapshot.empty) {
           await addDoc(collection(tripRef, "saved"), placeData);
-          Alert.alert("Success", "Place added to the wishlist successfully!");
+          // Alert.alert("Success", "Place added to the wishlist successfully!");
+          Toast.show(`Place added to Wishlist`, {
+            duration: Toast.durations.SHORT,
+            position: Toast.positions.BOTTOM - 50,
+            shadow: true,
+            animation: true,
+            hideOnPress: true,
+            delay: 0,
+            backgroundColor: "#63725A",
+          });
         }
       }
 
@@ -262,7 +272,16 @@ const AddPlaceModal = ({
             await addDoc(itineraryRef, itineraryData);
           }
         }
-        Alert.alert("Success", "Place added to the itinerary successfully!");
+        // Alert.alert("Success", "Place added to the itinerary successfully!");
+        Toast.show(`Place added to Itinerary`, {
+          duration: Toast.durations.SHORT,
+          position: Toast.positions.BOTTOM - 50,
+          shadow: true,
+          animation: true,
+          hideOnPress: true,
+          delay: 0,
+          backgroundColor: "#63725A",
+        });
       }
     } catch (error) {
       Alert.alert("Error saving place details:", error.message);

@@ -39,6 +39,7 @@ import DraggableFlatList, {
 } from "react-native-draggable-flatlist";
 import PlaceDetailModal from "../../components/TripsComp/PlaceDetailModal";
 import { MaterialIcons } from "@expo/vector-icons";
+import Toast from "react-native-root-toast";
 
 const Itinerary = () => {
   // State variables for modal visibility and selected place
@@ -266,7 +267,7 @@ const Itinerary = () => {
           )
         ) {
           // If all selected places are duplicates, show an error message
-          throw new Error("All selected places are duplicates.");
+          throw new Error("All selected places are already in the itinerary.");
         }
 
         const updatedData = {
@@ -275,7 +276,16 @@ const Itinerary = () => {
         };
 
         await setDoc(existingDoc.ref, updatedData);
-        Alert.alert("Success", "Place added to the itinerary successfully!");
+        // Alert.alert("Success", "Place added to the itinerary successfully!");
+        Toast.show(`Place added to ${selectedDate}`, {
+          duration: Toast.durations.SHORT,
+          position: Toast.positions.BOTTOM - 50,
+          shadow: true,
+          animation: true,
+          hideOnPress: true,
+          delay: 0,
+          backgroundColor: "#63725A",
+        });
       } else {
         // Document with the selected date doesn't exist, create a new document
         const itineraryData = {
@@ -283,7 +293,16 @@ const Itinerary = () => {
           places: selectedPlaces, // Convert selectedPlace to an array
         };
         await addDoc(itineraryRef, itineraryData);
-        Alert.alert("Success", "Place added to the itinerary successfully!");
+        // Alert.alert("Success", "Place added to the itinerary successfully!");
+        Toast.show(`Place added to ${selectedDate}`, {
+          duration: Toast.durations.SHORT,
+          position: Toast.positions.BOTTOM - 50,
+          shadow: true,
+          animation: true,
+          hideOnPress: true,
+          delay: 0,
+          backgroundColor: "#63725A",
+        });
       }
 
       // Clear the selected place
@@ -405,7 +424,16 @@ const Itinerary = () => {
         // Set the updated itinerary data back to the document
         await setDoc(querySnapshot4.docs[0].ref, updatedData);
 
-        Alert.alert("Success", "Place removed from the itinerary!");
+        // Alert.alert("Success", "Place removed from the itinerary!");
+        Toast.show(`Place removed from Itinerary`, {
+          duration: Toast.durations.SHORT,
+          position: Toast.positions.BOTTOM - 50,
+          shadow: true,
+          animation: true,
+          hideOnPress: true,
+          delay: 0,
+          backgroundColor: "#63725A",
+        });
       }
     } catch (error) {
       Alert.alert("Error deleting place:", error.message);

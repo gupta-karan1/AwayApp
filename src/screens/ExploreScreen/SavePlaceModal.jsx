@@ -27,6 +27,7 @@ import {
 import { useContext, useCallback, useEffect, useState } from "react";
 import { AuthContext } from "../../../hooks/AuthContext";
 import { useFocusEffect } from "@react-navigation/native";
+import Toast from "react-native-root-toast";
 
 const SavePlaceModal = ({ placeData, onClose, modalVisible }) => {
   const {
@@ -279,9 +280,18 @@ const SavePlaceModal = ({ placeData, onClose, modalVisible }) => {
         }
       }
 
-      Alert.alert("Place saved successfully");
+      // Alert.alert("Place saved successfully");
+      Toast.show(`Place Saved Successfully`, {
+        duration: Toast.durations.SHORT,
+        position: Toast.positions.BOTTOM - 50,
+        shadow: true,
+        animation: true,
+        hideOnPress: true,
+        delay: 0,
+        backgroundColor: "#63725A",
+      });
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       Alert.alert("Error saving place", error.message);
     } finally {
       setIsLoading(false);
@@ -313,7 +323,7 @@ const SavePlaceModal = ({ placeData, onClose, modalVisible }) => {
       setUserTrips(userTrips); // Set the travelBoards state variable
     } catch (error) {
       Alert.alert("Error fetching trips:", error.message);
-      console.log(error);
+      // console.log(error);
     } finally {
       setIsLoading(false); // hide loading indicator
     }

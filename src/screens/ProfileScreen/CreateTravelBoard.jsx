@@ -31,6 +31,7 @@ import { FlatList, ScrollView } from "react-native-gesture-handler";
 import uuid from "react-native-uuid";
 import { AuthContext } from "../../../hooks/AuthContext";
 import GlobalStyles from "../../GlobalStyles";
+import Toast from "react-native-root-toast";
 
 const CreateTravelBoard = () => {
   const [boardTitle, setBoardTitle] = useState("");
@@ -101,7 +102,16 @@ const CreateTravelBoard = () => {
       };
 
       await saveBoardDetails(userId, boardData);
-      Alert.alert("Board created successfully");
+      // Alert.alert("Board created successfully");
+      Toast.show(`Board created successfully`, {
+        duration: Toast.durations.SHORT,
+        position: Toast.positions.BOTTOM - 50,
+        shadow: true,
+        animation: true,
+        hideOnPress: true,
+        delay: 0,
+        backgroundColor: "#63725A",
+      });
       Navigation.navigate("Profile");
     } catch (error) {
       // console.log(error);
@@ -161,7 +171,16 @@ const CreateTravelBoard = () => {
         boardId: boardId,
       });
 
-      Alert.alert("Board updated successfully");
+      // Alert.alert("Board updated successfully");
+      Toast.show(`Board updated successfully`, {
+        duration: Toast.durations.SHORT,
+        position: Toast.positions.BOTTOM - 50,
+        shadow: true,
+        animation: true,
+        hideOnPress: true,
+        delay: 0,
+        backgroundColor: "#63725A",
+      });
       Navigation.navigate("BoardScreen", {
         boardId: boardId,
         title: boardTitle,
@@ -298,7 +317,7 @@ const CreateTravelBoard = () => {
             <Text
               style={[styles.saveButtonText, GlobalStyles.bodySmallRegular]}
             >
-              {boardId ? "Update Board" : "Submit Board"}
+              {boardId ? "Update Board" : "Add Board"}
             </Text>
           </Pressable>
         )}
