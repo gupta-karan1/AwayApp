@@ -26,8 +26,8 @@ import {
   setDoc,
   onSnapshot,
 } from "firebase/firestore";
-import { FlatList, ScrollView } from "react-native-gesture-handler";
-import SavedPlaceCard from "../../components/TripsComp/SavedPlaceCard";
+import { FlatList } from "react-native-gesture-handler";
+// import SavedPlaceCard from "../../components/TripsComp/SavedPlaceCard";
 import { Ionicons } from "@expo/vector-icons";
 import GlobalStyles from "../../GlobalStyles";
 import { useNavigation } from "@react-navigation/native";
@@ -35,7 +35,6 @@ import ViewMapModal from "./ViewMapModal";
 import { useEffect } from "react";
 import { useRoute, useIsFocused } from "@react-navigation/native";
 import DraggableFlatList, {
-  NestableScrollContainer,
   ScaleDecorator,
 } from "react-native-draggable-flatlist";
 import PlaceDetailModal from "../../components/TripsComp/PlaceDetailModal";
