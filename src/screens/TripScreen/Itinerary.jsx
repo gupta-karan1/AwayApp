@@ -35,9 +35,11 @@ import ViewMapModal from "./ViewMapModal";
 import { useEffect } from "react";
 import { useRoute, useIsFocused } from "@react-navigation/native";
 import DraggableFlatList, {
+  NestableScrollContainer,
   ScaleDecorator,
 } from "react-native-draggable-flatlist";
 import PlaceDetailModal from "../../components/TripsComp/PlaceDetailModal";
+import { MaterialIcons } from "@expo/vector-icons";
 
 const Itinerary = () => {
   // State variables for modal visibility and selected place
@@ -57,6 +59,7 @@ const Itinerary = () => {
   const [selectedMapDate, setSelectedMapDate] = useState("");
   const [selectedMapPlaces, setSelectedMapPlaces] = useState([]);
   const [placeModalVisible, setPlaceModalVisible] = useState(false);
+  const [selectedPlace, setSelectedPlace] = useState({});
 
   const isFocused = useIsFocused();
 
@@ -298,10 +301,7 @@ const Itinerary = () => {
       if (!modalVisible) {
         getSavedPlaces();
       }
-      if (!deleteLoading) {
-        // getItineraryData();
-      }
-    }, [modalVisible, deleteLoading]) // Function only called once
+    }, [modalVisible]) // Function only called once
   );
 
   useEffect(() => {
@@ -355,7 +355,7 @@ const Itinerary = () => {
     return () => {
       unsubscribe && unsubscribe();
     };
-  }, [itineraryData, isFocused]);
+  }, [tripReference, isFocused]);
 
   const confirmDelete = (item, section) => {
     Alert.alert(
@@ -467,16 +467,70 @@ const Itinerary = () => {
 
         // Set the updated itinerary data back to the document
         await setDoc(querySnapshot4.docs[0].ref, updatedNewData);
-
-        // console.log("Itinerary updated successfully!");
       }
     } catch (error) {
       Alert.alert("Error updating itinerary:", error.message);
-      // console.error("Error updating itinerary:", error.message);
-      // console.error("Date:", date);
-      // console.error("Updated Data:", updatedData);
-      // console.error("Query Snapshot:", querySnapshot4.docs[0].data());
     }
+  };
+
+  const DraggablePlaceCard = ({ item, section, drag, isActive }) => {
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          setPlaceModalVisible(true);
+          setSelectedPlace(item);
+        }}
+      >
+        <View style={isActive ? styles.placeCardSelect : styles.placeCard}>
+          <Image source={{ uri: item.placeImage }} style={styles.image} />
+          <View style={styles.textContainer}>
+            <Text
+              style={[styles.checklistText, GlobalStyles.labelMediumMedium]}
+              numberOfLines={1}
+            >
+              {item.placeCategory}
+            </Text>
+            <Text
+              style={[styles.checklistText, GlobalStyles.bodyMediumBold]}
+              numberOfLines={1}
+            >
+              {item.placeTitle}
+            </Text>
+          </View>
+          <View style={{ flexDirection: "row" }}>
+            {/* <TouchableOpacity
+            style={{ marginRight: 10 }}
+            onPress={() => {
+              setPlaceModalVisible(true);
+              setSelectedPlace(item);
+            }}
+          >
+            <Ionicons
+              name="information-circle-outline"
+              size={22}
+              color="#63725A"
+            />
+          </TouchableOpacity> */}
+            <TouchableOpacity
+              style={{ marginRight: 15 }}
+              onPress={() => confirmDelete(item, section)}
+            >
+              <Ionicons name="trash-outline" size={22} color="#63725A" />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{ marginRight: 10 }}
+              onLongPress={drag}
+              // onPress={() => {
+              //   setPlaceModalVisible(true);
+              //   // setSelectedPlace(item);
+              // }}
+            >
+              <MaterialIcons name="drag-indicator" size={24} color="#63725A" />
+            </TouchableOpacity>
+          </View>
+        </View>
+      </TouchableOpacity>
+    );
   };
 
   return (
@@ -531,59 +585,12 @@ const Itinerary = () => {
             data={item["places"] || []}
             renderItem={({ item, drag, isActive }) => (
               <ScaleDecorator>
-                <TouchableOpacity
-                  onLongPress={drag}
-                  disabled={isActive}
-                  onPress={() => {
-                    setPlaceModalVisible(true);
-                  }}
-                >
-                  {/* <SavedPlaceCard
-                      placeItem={item}
-                      onDelete={() => confirmDelete(item, section)}
-                      key={item.placeId}
-                    /> */}
-
-                  <View
-                    style={isActive ? styles.placeCardSelect : styles.placeCard}
-                  >
-                    <Image
-                      source={{ uri: item.placeImage }}
-                      style={styles.image}
-                    />
-                    <View style={styles.textContainer}>
-                      <Text
-                        style={GlobalStyles.labelMediumMedium}
-                        numberOfLines={1}
-                      >
-                        {item.placeCategory}
-                      </Text>
-                      <Text
-                        style={GlobalStyles.bodyMediumBold}
-                        numberOfLines={1}
-                      >
-                        {item.placeTitle}
-                      </Text>
-                    </View>
-                    <TouchableOpacity
-                      onPress={() => confirmDelete(item, section)}
-                    >
-                      <Ionicons
-                        name="trash-outline"
-                        size={22}
-                        color="#63725A"
-                      />
-                    </TouchableOpacity>
-                  </View>
-                </TouchableOpacity>
-                {/* {placeModalVisible && (
-                    <PlaceDetailModal
-                      onClose={() => setPlaceModalVisible(false)}
-                      modalVisible={placeModalVisible}
-                      placeItem={item}
-                      setModalVisible={setPlaceModalVisible}
-                    />
-                  )} */}
+                <DraggablePlaceCard
+                  item={item}
+                  section={section}
+                  drag={drag}
+                  isActive={isActive}
+                />
               </ScaleDecorator>
             )}
             keyExtractor={(item) => item.placeId}
@@ -594,12 +601,6 @@ const Itinerary = () => {
             windowSize={2} // Reduce the window size
             onDragEnd={({ data }) => {
               const updatedData = data.map((item) => item);
-              // Update the state with the updated data
-              // setItineraryData((prevItineraryData) => ({
-              //   ...prevItineraryData,
-              //   [section.title]: updatedData,
-              // }));
-
               // Update the itinerary in Firebase
               updateItineraryInFirebase(updatedData, section.title);
             }}
@@ -644,6 +645,15 @@ const Itinerary = () => {
           </View>
         )}
       />
+
+      {placeModalVisible && (
+        <PlaceDetailModal
+          onClose={() => setPlaceModalVisible(false)}
+          modalVisible={placeModalVisible}
+          placeItem={selectedPlace}
+          setModalVisible={setPlaceModalVisible}
+        />
+      )}
 
       {tripReference && ( // Show the modal content only when tripReference is available
         <Modal
