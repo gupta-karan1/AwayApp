@@ -30,14 +30,16 @@ function TripTopNav({
     <Tab.Navigator
       screenOptions={{
         // tabBarScrollEnabled: true,
-        // swipeEnabled: false,
+
+        swipeEnabled: true,
         animationEnabled: true,
         tabBarActiveTintColor: "#63725A",
         tabBarInactiveTintColor: "#C4C4C4",
         tabBarIndicatorStyle: {
           backgroundColor: "#63725A",
         },
-        // tabBarAllowFontScaling: true,
+
+        tabBarAllowFontScaling: true,
         // tabBarGap: 0,
         // lazy: true,
 
@@ -61,7 +63,9 @@ function TripTopNav({
         }}
         options={{
           tabBarLabel: "Itinerary",
-          lazy: true,
+          // lazy: true,
+          // animationEnabled: true,
+
           tabBarStyle: {
             marginBottom: -StatusBar.currentHeight || 0,
             // paddingBottom: StatusBar.currentHeight || 0,
@@ -80,7 +84,7 @@ function TripTopNav({
         }}
         options={{
           tabBarLabel: "Wishlist",
-          lazy: true,
+          // lazy: true,
           tabBarStyle: {
             marginBottom: -StatusBar.currentHeight || 0,
             // paddingBottom: StatusBar.currentHeight || 0,

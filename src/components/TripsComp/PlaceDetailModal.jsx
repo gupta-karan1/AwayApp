@@ -12,6 +12,7 @@ import {
 import React, { useState } from "react";
 import GlobalStyles from "../../GlobalStyles";
 import { FontAwesome } from "@expo/vector-icons";
+import { EvilIcons } from "@expo/vector-icons";
 
 const PlaceDetailModal = ({
   onClose,
@@ -119,7 +120,7 @@ const PlaceDetailModal = ({
                     <Text
                       style={[GlobalStyles.bodySmallRegular, styles.bodyText]}
                     >
-                      {placeAddress}
+                      {placeAddress} (Open in Google Maps)
                     </Text>
                   </View>
                 </Pressable>

@@ -532,6 +532,35 @@ const Itinerary = () => {
     );
   };
 
+  const DraggableItinerary = ({ item, section }) => {
+    return (
+      <DraggableFlatList
+        data={item["places"] || []}
+        renderItem={({ item, drag, isActive }) => (
+          <ScaleDecorator>
+            <DraggablePlaceCard
+              item={item}
+              section={section}
+              drag={drag}
+              isActive={isActive}
+            />
+          </ScaleDecorator>
+        )}
+        keyExtractor={(item) => item.placeId}
+        removeClippedSubviews={true} // Unmount components when outside of window
+        initialNumToRender={5} // Reduce initial render amount
+        maxToRenderPerBatch={5} // Reduce number in each render batch
+        updateCellsBatchingPeriod={100} // Increase time between renders
+        windowSize={2} // Reduce the window size
+        onDragEnd={({ data }) => {
+          const updatedData = data.map((item) => item);
+          // Update the itinerary in Firebase
+          updateItineraryInFirebase(updatedData, section.title);
+        }}
+      />
+    );
+  };
+
   return (
     <View style={styles.container}>
       {/* {loading && <ActivityIndicator size={"large"} />} */}
@@ -562,7 +591,6 @@ const Itinerary = () => {
           selectedMapPlaces={selectedMapPlaces}
         />
       )}
-
       <SectionList
         contentContainerStyle={styles.contentContainer}
         scrollEnabled={true}
@@ -580,30 +608,32 @@ const Itinerary = () => {
         // performance settings for section list
 
         renderItem={({ item, section }) => (
-          <DraggableFlatList
-            data={item["places"] || []}
-            renderItem={({ item, drag, isActive }) => (
-              <ScaleDecorator>
-                <DraggablePlaceCard
-                  item={item}
-                  section={section}
-                  drag={drag}
-                  isActive={isActive}
-                />
-              </ScaleDecorator>
-            )}
-            keyExtractor={(item) => item.placeId}
-            removeClippedSubviews={true} // Unmount components when outside of window
-            initialNumToRender={5} // Reduce initial render amount
-            maxToRenderPerBatch={5} // Reduce number in each render batch
-            updateCellsBatchingPeriod={100} // Increase time between renders
-            windowSize={2} // Reduce the window size
-            onDragEnd={({ data }) => {
-              const updatedData = data.map((item) => item);
-              // Update the itinerary in Firebase
-              updateItineraryInFirebase(updatedData, section.title);
-            }}
-          />
+          <DraggableItinerary item={item} section={section} />
+          //   <DraggableFlatList
+          //     scrollEnabled={true}
+          //     data={item["places"] || []}
+          //     renderItem={({ item, drag, isActive }) => (
+          //       <ScaleDecorator>
+          //         <DraggablePlaceCard
+          //           item={item}
+          //           section={section}
+          //           drag={drag}
+          //           isActive={isActive}
+          //         />
+          //       </ScaleDecorator>
+          // )}
+          // keyExtractor={(item) => item.placeId}
+          // removeClippedSubviews={true} // Unmount components when outside of window
+          // initialNumToRender={5} // Reduce initial render amount
+          // maxToRenderPerBatch={5} // Reduce number in each render batch
+          // updateCellsBatchingPeriod={100} // Increase time between renders
+          // windowSize={2} // Reduce the window size
+          // onDragEnd={({ data }) => {
+          //   const updatedData = data.map((item) => item);
+          //   // Update the itinerary in Firebase
+          //   updateItineraryInFirebase(updatedData, section.title);
+          // }}
+          // />
         )}
         stickySectionHeadersEnabled={true}
         renderSectionHeader={({ section: { title, data } }) => (
@@ -644,7 +674,6 @@ const Itinerary = () => {
           </View>
         )}
       />
-
       {placeModalVisible && (
         <PlaceDetailModal
           onClose={() => setPlaceModalVisible(false)}
@@ -653,7 +682,6 @@ const Itinerary = () => {
           setModalVisible={setPlaceModalVisible}
         />
       )}
-
       {tripReference && ( // Show the modal content only when tripReference is available
         <Modal
           animationType="slide"
