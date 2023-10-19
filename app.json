@@ -17,7 +17,7 @@
       "supportsTablet": true,
       "jsEngine": "hermes",
       "config": {
-        "googleMapsApiKey": "AIzaSyBxu_7vriZr_HochNOZmK64QTsbm4UhyZA"
+        "googleMapsApiKey": "@env:GOOGLE_MAPS_API_KEY"
       }
     },
     "android": {
@@ -26,7 +26,7 @@
         "backgroundColor": "#ffffff",
         "config": {
           "googleMaps": {
-            "apiKey": "AIzaSyBxu_7vriZr_HochNOZmK64QTsbm4UhyZA"
+            "apiKey": "@env:GOOGLE_MAPS_API_KEY"
           }
         }
       },
