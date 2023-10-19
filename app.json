@@ -13,24 +13,14 @@
       "backgroundColor": "#ffffff"
     },
     "assetBundlePatterns": ["**/*"],
-    "ios": {
-      "supportsTablet": true,
-      "jsEngine": "hermes",
-      "config": {
-        "googleMapsApiKey": "@env:GOOGLE_MAPS_API_KEY"
-      }
-    },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff",
-        "config": {
-          "googleMaps": {
-            "apiKey": "@env:GOOGLE_MAPS_API_KEY"
-          }
-        }
+        "backgroundColor": "#ffffff"
       },
-      "jsEngine": "hermes"
+      "config": { "googleMaps": { "apiKey": "@env:GOOGLE_MAPS_API_KEY" } },
+      "permissions": ["android.permission.RECORD_AUDIO"],
+      "package": "com.karang6.AwayApp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -43,6 +33,11 @@
           "cameraPermission": "The app needs access to your camera so you can take pictures of your items to put on the app."
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "dd78721a-595f-4c31-9d80-c5f2100c146a"
+      }
+    }
   }
 }

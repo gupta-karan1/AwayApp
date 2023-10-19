@@ -37,7 +37,6 @@ import { Feather } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { EvilIcons } from "@expo/vector-icons";
 import Toast from "react-native-root-toast";
-// import { Camera } from "expo-camera";
 
 const EditProfile = () => {
   const [userName, setUserName] = useState("");

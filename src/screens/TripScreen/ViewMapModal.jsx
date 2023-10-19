@@ -131,15 +131,6 @@ const ViewMapModal = ({
 export default ViewMapModal;
 
 const styles = StyleSheet.create({
-  // popupContainer: {
-  //   backgroundColor: "#E5E8E3", // Set the background color of the popup
-  //   padding: 10, // Add padding for content spacing
-  //   borderRadius: 10, // Set the border radius to make it rounded
-  //   shadowColor: "black", // Add shadow for depth
-  //   shadowOpacity: 0.2,
-  //   shadowOffset: { width: 0, height: 2 },
-  //   elevation: 2, // Android shadow
-  // },
   centeredView: {
     flex: 1,
     justifyContent: "flex-end",

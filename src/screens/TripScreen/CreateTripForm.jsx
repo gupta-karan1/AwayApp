@@ -11,8 +11,7 @@ import {
   ActivityIndicator,
   ScrollView,
 } from "react-native";
-import { Picker } from "@react-native-picker/picker";
-import { TextInput, Button } from "react-native";
+import { TextInput } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Platform } from "react-native";
 import * as ImagePicker from "expo-image-picker";
@@ -39,7 +38,6 @@ import {
   SelectList,
   MultipleSelectList,
 } from "react-native-dropdown-select-list";
-import { FontAwesome } from "expo-vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";

@@ -40,6 +40,7 @@ import DraggableFlatList, {
 import PlaceDetailModal from "../../components/TripsComp/PlaceDetailModal";
 import { MaterialIcons } from "@expo/vector-icons";
 import Toast from "react-native-root-toast";
+// import { NestableScrollContainer, NestableDraggableFlatList } from "react-native-draggable-flatlist";
 
 const Itinerary = () => {
   // State variables for modal visibility and selected place
@@ -575,11 +576,6 @@ const Itinerary = () => {
           </ScaleDecorator>
         )}
         keyExtractor={(item) => item.placeId}
-        // removeClippedSubviews={true} // Unmount components when outside of window
-        // initialNumToRender={5} // Reduce initial render amount
-        // maxToRenderPerBatch={5} // Reduce number in each render batch
-        // updateCellsBatchingPeriod={100} // Increase time between renders
-        // windowSize={2} // Reduce the window size
         onDragEnd={({ data }) => {
           const updatedData = data.map((item) => item);
           // Update the itinerary in Firebase
@@ -619,6 +615,7 @@ const Itinerary = () => {
           selectedMapPlaces={selectedMapPlaces}
         />
       )}
+
       <SectionList
         contentContainerStyle={styles.contentContainer}
         scrollEnabled={true}
@@ -627,41 +624,8 @@ const Itinerary = () => {
           data: itineraryData[formatDateString(date)] || [], // Use the itinerary data for each date
         }))}
         keyExtractor={(item, index) => index.toString()}
-        // Performance Settings
-        // removeClippedSubviews={true} // Unmount components when outside of window
-        // initialNumToRender={3} // Reduce initial render amount
-        // maxToRenderPerBatch={3} // Reduce number in each render batch
-        // updateCellsBatchingPeriod={50} // Increase time between renders
-        // windowSize={2} // Reduce the window size
-        // // performance settings for section list
-
         renderItem={({ item, section }) => (
           <DraggableItinerary item={item} section={section} />
-          //   <DraggableFlatList
-          //     scrollEnabled={true}
-          //     data={item["places"] || []}
-          //     renderItem={({ item, drag, isActive }) => (
-          //       <ScaleDecorator>
-          //         <DraggablePlaceCard
-          //           item={item}
-          //           section={section}
-          //           drag={drag}
-          //           isActive={isActive}
-          //         />
-          //       </ScaleDecorator>
-          // )}
-          // keyExtractor={(item) => item.placeId}
-          // removeClippedSubviews={true} // Unmount components when outside of window
-          // initialNumToRender={5} // Reduce initial render amount
-          // maxToRenderPerBatch={5} // Reduce number in each render batch
-          // updateCellsBatchingPeriod={100} // Increase time between renders
-          // windowSize={2} // Reduce the window size
-          // onDragEnd={({ data }) => {
-          //   const updatedData = data.map((item) => item);
-          //   // Update the itinerary in Firebase
-          //   updateItineraryInFirebase(updatedData, section.title);
-          // }}
-          // />
         )}
         stickySectionHeadersEnabled={true}
         renderSectionHeader={({ section: { title, data } }) => (
@@ -682,7 +646,6 @@ const Itinerary = () => {
               >
                 <Ionicons name="map-outline" size={22} color="#63725A" />
               </TouchableOpacity>
-              {/* )} */}
 
               <TouchableOpacity
                 style={styles.button}
@@ -702,6 +665,7 @@ const Itinerary = () => {
           </View>
         )}
       />
+
       {placeModalVisible && (
         <PlaceDetailModal
           onClose={() => setPlaceModalVisible(false)}

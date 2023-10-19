@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, Pressable } from "react-native";
+import { StyleSheet, Text, View, Image, Pressable, Alert } from "react-native";
 import React, { useState, useEffect } from "react";
 import { FIREBASE_DB } from "../../../firebaseConfig";
 import { doc, getDoc, getDocs, collection } from "firebase/firestore";
@@ -66,11 +66,12 @@ const FeaturedArticle = () => {
         setDestination(destination); // The destination name of the destination that the featured article is from is stored in the destination state variable using the setDestination function.
         setIndex(index); // The index of the featured article is stored in the index state variable using the setIndex function.
       } else {
-        alert("No such document!"); // If the document does not exist in the database, an error is logged to the console.
-        console.log("No such document");
+        Alert.alert("No such document!"); // If the document does not exist in the database, an error is logged to the console.
+        // console.log("No such document");
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
+      Alert.alert(error); // If an error occurs, an error is logged to the console.
     }
   };
 

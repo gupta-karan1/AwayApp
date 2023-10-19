@@ -327,7 +327,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     // marginHorizontal: 10,
     // marginTop: 10,
-    padding: 20,
+    // padding: 20,
     marginBottom: 20,
   },
   navText: {
