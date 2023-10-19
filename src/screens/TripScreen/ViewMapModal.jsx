@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, Modal, ActivityIndicator } from "react-native";
 import React, { useState } from "react";
 import { useEffect } from "react";
 import { Ionicons } from "@expo/vector-icons";
-import MapView, { Marker, Callout } from "react-native-maps";
+import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import { Dimensions } from "react-native";
 import GlobalStyles from "../../GlobalStyles";
 
@@ -80,7 +80,7 @@ const ViewMapModal = ({
               {selectedPlaces.length > 0 ? (
                 <MapView
                   style={styles.map}
-                  provider="google"
+                  provider={PROVIDER_GOOGLE}
                   onMapReady={() => setMapInitialized(true)}
                   loadingEnabled={true}
                   initialRegion={{
