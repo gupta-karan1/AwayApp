@@ -575,11 +575,11 @@ const Itinerary = () => {
           </ScaleDecorator>
         )}
         keyExtractor={(item) => item.placeId}
-        removeClippedSubviews={true} // Unmount components when outside of window
-        initialNumToRender={5} // Reduce initial render amount
-        maxToRenderPerBatch={5} // Reduce number in each render batch
-        updateCellsBatchingPeriod={100} // Increase time between renders
-        windowSize={2} // Reduce the window size
+        // removeClippedSubviews={true} // Unmount components when outside of window
+        // initialNumToRender={5} // Reduce initial render amount
+        // maxToRenderPerBatch={5} // Reduce number in each render batch
+        // updateCellsBatchingPeriod={100} // Increase time between renders
+        // windowSize={2} // Reduce the window size
         onDragEnd={({ data }) => {
           const updatedData = data.map((item) => item);
           // Update the itinerary in Firebase
@@ -628,12 +628,12 @@ const Itinerary = () => {
         }))}
         keyExtractor={(item, index) => index.toString()}
         // Performance Settings
-        removeClippedSubviews={true} // Unmount components when outside of window
-        initialNumToRender={3} // Reduce initial render amount
-        maxToRenderPerBatch={3} // Reduce number in each render batch
-        updateCellsBatchingPeriod={50} // Increase time between renders
-        windowSize={2} // Reduce the window size
-        // performance settings for section list
+        // removeClippedSubviews={true} // Unmount components when outside of window
+        // initialNumToRender={3} // Reduce initial render amount
+        // maxToRenderPerBatch={3} // Reduce number in each render batch
+        // updateCellsBatchingPeriod={50} // Increase time between renders
+        // windowSize={2} // Reduce the window size
+        // // performance settings for section list
 
         renderItem={({ item, section }) => (
           <DraggableItinerary item={item} section={section} />
