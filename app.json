@@ -12,7 +12,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "jsEngine": "hermes",
@@ -30,7 +32,11 @@
           }
         }
       },
-      "jsEngine": "hermes"
+      "jsEngine": "hermes",
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.cahill04.AwayApp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -43,6 +49,11 @@
           "cameraPermission": "The app needs access to your camera so you can take pictures of your items to put on the app."
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "23e2fd56-b038-4d47-a6fe-bc693c7038cb"
+      }
+    }
   }
 }
