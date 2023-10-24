@@ -9,6 +9,10 @@
     },
     "preview": {
       "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      },
+
       "env": {
         "UNSPLASH_ACCESS_KEY": "ZCPL1ZROMMX6TtxvEKkXS_9aUdAsedtrB9B1ANJvBkY",
         "UNSPLASH_SECRET_KEY": "3k2VQikIAsUXp3gwddHwmqXrZtYcgay-ImM2b1MtSAo",
@@ -21,6 +25,7 @@
         "FIREBASE_STORAGE_BUCKET": "away-app-31140.appspot.com"
       }
     },
+
     "production": {}
   },
   "submit": {
