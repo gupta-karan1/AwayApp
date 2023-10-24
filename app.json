@@ -12,31 +12,17 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "ios": {
-      "supportsTablet": true,
-      "jsEngine": "hermes",
-      "config": {
-        "googleMapsApiKey": "@env:GOOGLE_MAPS_API_KEY"
-      }
-    },
+    "assetBundlePatterns": ["*/"],
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff",
-        "config": {
-          "googleMaps": {
-            "apiKey": "@env:GOOGLE_MAPS_API_KEY"
-          }
-        }
+        "backgroundColor": "#ffffff"
       },
-      "jsEngine": "hermes",
-      "permissions": [
-        "android.permission.RECORD_AUDIO"
-      ],
-      "package": "com.cahill04.AwayApp"
+      "config": {
+        "googleMaps": { "apiKey": "AIzaSyBxu_7vriZr_HochNOZmK64QTsbm4UhyZA" }
+      },
+      "permissions": ["android.permission.RECORD_AUDIO"],
+      "package": "com.karang6.AwayApp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -52,7 +38,7 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "23e2fd56-b038-4d47-a6fe-bc693c7038cb"
+        "projectId": "dd78721a-595f-4c31-9d80-c5f2100c146a"
       }
     }
   }
