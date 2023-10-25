@@ -8,7 +8,6 @@ import {
   Alert,
   TouchableOpacity,
   Image,
-  ActivityIndicator,
 } from "react-native";
 import { useCallback } from "react";
 import { useFocusEffect } from "@react-navigation/native";
@@ -751,7 +750,7 @@ const styles = StyleSheet.create({
     flex: 1,
     // marginTop: 30,
     backgroundColor: "#fff",
-    paddingTop: 40,
+    paddingTop: 20,
   },
   contentContainer: {
     paddingBottom: 80,

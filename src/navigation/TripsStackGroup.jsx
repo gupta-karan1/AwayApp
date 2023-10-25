@@ -50,7 +50,7 @@ const TripsStackGroup = () => {
         name="TripPlan"
         component={TripPlan}
         options={{
-          headerShown: false,
+          // headerShown: false,
           headerTitle: "Trip Plan",
         }}
       />

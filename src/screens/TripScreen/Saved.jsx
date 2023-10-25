@@ -6,8 +6,8 @@ import {
   TouchableOpacity,
   Pressable,
 } from "react-native";
-import { useState, useContext, useEffect } from "react";
-import { AuthContext } from "../../../hooks/AuthContext";
+import { useState } from "react";
+// import { AuthContext } from "../../../hooks/AuthContext";
 import { Alert } from "react-native";
 import {
   collection,
@@ -24,7 +24,7 @@ import SavedPlaceCard from "../../components/TripsComp/SavedPlaceCard";
 import { useFocusEffect } from "@react-navigation/native";
 import { useCallback } from "react";
 import GlobalStyles from "../../GlobalStyles";
-import { Feather } from "@expo/vector-icons";
+// import { Feather } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import ViewMapModal from "./ViewMapModal";
 import { useNavigation } from "@react-navigation/native";
@@ -218,8 +218,9 @@ export default Saved;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 40,
+    paddingTop: 20,
     backgroundColor: "#fff",
+    // marginTop: StatusBar.currentHeight || 0,
   },
   headerContainer: {
     flexDirection: "row",

@@ -32,7 +32,7 @@ function TripTopNav({
         // tabBarScrollEnabled: true,
 
         swipeEnabled: true,
-        animationEnabled: true,
+        // animationEnabled: true,
         tabBarActiveTintColor: "#63725A",
         tabBarInactiveTintColor: "#C4C4C4",
         tabBarIndicatorStyle: {
@@ -67,7 +67,7 @@ function TripTopNav({
           // animationEnabled: true,
 
           tabBarStyle: {
-            marginBottom: -StatusBar.currentHeight || 0,
+            // marginBottom: -StatusBar.currentHeight || 0,
             // paddingBottom: StatusBar.currentHeight || 0,
           },
         }}
@@ -86,7 +86,7 @@ function TripTopNav({
           tabBarLabel: "Wishlist",
           // lazy: true,
           tabBarStyle: {
-            marginBottom: -StatusBar.currentHeight || 0,
+            // marginBottom: -StatusBar.currentHeight || 0,
             // paddingBottom: StatusBar.currentHeight || 0,
           },
         }}
@@ -106,7 +106,7 @@ function TripTopNav({
           tabBarLabel: "Explore",
           lazy: true,
           tabBarStyle: {
-            marginBottom: -StatusBar.currentHeight || 0,
+            // marginBottom: -StatusBar.currentHeight || 0,
             // paddingBottom: StatusBar.currentHeight || 0,
           },
         }}
@@ -124,7 +124,7 @@ function TripTopNav({
           options={{
             tabBarLabel: "Chat",
             tabBarStyle: {
-              marginBottom: -StatusBar.currentHeight || 0,
+              // marginBottom: -StatusBar.currentHeight || 0,
               // paddingBottom: StatusBar.currentHeight || 0,
             },
           }}

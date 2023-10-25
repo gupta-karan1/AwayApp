@@ -49,12 +49,12 @@ const TripPlan = () => {
       {/* Trip Details Header */}
       <ImageBackground source={{ uri: coverImage }} style={styles.image}>
         <View style={styles.iconContainer}>
-          <Pressable
+          {/* <Pressable
             onPress={() => Navigation.navigate("Trips")}
             style={styles.backButton}
           >
             <AntDesign name="arrowleft" size={24} color="#63725A" />
-          </Pressable>
+          </Pressable> */}
           {user.uid === userId && (
             <Pressable
               onPress={() =>
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     // Create status bar for Trip Page
-    marginTop: StatusBar.currentHeight || 0,
+    // marginTop: -StatusBar.currentHeight || 0,
   },
   image: {
     height: 150,
